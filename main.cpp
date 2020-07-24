@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 #include <map>
+#include <set>
 
 using namespace std;
 
@@ -438,6 +439,11 @@ public:
         root = balanceNodes(root);
 
 
+    }
+
+    bool operator< (string left, string right) {
+        
+        if(str)
     }
 
     private: Node* deleteRecursive(Node* root, Node* rootNonRecursive, Node*& inorder, Node* deleting) {
