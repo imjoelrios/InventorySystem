@@ -10,10 +10,10 @@ using namespace std;
 string printRandomString(int n)
 {
     const int MAX = 26;
-    char alphabet[MAX] = {'a', 'b', 'c', 'd', 'e', 'f', 'g',
+    char alphabet[MAX] = { 'a', 'b', 'c', 'd', 'e', 'f', 'g',
                           'h', 'i', 'j', 'k', 'l', 'm', 'n',
                           'o', 'p', 'q', 'r', 's', 't', 'u',
-                          'v', 'w', 'x', 'y', 'z'};
+                          'v', 'w', 'x', 'y', 'z' };
 
     string res = "";
     for (int i = 0; i < n; i++)
@@ -65,7 +65,7 @@ public:
         {
         }
         // Parameterized constructor
-        Map(vector<InventorySystem::Item> &inventory)
+        Map(vector<InventorySystem::Item>& inventory)
         {
             //storing the inventory data in this map data structure
             //a key and its value are at same location in their corresponding containers.
@@ -147,9 +147,355 @@ public:
     Map inventoryMap;
 
     // ===================== Tree  ================
-    class Tree
+
+    struct Tree {
+        struct Node {
+            Item classItem;
+            Node* right = nullptr;
+            Node* left = nullptr;
+            int data = NULL;
+            int height = 0;
+
+        };
+
+
+    private:
+
+        Node* AVL_Root = nullptr;
+
+
+    private: Node* rotateRightLeft(Node* node)
     {
+
+        if (node == nullptr)
+            return node;
+        Node* rightChild = node->right;
+        node->right = rightChild->left;
+        rightChild->left = node->right->right;
+        node->right->right = rightChild;
+
+        auto newRightChild = node->right;
+        node->right = newRightChild->left;
+        newRightChild->left = node;
+
+        if (node == AVL_Root)
+            AVL_Root = newRightChild;
+        rightChild->left->height -= 2;
+        newRightChild->height++;
+        return newRightChild;
+
+
+    }
+    public: int headValue() {
+        return AVL_Root->data;
+    }
+
+    private:   Node* rotateLeft(Node* node) {
+        if (node == nullptr)
+            return node;
+        auto rightChild = node->right;
+        node->right = node->right->left;
+        rightChild->left = node;
+
+        if (node == AVL_Root)
+            AVL_Root = rightChild;
+        rightChild->left->height -= 2;
+        return rightChild;
+    }
+
+    private: Node* rotateRight(Node* node) {
+        if (node == nullptr)
+            return node;
+        auto leftChild = node->left;
+        node->left = node->left->right;
+        leftChild->right = node;
+
+        if (node == AVL_Root)
+            AVL_Root = leftChild;
+        leftChild->right->height -= 2;
+        return leftChild;
+
+    }
+
+    private: Node* rotateLeftRight(Node* node) {
+        if (node == nullptr)
+            return node;
+        Node* leftChild = node->left;
+        node->left = leftChild->right;
+        leftChild->right = node->left->left;
+        node->left->left = leftChild;
+
+        auto newLeftChild = node->left;
+        node->left = newLeftChild->right;
+        newLeftChild->right = node;
+
+        if (node == AVL_Root)
+            AVL_Root = newLeftChild;
+        leftChild->right->height -= 2;
+        newLeftChild->height++;
+        return newLeftChild;
+
+    }
+
+    public:  void insert(int data, Item& item)
+    {
+        if (AVL_Root == nullptr) {
+            Node* temp = new Node();
+            temp->classItem = item;
+            temp->data = data;
+            AVL_Root = temp;
+            temp->height = 1;
+            return;
+        }
+
+        insertRecursive(AVL_Root, data, item);
+    }
+
+
+
+    private: Node* insertRecursive(Node* root, int data, Item& item) {
+
+        if (root == NULL)
+        {
+            Node* temp = new Node();
+            temp->classItem = item;
+            temp->data = data;
+            temp->height = 1;
+            return temp;
+        }
+        if (data < root->data)
+            root->left = insertRecursive(root->left, data, item);
+        else if (data > root->data)
+            root->right = insertRecursive(root->right, data, item);
+
+        root->height = max_height(root);
+        root = balanceNodes(root);
+
+
+        return root;
+
+    }
+
+
+
+    private:int max_height(Node* root) {
+        if (root == nullptr)
+            return 0;
+        int heightLeft, heightRight;
+        heightLeft = root->left == nullptr ? 0 : root->left->height;
+        heightRight = root->right == nullptr ? 0 : root->right->height;
+
+        return 1 + (heightLeft > heightRight ? heightLeft : heightRight);
+    }
+
+    private:int height(Node* root) {
+        if (root == nullptr)
+            return 0;
+        return root->height;
+    }
+
+
+
+    private:Node* balanceNodes(Node* parent) {
+        if (parent == nullptr)
+            return parent;
+
+
+        Node* temp = parent;
+
+
+        if (height(parent->left) - height(parent->right) > 1) {
+            if (parent->left != nullptr && height(parent->left->right) < height(parent->left->left))
+                parent = rotateRight(parent);
+            else if (parent->left != nullptr && height(parent->left->right) > height(parent->left->left))
+                parent = rotateLeftRight(parent);
+            else if (height(parent->right) == 0)
+                parent = rotateRight(parent);
+
+
+        }
+        else if (height(parent->left) - height(parent->right) < -1) {
+
+
+            if (parent->right != nullptr && height(parent->right->left) < height(parent->right->right)) {
+                parent = rotateLeft(parent);
+
+            }
+
+            else if (parent->right != nullptr && height(parent->right->left) > height(parent->right->right)) {
+                parent = rotateRightLeft(parent);
+
+            }
+            else if (height(parent->left) == 0)
+                parent = rotateLeft(parent);
+
+        }
+
+
+        return parent;
+    }
+
+
+
+
+
+
+
+
+
+
+
+    private:void printLeaves(Node* root)
+    {
+        if (root == nullptr)
+            return;
+
+        printLeaves(root->left);
+        printLeaves(root->right);
+        cout << "Name: " << root->classItem.name << endl;
+        cout << "idNumber: " << root->classItem.idNumber << endl;
+        cout << "Number of items: " << root->classItem.inStock << endl;
+
+    }
+
+
+    public:void print() {
+        auto temp = AVL_Root;
+        if (temp != nullptr) {
+            printLeaves(temp);
+        }
+    }
+    public:  Item* search(int key, Item& item) {
+        auto temp = searchRecursive(AVL_Root, key);
+        if (temp == nullptr)
+            return nullptr;
+        return &temp->classItem;
+
+    }
+
+
+    private: Node* searchRecursive(Node* root, int key) {
+        if (root == nullptr)
+            return nullptr;
+        if (key == root->data)
+            return root;
+        else if (key < root->data)
+            return searchRecursive(root->left, key);
+        else if (key > root->data)
+            return searchRecursive(root->right, key);
+        return nullptr;
+    }
+
+    private: bool isALeaf(Node* node) {
+        if (node == nullptr)
+            return false;
+        else if (node->left == nullptr && node->right == nullptr)
+            return true;
+        return false;
+    }
+
+
+    public:  bool deleteValue(int key) {
+        auto val = searchRecursive(AVL_Root, key);
+        auto predecessor = inorder_predecessor(val);
+        if (val == nullptr)
+            return false;
+        if (isALeaf(val)) {
+            auto parentNode = parent(AVL_Root, val);
+            if (parentNode->left == val)
+                parentNode->left = nullptr;
+            else if (parentNode->right == val)
+                parentNode->right = nullptr;
+            free(val);
+            deleteLeaf(AVL_Root, parentNode);
+
+            return true;
+        }
+
+
+
+        else {
+
+            deleteRecursive(AVL_Root, AVL_Root, predecessor, val);
+            return true;
+        }
+
+
+    }
+    private: Node* deleteLeaf(Node* root, Node* parent) {
+
+        if (root->data == parent->data) {
+            root->height = max_height(root);
+            root = balanceNodes(root);
+            return root;
+        }
+        if (parent->data < root->data)
+            root->left = deleteLeaf(root->left, parent);
+        else if (parent->data > root->data)
+            root->right = deleteLeaf(root->right, parent);
+
+        root->height = max_height(root);
+        root = balanceNodes(root);
+
+
+    }
+
+    private: Node* deleteRecursive(Node* root, Node* rootNonRecursive, Node*& inorder, Node* deleting) {
+
+        if (root->data == inorder->data)
+        {
+            parent(rootNonRecursive, inorder)->right = inorder->left;
+            swap(deleting->data, inorder->data);
+            free(inorder);
+            return nullptr;
+        }
+        else if (inorder->data < root->data)
+            root->left = deleteRecursive(root->left, rootNonRecursive, inorder, deleting);
+        else if (inorder->data > root->data)
+            root->right = deleteRecursive(root->right, rootNonRecursive, inorder, deleting);
+
+
+        root->height = max_height(root);
+        root = balanceNodes(root);
+
+        return root;
+
+
+    }
+
+    private:  Node* parent(Node* root, Node* key) {
+        if (root == nullptr || key == AVL_Root)
+            return nullptr;
+        if (root->left == key)
+            return root;
+        else if (root->right == key)
+            return root;
+        if (root->data > key->data)
+            return parent(root->left, key);
+        if (root->data < key->data)
+            return parent(root->right, key);
+
+    }
+
+    private:  Node* inorder_predecessor(Node* root) {
+
+        if (root == nullptr)
+            return nullptr;
+        if (root->left == nullptr)
+            return nullptr;
+        auto temp = root->left;
+        while (temp->right != nullptr)
+            temp = temp->right;
+
+        return temp;
+
+
+
+    }
+
+
     };
+
 
     // Tree with inventory
     Tree inventoryTree;
@@ -161,23 +507,23 @@ public:
         Item newItem = Item(name, idNumber, inStock);
         inventoryVector.push_back(newItem);
         inventoryMap.add(newItem);
-        // inventoryTree.add(newItem);
+        inventoryTree.insert(newItem.idNumber, newItem);    //currently sorted by id Number, choose whatever 
     }
     void searchByID()
     {
-        // Search by ID
+        inventoryTree.search(//idNumber, item)
     }
     void searchByName()
     {
-        // Search by Name and delete it
+        inventoryTree.search(//name, item)
     }
     void deleteByID()
     {
-        // Search by ID and delete it
+        inventoryTree.deleteValue(//id)
     }
     void deleteByName()
     {
-        // Search by name and delete it
+        inventoryTree.deleteValue(//name)
     }
     void inventoryGenerator(int inventoryNumber)
     {
@@ -209,13 +555,17 @@ public:
     void printMap()
     {
         inventoryMap.printMap();
+
+    }
+    void printTree() {
+        inventoryTree.print()
     }
 };
 
 // ===================== Test Cases ===========================
 /*
     1. Run the function being tested on each data structure
-    2. Print time 
+    2. Print time
 
 */
 void test1()
@@ -266,10 +616,10 @@ void test2()
     cout << "Execution time by tree : " << fixed << treeExecutionTime << setprecision(5);
     cout << " sec " << endl;
 };
-void test3(){
+void test3() {
     // === Test edit
 };
-void test4(){
+void test4() {
     // Test search
 
     // Test search for small data sets
@@ -285,7 +635,7 @@ void run()
     system1.inventoryGenerator(100);
     system1.printInventoryVector();
     /*Some possible function calls for testing purpose if you guys want to see how it works
-    Map map(system1.inventoryVector);  
+    Map map(system1.inventoryVector);
     InventorySystem::Item item;
     item.name = printRandomString(10);
     item.idNumber = 101;
