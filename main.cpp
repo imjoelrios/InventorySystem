@@ -150,44 +150,45 @@ public:
 
     // ===================== Tree  ================
 
+
+
     struct Tree {
-        template <typename T>;
+
+
         struct Node {
             Item classItem;
             Node* right = nullptr;
             Node* left = nullptr;
-            int data = NULL;
             int height = 0;
+            int data = NULL;
+            string stringData = "";
+
 
         };
 
+    public:
+        friend bool operator< (string left, string right) {
+            if (left.compare(right) < 0)
+                return true;
+            return false;
+        }
+
+
+        friend bool operator>(string left, string right) {
+            if (left.compare(right) > 0)
+                return true;
+            return false;
+        }
+
+        friend bool operator==(string left, string right) {
+            if (left.compare(right) == 0)
+                return true;
+            return false;
+        }
 
     private:
 
         Node* AVL_Root = nullptr;
-
-
-
-        bool operator<(string left, string right) {
-            if (strcmp(left, right) < 0)
-                return true;
-            return false;
-        }
-
-
-
-
-        bool operator>(const string left, const string right) {
-            if (strcmp(left, right) > 0)
-                return true;
-            return false;
-        }
-
-        bool operator==(const string left, const string right) {
-            if (strcmp(left, right) == 0)
-                return true;
-            return false;
-        }
 
 
     private: Node* rotateRightLeft(Node* node)
@@ -206,14 +207,14 @@ public:
 
         if (node == AVL_Root)
             AVL_Root = newRightChild;
-        rightChild->left->height -= 2;
+        newRightChild->left->height -= 2;
         newRightChild->height++;
         return newRightChild;
 
 
     }
-    public: int headValue() {
-        return AVL_Root->data;
+    public: Item headValue() {
+        return AVL_Root->classItem;
     }
 
     private:   Node* rotateLeft(Node* node) {
@@ -257,50 +258,75 @@ public:
 
         if (node == AVL_Root)
             AVL_Root = newLeftChild;
-        leftChild->right->height -= 2;
+        newLeftChild->right->height -= 2;
         newLeftChild->height++;
         return newLeftChild;
 
     }
-
-    public:  void insert(auto data, Item& item)
-    {
-        if (AVL_Root == nullptr) {
-            Node* temp = new Node();
-            temp->classItem = item;
-            temp->data = data;
-            AVL_Root = temp;
-            temp->height = 1;
-            return;
-        }
-
-        insertRecursive(AVL_Root, data, item);
-    }
-
-
-
-    private: Node* insertRecursive(Node* root, auto data, Item& item) {
-
-        if (root == NULL)
+    public:
+        void insert(int data, Item& item)
         {
-            Node* temp = new Node();
-            temp->classItem = item;
-            temp->data = data;
-            temp->height = 1;
-            return temp;
+            if (AVL_Root == nullptr) {
+                Node* temp = new Node();
+                temp->classItem = item;
+                temp->data = data;
+                AVL_Root = temp;
+                temp->height = 1;
+                return;
+            }
+            insertRecursive(AVL_Root, data, item);
         }
-        if (data < root->data)
-            root->left = insertRecursive(root->left, data, item);
-        else if (data > root->data)
-            root->right = insertRecursive(root->right, data, item);
+        void insert(string data, Item& item)
+        {
+            if (AVL_Root == nullptr) {
+                Node* temp = new Node();
+                temp->classItem = item;
+                temp->stringData = data;
+                AVL_Root = temp;
+                temp->height = 1;
+                return;
+            }
+            insertRecursive(AVL_Root, data, item);
+        }
 
-        root->height = max_height(root);
-        root = balanceNodes(root);
 
+    private:
+        Node* insertRecursive(Node* root, int data, Item& item) {
 
-        return root;
+            if (root == NULL) {
+                Node* temp = new Node();
+                temp->classItem = item;
+                temp->data = data;
+                temp->height = 1;
+                return temp;
+            }
+            if (data < root->data)
+                root->left = insertRecursive(root->left, data, item);
+            else if (data > root->data)
+                root->right = insertRecursive(root->right, data, item);
 
-    }
+            root->height = max_height(root);
+            root = balanceNodes(root);
+            return root;
+        }
+        Node* insertRecursive(Node* root, string data, Item& item) {
+
+            if (root == NULL) {
+                Node* temp = new Node();
+                temp->classItem = item;
+                temp->stringData = data;
+                temp->height = 1;
+                return temp;
+            }
+            if (data < root->stringData)
+                root->left = insertRecursive(root->left, data, item);
+            else if (data > root->stringData)
+                root->right = insertRecursive(root->right, data, item);
+
+            root->height = max_height(root);
+            root = balanceNodes(root);
+            return root;
+        }
 
 
 
@@ -341,34 +367,16 @@ public:
 
         }
         else if (height(parent->left) - height(parent->right) < -1) {
-
-
-            if (parent->right != nullptr && height(parent->right->left) < height(parent->right->right)) {
+            if (parent->right != nullptr && height(parent->right->left) < height(parent->right->right))
                 parent = rotateLeft(parent);
-
-            }
-
-            else if (parent->right != nullptr && height(parent->right->left) > height(parent->right->right)) {
+            else if (parent->right != nullptr && height(parent->right->left) > height(parent->right->right))
                 parent = rotateRightLeft(parent);
-
-            }
             else if (height(parent->left) == 0)
                 parent = rotateLeft(parent);
 
         }
-
-
         return parent;
     }
-
-
-
-
-
-
-
-
-
 
 
     private:void printLeaves(Node* root)
@@ -402,17 +410,30 @@ public:
     }
 
 
-    private: Node* searchRecursive(Node* root, auto key) {
-        if (root == nullptr)
+    private:
+        Node* searchRecursive(Node* root, int key) {
+            if (root == nullptr)
+                return nullptr;
+            if (key == root->data)
+                return root;
+            else if (key < root->data)
+                return searchRecursive(root->left, key);
+            else if (key > root->data)
+                return searchRecursive(root->right, key);
             return nullptr;
-        if (key == root->data)
-            return root;
-        else if (key < root->data)
-            return searchRecursive(root->left, key);
-        else if (key > root->data)
-            return searchRecursive(root->right, key);
-        return nullptr;
-    }
+        }
+
+        Node* searchRecursive(Node* root, string key) {
+            if (root == nullptr)
+                return nullptr;
+            if (key == root->stringData)
+                return root;
+            else if (key < root->stringData)
+                return searchRecursive(root->left, key);
+            else if (key > root->stringData)
+                return searchRecursive(root->right, key);
+            return nullptr;
+        }
 
     private: bool isALeaf(Node* node) {
         if (node == nullptr)
@@ -423,33 +444,50 @@ public:
     }
 
 
-    public:  bool deleteValue(auto key) {
-        auto val = searchRecursive(AVL_Root, key);
-        auto predecessor = inorder_predecessor(val);
-        if (val == nullptr)
-            return false;
-        if (isALeaf(val)) {
-            auto parentNode = parent(AVL_Root, val);
-            if (parentNode->left == val)
-                parentNode->left = nullptr;
-            else if (parentNode->right == val)
-                parentNode->right = nullptr;
-            free(val);
-            deleteLeaf(AVL_Root, parentNode);
+    public:
+        bool deleteValue(int key) {
+            auto val = searchRecursive(AVL_Root, key);
+            auto predecessor = inorder_predecessor(val);
+            if (val == nullptr)
+                return false;
+            if (isALeaf(val)) {
+                auto parentNode = parent(AVL_Root, val);
+                if (parentNode->left == val)
+                    parentNode->left = nullptr;
+                else if (parentNode->right == val)
+                    parentNode->right = nullptr;
+                free(val);
+                deleteLeaf(AVL_Root, parentNode);
 
-            return true;
+                return true;
+            }
+            else {
+                deleteRecursive(AVL_Root, AVL_Root, predecessor, val);
+                return true;
+            }
         }
 
+        bool deleteValue(string key) {
+            auto val = searchRecursive(AVL_Root, key);
+            auto predecessor = inorder_predecessor(val);
+            if (val == nullptr)
+                return false;
+            if (isALeaf(val)) {
+                auto parentNode = parent(AVL_Root, val);
+                if (parentNode->left == val)
+                    parentNode->left = nullptr;
+                else if (parentNode->right == val)
+                    parentNode->right = nullptr;
+                free(val);
+                deleteLeaf(AVL_Root, parentNode);
 
-
-        else {
-
-            deleteRecursive(AVL_Root, AVL_Root, predecessor, val);
-            return true;
+                return true;
+            }
+            else {
+                deleteRecursive(AVL_Root, AVL_Root, predecessor, val);
+                return true;
+            }
         }
-
-
-    }
     private: Node* deleteLeaf(Node* root, Node* parent) {
 
         if (root->data == parent->data) {
@@ -472,10 +510,14 @@ public:
 
         if (root->data == inorder->data)
         {
-            parent(rootNonRecursive, inorder)->right = inorder->left;
+            auto temp = inorder->left;
             swap(deleting->data, inorder->data);
+            swap(deleting->classItem, inorder->classItem);
+            swap(deleting->stringData, inorder->stringData);
             free(inorder);
-            return nullptr;
+            if (temp == nullptr)
+                return nullptr;
+            return temp;
         }
         else if (inorder->data < root->data)
             root->left = deleteRecursive(root->left, rootNonRecursive, inorder, deleting);
@@ -485,7 +527,6 @@ public:
 
         root->height = max_height(root);
         root = balanceNodes(root);
-
         return root;
 
 
@@ -516,11 +557,7 @@ public:
             temp = temp->right;
 
         return temp;
-
-
-
     }
-
 
     };
 
