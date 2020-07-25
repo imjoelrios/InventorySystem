@@ -267,13 +267,13 @@ public:
                 else if (parentNode->right == val)
                     parentNode->right = nullptr;
                 free(val);
-                deleteLeaf(AVL_Root, parentNode);
+
 
                 return true;
             }
             else
             {
-                deleteRecursive(AVL_Root, AVL_Root, predecessor, val);
+                deleteRecursive(AVL_Root, AVL_Root, predecessor, val, false);
                 return true;
             }
         }
@@ -286,18 +286,23 @@ public:
             if (isALeaf(val))
             {
                 auto parentNode = parent(AVL_Root, val);
-                if (parentNode->left == val)
+                if (height(val) == 1) {
+                    free(AVL_Root);
+                    AVL_Root = nullptr;
+                    return true;
+
+                }
+                else if (parentNode->left == val)
                     parentNode->left = nullptr;
                 else if (parentNode->right == val)
                     parentNode->right = nullptr;
                 free(val);
-                deleteLeaf(AVL_Root, parentNode);
 
                 return true;
             }
             else
             {
-                deleteRecursive(AVL_Root, AVL_Root, predecessor, val);
+                deleteRecursive(AVL_Root, AVL_Root, predecessor, val, true);
                 return true;
             }
         }
@@ -627,13 +632,15 @@ public:
             root->height = max_height(root);
             root = balanceNodes(root);
         }
-        Node* deleteRecursive(Node* root, Node* rootNonRecursive, Node*& inorder, Node* deleting)
+        Node* deleteRecursive(Node* root, Node* rootNonRecursive, Node*& inorder, Node* deleting, bool is_string)
         {
             if (inorder == nullptr) {
                 auto parentSmallest = parent(AVL_Root, root);
                 if (parentSmallest != nullptr) {
                     parentSmallest->left = root->right;
                     free(root);
+                    return nullptr;
+
                 }
                 else {
                     AVL_Root = root->right;
@@ -641,7 +648,7 @@ public:
                     return nullptr;
                 }
             }
-            else if (root->data == inorder->data)
+            else if (root->data == inorder->data && !is_string)
             {
                 auto temp = inorder->left;
                 swap(deleting->data, inorder->data);
@@ -652,10 +659,30 @@ public:
                     return nullptr;
                 return temp;
             }
-            else if (inorder->data < root->data)
-                root->left = deleteRecursive(root->left, rootNonRecursive, inorder, deleting);
-            else if (inorder->data > root->data)
-                root->right = deleteRecursive(root->right, rootNonRecursive, inorder, deleting);
+            else if (root->stringData == inorder->stringData && is_string)
+            {
+                auto temp = inorder->left;
+                swap(deleting->data, inorder->data);
+                swap(deleting->classItem, inorder->classItem);
+                swap(deleting->stringData, inorder->stringData);
+                free(inorder);
+                if (temp == nullptr)
+                    return nullptr;
+                return temp;
+            }
+            else if (is_string) {
+                if (inorder->stringData < root->stringData)
+                    root->left = deleteRecursive(root->left, rootNonRecursive, inorder, deleting, is_string);
+                else if (inorder->stringData > root->stringData)
+                    root->right = deleteRecursive(root->right, rootNonRecursive, inorder, deleting, is_string);
+            }
+            else if (!is_string) {
+                if (inorder->data < root->data)
+                    root->left = deleteRecursive(root->left, rootNonRecursive, inorder, deleting, is_string);
+                else if (inorder->data > root->data)
+                    root->right = deleteRecursive(root->right, rootNonRecursive, inorder, deleting, is_string);
+            }
+
 
             root->height = max_height(root);
             root = balanceNodes(root);
@@ -684,7 +711,6 @@ public:
             auto temp = root->left;
             while (temp->right != nullptr)
                 temp = temp->right;
-
             return temp;
         }
     };
