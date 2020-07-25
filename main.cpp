@@ -5,6 +5,7 @@
 #include <map>
 #include <string.h>
 #include <string>
+#include <stack>
 
 using namespace std;
 
@@ -156,8 +157,8 @@ public:
         struct Node
         {
             Item classItem;
-            Node *right = nullptr;
-            Node *left = nullptr;
+            Node* right = nullptr;
+            Node* left = nullptr;
             int height = 0;
             int data = NULL;
             string stringData = "";
@@ -185,11 +186,11 @@ public:
         }
 
         // Tree functions
-        void insert(int data, Item &item)
+        void insert(int data, Item& item)
         {
             if (AVL_Root == nullptr)
             {
-                Node *temp = new Node();
+                Node* temp = new Node();
                 temp->classItem = item;
                 temp->data = data;
                 AVL_Root = temp;
@@ -198,11 +199,11 @@ public:
             }
             insertRecursive(AVL_Root, data, item);
         }
-        void insert(string data, Item &item)
+        void insert(string data, Item& item)
         {
             if (AVL_Root == nullptr)
             {
-                Node *temp = new Node();
+                Node* temp = new Node();
                 temp->classItem = item;
                 temp->stringData = data;
                 AVL_Root = temp;
@@ -211,15 +212,35 @@ public:
             }
             insertRecursive(AVL_Root, data, item);
         }
-        void printTree()
+
+        // Choose:
+        // 1. Ascending order
+        // 2. Descending order
+        // 3. Postorder
+        // 4. Preorder
+        void printTree(int choice)
         {
+            cout << "Available inventory" << endl;
             auto temp = AVL_Root;
-            if (temp != nullptr)
+            if (temp != nullptr && choice == 3)
             {
-                printLeaves(temp);
+                printPostorder(temp);
             }
+            else if (temp != nullptr && choice == 1) {
+                printInorder(temp);
+            }
+            else if (temp != nullptr && choice == 2) {
+                printReverseInorder(temp);
+            }
+            else if (temp != nullptr && choice == 4) {
+                printPreorder(temp);
+            }
+            else
+                cout << "Invalid option! " << endl;
+
+
         }
-        Item *search(int key, Item &item)
+        Item* search(int key, Item& item)
         {
             auto temp = searchRecursive(AVL_Root, key);
             if (temp == nullptr)
@@ -275,18 +296,65 @@ public:
             }
         }
 
-        // Tree structure
+        bool deleteHead(bool is_string) {
+            if (is_string)
+                return deleteValue(headValue().name);
+            return deleteValue(headValue().idNumber);
+        }
+
+
         Item headValue()
         {
             return AVL_Root->classItem;
         }
-        Node *AVL_Root = nullptr;
-        Node *rotateRightLeft(Node *node)
+
+        bool searchInorder(string key) {
+            stack<Node*> temp;
+            if (AVL_Root == nullptr)
+                return false;
+            searchInorderHelp(key, AVL_Root, temp);
+            while (!temp.empty()) {
+                if (temp.top()->stringData == key) {
+                    printItem(temp.top());
+                    return true;
+                }
+
+                temp.pop();
+            }
+            return false;
+
+        }
+        bool searchInorder(int key) {
+            stack<Node*>temp;
+            if (AVL_Root == nullptr)
+                return false;
+            searchInorderHelp(key, AVL_Root, temp);
+            while (!temp.empty()) {
+                if (temp.top()->data == key) {
+                    printItem(temp.top());
+                    return true;
+                }
+
+                temp.pop();
+            }
+            return false;
+        }
+
+
+
+
+
+
+    private:
+
+        // Tree structure
+        Node* AVL_Root = nullptr;
+        Node* rotateRightLeft(Node* node)
         {
 
             if (node == nullptr)
                 return node;
-            Node *rightChild = node->right;
+            Node* rightChild = node->right;
             node->right = rightChild->left;
             rightChild->left = node->right->right;
             node->right->right = rightChild;
@@ -301,7 +369,7 @@ public:
             newRightChild->height++;
             return newRightChild;
         }
-        Node *rotateLeft(Node *node)
+        Node* rotateLeft(Node* node)
         {
             if (node == nullptr)
                 return node;
@@ -314,7 +382,7 @@ public:
             rightChild->left->height -= 2;
             return rightChild;
         }
-        Node *rotateRight(Node *node)
+        Node* rotateRight(Node* node)
         {
             if (node == nullptr)
                 return node;
@@ -327,11 +395,11 @@ public:
             leftChild->right->height -= 2;
             return leftChild;
         }
-        Node *rotateLeftRight(Node *node)
+        Node* rotateLeftRight(Node* node)
         {
             if (node == nullptr)
                 return node;
-            Node *leftChild = node->left;
+            Node* leftChild = node->left;
             node->left = leftChild->right;
             leftChild->right = node->left->left;
             node->left->left = leftChild;
@@ -346,12 +414,12 @@ public:
             newLeftChild->height++;
             return newLeftChild;
         }
-        Node *insertRecursive(Node *root, int data, Item &item)
+        Node* insertRecursive(Node* root, int data, Item& item)
         {
 
             if (root == NULL)
             {
-                Node *temp = new Node();
+                Node* temp = new Node();
                 temp->classItem = item;
                 temp->data = data;
                 temp->height = 1;
@@ -366,12 +434,12 @@ public:
             root = balanceNodes(root);
             return root;
         }
-        Node *insertRecursive(Node *root, string data, Item &item)
+        Node* insertRecursive(Node* root, string data, Item& item)
         {
 
             if (root == NULL)
             {
-                Node *temp = new Node();
+                Node* temp = new Node();
                 temp->classItem = item;
                 temp->stringData = data;
                 temp->height = 1;
@@ -386,7 +454,7 @@ public:
             root = balanceNodes(root);
             return root;
         }
-        int max_height(Node *root)
+        int max_height(Node* root)
         {
             if (root == nullptr)
                 return 0;
@@ -396,18 +464,18 @@ public:
 
             return 1 + (heightLeft > heightRight ? heightLeft : heightRight);
         }
-        int height(Node *root)
+        int height(Node* root)
         {
             if (root == nullptr)
                 return 0;
             return root->height;
         }
-        Node *balanceNodes(Node *parent)
+        Node* balanceNodes(Node* parent)
         {
             if (parent == nullptr)
                 return parent;
 
-            Node *temp = parent;
+            Node* temp = parent;
 
             if (height(parent->left) - height(parent->right) > 1)
             {
@@ -429,18 +497,82 @@ public:
             }
             return parent;
         }
-        void printLeaves(Node *root)
+
+
+
+        void printItem(Node* item) {
+            if (item != nullptr) {
+                cout << "Name: " << item->classItem.name << endl;
+                cout << "idNumber: " << item->classItem.idNumber << endl;
+                cout << "Number of items: " << item->classItem.inStock << endl;
+                cout << endl;
+            }
+
+
+        }
+        void printPostorder(Node* root)
         {
             if (root == nullptr)
                 return;
 
-            printLeaves(root->left);
-            printLeaves(root->right);
-            cout << "Name: " << root->classItem.name << endl;
-            cout << "idNumber: " << root->classItem.idNumber << endl;
-            cout << "Number of items: " << root->classItem.inStock << endl;
+            printPostorder(root->left);
+            printPostorder(root->right);
+            printItem(root);
         }
-        Node *searchRecursive(Node *root, int key)
+
+        void printInorder(Node* root) {
+            if (root == nullptr)
+                return;
+
+            printInorder(root->left);
+            printItem(root);
+            printInorder(root->right);
+
+
+        }
+
+        void printReverseInorder(Node* root) {
+            if (root == nullptr)
+                return;
+
+            printReverseInorder(root->right);
+            printItem(root);
+            printReverseInorder(root->left);
+
+        }
+
+        void printPreorder(Node* root) {
+            if (root == nullptr)
+                return;
+
+            printItem(root);
+            printPreorder(root->left);
+            printPreorder(root->right);
+
+        }
+
+        void searchInorderHelp(string key, Node* root, stack<Node*>& stack_) {
+            if (root == nullptr)
+                return;
+            searchInorderHelp(key, root->left, stack_);
+            if (root->stringData == key)
+                stack_.push(root);
+            searchInorderHelp(key, root->right, stack_);
+
+        }
+        void searchInorderHelp(int key, Node* root, stack<Node*>& stack_) {
+            if (root == nullptr)
+                return;
+            searchInorderHelp(key, root->left, stack_);
+            if (root->data == key)
+                stack_.push(root);
+            searchInorderHelp(key, root->right, stack_);
+
+        }
+
+
+
+        Node* searchRecursive(Node* root, int key)
         {
             if (root == nullptr)
                 return nullptr;
@@ -452,7 +584,7 @@ public:
                 return searchRecursive(root->right, key);
             return nullptr;
         }
-        Node *searchRecursive(Node *root, string key)
+        Node* searchRecursive(Node* root, string key)
         {
             if (root == nullptr)
                 return nullptr;
@@ -464,7 +596,7 @@ public:
                 return searchRecursive(root->right, key);
             return nullptr;
         }
-        bool isALeaf(Node *node)
+        bool isALeaf(Node* node)
         {
             if (node == nullptr)
                 return false;
@@ -472,7 +604,7 @@ public:
                 return true;
             return false;
         }
-        Node *deleteLeaf(Node *root, Node *parent)
+        Node* deleteLeaf(Node* root, Node* parent)
         {
 
             if (root->data == parent->data)
@@ -489,7 +621,7 @@ public:
             root->height = max_height(root);
             root = balanceNodes(root);
         }
-        Node *deleteRecursive(Node *root, Node *rootNonRecursive, Node *&inorder, Node *deleting)
+        Node* deleteRecursive(Node* root, Node* rootNonRecursive, Node*& inorder, Node* deleting)
         {
 
             if (root->data == inorder->data)
@@ -512,7 +644,7 @@ public:
             root = balanceNodes(root);
             return root;
         }
-        Node *parent(Node *root, Node *key)
+        Node* parent(Node* root, Node* key)
         {
             if (root == nullptr || key == AVL_Root)
                 return nullptr;
@@ -525,7 +657,7 @@ public:
             if (root->data < key->data)
                 return parent(root->right, key);
         }
-        Node *inorder_predecessor(Node *root)
+        Node* inorder_predecessor(Node* root)
         {
 
             if (root == nullptr)
