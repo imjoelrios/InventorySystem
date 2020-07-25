@@ -3,7 +3,8 @@
 #include <string>
 #include <vector>
 #include <map>
-#include <set>
+#include<string.h>
+#include <string>
 
 using namespace std;
 
@@ -150,6 +151,7 @@ public:
     // ===================== Tree  ================
 
     struct Tree {
+        template <typename T>;
         struct Node {
             Item classItem;
             Node* right = nullptr;
@@ -163,6 +165,29 @@ public:
     private:
 
         Node* AVL_Root = nullptr;
+
+
+
+        bool operator<(string left, string right) {
+            if (strcmp(left, right) < 0)
+                return true;
+            return false;
+        }
+
+
+
+
+        bool operator>(const string left, const string right) {
+            if (strcmp(left, right) > 0)
+                return true;
+            return false;
+        }
+
+        bool operator==(const string left, const string right) {
+            if (strcmp(left, right) == 0)
+                return true;
+            return false;
+        }
 
 
     private: Node* rotateRightLeft(Node* node)
@@ -238,7 +263,7 @@ public:
 
     }
 
-    public:  void insert(int data, Item& item)
+    public:  void insert(auto data, Item& item)
     {
         if (AVL_Root == nullptr) {
             Node* temp = new Node();
@@ -254,7 +279,7 @@ public:
 
 
 
-    private: Node* insertRecursive(Node* root, int data, Item& item) {
+    private: Node* insertRecursive(Node* root, auto data, Item& item) {
 
         if (root == NULL)
         {
@@ -360,6 +385,8 @@ public:
     }
 
 
+
+
     public:void print() {
         auto temp = AVL_Root;
         if (temp != nullptr) {
@@ -375,7 +402,7 @@ public:
     }
 
 
-    private: Node* searchRecursive(Node* root, int key) {
+    private: Node* searchRecursive(Node* root, auto key) {
         if (root == nullptr)
             return nullptr;
         if (key == root->data)
@@ -396,7 +423,7 @@ public:
     }
 
 
-    public:  bool deleteValue(int key) {
+    public:  bool deleteValue(auto key) {
         auto val = searchRecursive(AVL_Root, key);
         auto predecessor = inorder_predecessor(val);
         if (val == nullptr)
@@ -439,11 +466,6 @@ public:
         root = balanceNodes(root);
 
 
-    }
-
-    bool operator< (string left, string right) {
-        
-        if(str)
     }
 
     private: Node* deleteRecursive(Node* root, Node* rootNonRecursive, Node*& inorder, Node* deleting) {
