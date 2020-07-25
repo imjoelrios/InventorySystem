@@ -220,19 +220,19 @@ public:
         // 4. Preorder
         void printTree(int choice)
         {
-            cout << "Available inventory" << endl;
+            cout << "Available inventory: " << endl;
             auto temp = AVL_Root;
-            if (temp != nullptr && choice == 3)
+            if (choice == 3)
             {
                 printPostorder(temp);
             }
-            else if (temp != nullptr && choice == 1) {
+            else if (choice == 1) {
                 printInorder(temp);
             }
-            else if (temp != nullptr && choice == 2) {
+            else if (choice == 2) {
                 printReverseInorder(temp);
             }
-            else if (temp != nullptr && choice == 4) {
+            else if (choice == 4) {
                 printPreorder(temp);
             }
             else
@@ -256,7 +256,13 @@ public:
             if (isALeaf(val))
             {
                 auto parentNode = parent(AVL_Root, val);
-                if (parentNode->left == val)
+                if (height(val) == 1) {
+                    free(AVL_Root);
+                    AVL_Root = nullptr;
+                    return true;
+
+                }
+                else if (parentNode->left == val)
                     parentNode->left = nullptr;
                 else if (parentNode->right == val)
                     parentNode->right = nullptr;
@@ -623,8 +629,19 @@ public:
         }
         Node* deleteRecursive(Node* root, Node* rootNonRecursive, Node*& inorder, Node* deleting)
         {
-
-            if (root->data == inorder->data)
+            if (inorder == nullptr) {
+                auto parentSmallest = parent(AVL_Root, root);
+                if (parentSmallest != nullptr) {
+                    parentSmallest->left = root->right;
+                    free(root);
+                }
+                else {
+                    AVL_Root = root->right;
+                    free(root);
+                    return nullptr;
+                }
+            }
+            else if (root->data == inorder->data)
             {
                 auto temp = inorder->left;
                 swap(deleting->data, inorder->data);
