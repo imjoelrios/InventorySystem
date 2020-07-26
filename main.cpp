@@ -128,7 +128,7 @@ public:
             else
                 return helpFind(idNumber, first, middle - 1);
         }
-        InventorySystem::Item find(int idNumber)
+        void find(int idNumber)
         {
             //time complexity is O(log(n))
             int index = helpFind(idNumber, 0, size);
@@ -246,7 +246,7 @@ public:
         {
             auto temp = searchRecursive(AVL_Root, key);
             if (temp == nullptr)
-                cout << "Item not found!" << endl
+                cout << "Item not found!" << endl;
             else printItem(temp);
         }
 
@@ -254,7 +254,7 @@ public:
         {
             auto temp = searchRecursive(AVL_Root, key);
             if (temp == nullptr)
-                cout << "Item not found!" << endl
+                cout << "Item not found!" << endl;
             else printItem(temp);
         }
         bool delete_(int key)
@@ -757,7 +757,7 @@ public:
         // TODO: make sure the item is NOT already in the system (checking idNumber)
         Item newItem = Item(name, idNumber, inStock);
         inventoryVector.push_back(newItem);
-        inventoryMap.add(newItem);
+        inventoryMap.insert(newItem);
         inventoryTree.insert(newItem.idNumber, newItem); //currently sorted by id Number, choose whatever
     }
     void searchByID()
@@ -883,19 +883,6 @@ void test4(InventorySystem system){
 void run()
 {
     InventorySystem system;
-    /*Some possible function calls for testing purpose if you guys want to see how it works
-    Map map(system1.inventoryVector);
-    InventorySystem::Item item;
-    item.name = printRandomString(10);
-    item.idNumber = 101;
-    item.inStock = 50;
-    map.add(item);
-    map.remove(1);
-    map.printMap();
-    cout << endl;
-    map.find(1);
-    */
-
     // Run all tests
     /*
         test1(system);
