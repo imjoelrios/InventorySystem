@@ -69,7 +69,7 @@ public:
         {
         }
         // Parameterized constructor
-        Map(vector<InventorySystem::Item> &inventory)
+        Map(vector<InventorySystem::Item> inventory)
         {
             //storing the inventory data in this map data structure
             //a key and its value are at same location in their corresponding containers.
@@ -91,19 +91,21 @@ public:
                 cout << "Amount: " << values.at(i).inStock << endl;
             }
         }
-        void add(InventorySystem::Item item)
+        void insert(InventorySystem::Item item)
         {
-            //simply adds the key and value to the end of corresponding vectors
-            //time complexity is O(1)
-            keys.push_back(item.idNumber);
-            values.push_back(item);
-            size++;
+            //adds the key and value to the end of corresponding vectors if key doesn't already exists (otherwise does nothing)
+            //time complexity is O(logn)
+            if(helpFind(item.idNumber, 0, size) >= 0){
+                keys.push_back(item.idNumber);
+                values.push_back(item);
+                size++;
+            }
         }
         void remove(int idNumber)
         {
             //time complexity is log(n)
             int index = helpFind(idNumber, 0, size);
-            //this replaces the item to be removed with the last item and then deletes the last item which all can be done in O(1)
+            //if the item is found, item to be removed is swapped with the last item and then last item is deleted which all can be done in O(1) 
             if (index >= 0)
             {
                 keys.at(index) = keys.at(size - 1);
@@ -112,11 +114,6 @@ public:
                 values.pop_back();
                 size--;
             }
-            /* this would just delete the item to be removes and shifts all the other ones which is done in O(n)
-        if(index >= 0){
-            keys.erase(keys.begin() + index);
-            values.erase(values.begin() + index);
-        }*/
         }
         int helpFind(int idNumber, int first, int last)
         {
@@ -131,11 +128,11 @@ public:
             else
                 return helpFind(idNumber, first, middle - 1);
         }
-        void find(int idNumber)
+        InventorySystem::Item find(int idNumber)
         {
             //time complexity is O(log(n))
             int index = helpFind(idNumber, 0, size);
-            //print statements could be removed if we want to implement them in main instead
+             //print statements could be removed if we want to implement them in main instead
             if (index < 0)
                 cout << "Item not found" << endl;
             else
@@ -144,6 +141,11 @@ public:
                 cout << "idNumber: " << keys.at(index) << endl;
                 cout << "Number of items: " << values.at(index).inStock << endl;
             }
+        }
+        void edit(int idNumber, int newInStock){
+            //time complexity is O(logn)
+            int index = helpFind(idNumber, 0, size);
+            values.at(index).inStock = newInStock;
         }
     };
 
