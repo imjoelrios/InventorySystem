@@ -830,12 +830,12 @@ public:
 void testInsert(InventorySystem system)
 {
     system.inventoryGenerator(100000);
-    InventorySystem::Item newItem("Tshirt", 8789, 1000);
+    InventorySystem::Item newItem("Tshirt", 100005, 1000);
     system.inventoryVector.push_back(newItem);
     // --- Test in Map
     time_t start, end;
     time(&start);
-    system.inventoryMap.insert(newItem);
+    // system.inventoryMap.insert(newItem);
     time(&end);
     double mapExecutionTime = double(end - start);
 
@@ -887,7 +887,7 @@ void testDelete(InventorySystem system)
 void testSearch(InventorySystem system)
 {
     system.inventoryGenerator(100000);
-    InventorySystem::Item newItem("Tshirt", 8789, 1000);
+    InventorySystem::Item newItem("Tshirt", 100005, 1000);
     system.inventoryVector.push_back(newItem);
     system.inventoryMap.insert(newItem);
     system.inventoryTree.insert(newItem);
@@ -917,7 +917,7 @@ void testSearch(InventorySystem system)
 void testEdit(InventorySystem system)
 {
     system.inventoryGenerator(100000);
-    InventorySystem::Item newItem("Tshirt", 8789, 1000);
+    InventorySystem::Item newItem("Tshirt", 100005, 1000);
     system.inventoryVector.push_back(newItem);
     system.inventoryMap.insert(newItem);
     system.inventoryTree.insert(newItem);
@@ -957,7 +957,5 @@ int main()
 {
     // Main is used to test whatever you're working on
     // Just make sure to clear main before pushing/commiting any changes
-    InventorySystem system;
-    testInsert(system);
     return 0;
 };
