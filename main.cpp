@@ -145,7 +145,8 @@ public:
         void edit(int idNumber, int newInStock){
             //time complexity is O(logn)
             int index = helpFind(idNumber, 0, size);
-            values.at(index).inStock = newInStock;
+            if(index >= 0)
+                values.at(index).inStock = newInStock;
         }
     };
 
