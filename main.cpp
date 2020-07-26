@@ -190,7 +190,7 @@ public:
             return false;
         }
 
-        // Tree functions
+        // --- Tree functions ---
         void insert(Item &newItem)
         {
             if (AVL_Root == nullptr)
@@ -246,16 +246,9 @@ public:
             else
                 cout << "Invalid option! " << endl;
         }
-        void search(int key)
-        {
-            auto temp = searchRecursive(AVL_Root, key);
-            if (temp == nullptr)
-                cout << "Item not found!" << endl;
-            else
-                printItem(temp);
-        }
 
-        void search(string key)
+        // Tree organized by ID number
+        void search(int key)
         {
             auto temp = searchRecursive(AVL_Root, key);
             if (temp == nullptr)
@@ -292,6 +285,45 @@ public:
                 return true;
             }
         }
+        bool edit(int id, int newAmount)
+        {
+
+            auto temp = searchRecursive(AVL_Root, id);
+            if (temp != nullptr)
+            {
+                temp->classItem.inStock = newAmount;
+                return true;
+            }
+            return false;
+        }
+        bool searchInorder(int key)
+        {
+            stack<Node *> temp;
+            if (AVL_Root == nullptr)
+                return false;
+            searchInorderHelp(key, AVL_Root, temp);
+            while (!temp.empty())
+            {
+                if (temp.top()->data == key)
+                {
+                    printItem(temp.top());
+                    return true;
+                }
+
+                temp.pop();
+            }
+            return false;
+        }
+
+        // Tree organized by name
+        void search(string key)
+        {
+            auto temp = searchRecursive(AVL_Root, key);
+            if (temp == nullptr)
+                cout << "Item not found!" << endl;
+            else
+                printItem(temp);
+        }
         bool delete_(string key)
         {
             auto val = searchRecursive(AVL_Root, key);
@@ -321,18 +353,6 @@ public:
                 return true;
             }
         }
-
-        bool edit(int id, int newAmount)
-        {
-
-            auto temp = searchRecursive(AVL_Root, id);
-            if (temp != nullptr)
-            {
-                temp->classItem.inStock = newAmount;
-                return true;
-            }
-            return false;
-        }
         bool edit(string name, int newAmount)
         {
 
@@ -344,19 +364,6 @@ public:
             }
             return false;
         }
-
-        bool deleteHead(bool is_string)
-        {
-            if (is_string)
-                return delete_(headValue().name);
-            return delete_(headValue().idNumber);
-        }
-
-        Item headValue()
-        {
-            return AVL_Root->classItem;
-        }
-
         bool searchInorder(string key)
         {
             stack<Node *> temp;
@@ -375,27 +382,20 @@ public:
             }
             return false;
         }
-        bool searchInorder(int key)
-        {
-            stack<Node *> temp;
-            if (AVL_Root == nullptr)
-                return false;
-            searchInorderHelp(key, AVL_Root, temp);
-            while (!temp.empty())
-            {
-                if (temp.top()->data == key)
-                {
-                    printItem(temp.top());
-                    return true;
-                }
 
-                temp.pop();
-            }
-            return false;
+        bool deleteHead(bool is_string)
+        {
+            if (is_string)
+                return delete_(headValue().name);
+            return delete_(headValue().idNumber);
+        }
+        Item headValue()
+        {
+            return AVL_Root->classItem;
         }
 
     private:
-        // Tree structure
+        // --- Tree structure ---
         Node *AVL_Root = nullptr;
         Node *rotateRightLeft(Node *node)
         {
@@ -545,7 +545,6 @@ public:
             }
             return parent;
         }
-
         void printItem(Node *item)
         {
             if (item != nullptr)
@@ -565,7 +564,6 @@ public:
             printPostorder(root->right);
             printItem(root);
         }
-
         void printInorder(Node *root)
         {
             if (root == nullptr)
@@ -575,7 +573,6 @@ public:
             printItem(root);
             printInorder(root->right);
         }
-
         void printReverseInorder(Node *root)
         {
             if (root == nullptr)
@@ -585,7 +582,6 @@ public:
             printItem(root);
             printReverseInorder(root->left);
         }
-
         void printPreorder(Node *root)
         {
             if (root == nullptr)
@@ -595,7 +591,6 @@ public:
             printPreorder(root->left);
             printPreorder(root->right);
         }
-
         void searchInorderHelp(string key, Node *root, stack<Node *> &stack_)
         {
             if (root == nullptr)
@@ -614,7 +609,6 @@ public:
                 stack_.push(root);
             searchInorderHelp(key, root->right, stack_);
         }
-
         Node *searchRecursive(Node *root, int key)
         {
             if (root == nullptr)
