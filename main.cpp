@@ -186,18 +186,18 @@ public:
         }
 
         // Tree functions
-        void insert(int data, Item& item)
+        void insert(Item& newItem)
         {
             if (AVL_Root == nullptr)
             {
                 Node* temp = new Node();
-                temp->classItem = item;
-                temp->data = data;
+                temp->classItem = newItem;
+                temp->data = newItem.idNumber;
                 AVL_Root = temp;
                 temp->height = 1;
                 return;
             }
-            insertRecursive(AVL_Root, data, item);
+            insertRecursive(AVL_Root, newItem.idNumber, newItem);
         }
         void insert(string data, Item& item)
         {
@@ -240,14 +240,22 @@ public:
 
 
         }
-        Item* search(int key, Item& item)
+        Item* search(int key)   // Returns nullptr if not found, dereference pointer before using
         {
             auto temp = searchRecursive(AVL_Root, key);
             if (temp == nullptr)
                 return nullptr;
             return &temp->classItem;
         }
-        bool deleteValue(int key)
+
+        Item* search(string key)   // Returns nullptr if not found, dereference pointer before using
+        {
+            auto temp = searchRecursive(AVL_Root, key);
+            if (temp == nullptr)
+                return nullptr;
+            return &temp->classItem;
+        }
+        bool delete_(int key)
         {
             auto val = searchRecursive(AVL_Root, key);
             auto predecessor = inorder_predecessor(val);
@@ -277,7 +285,7 @@ public:
                 return true;
             }
         }
-        bool deleteValue(string key)
+        bool delete_(string key)
         {
             auto val = searchRecursive(AVL_Root, key);
             auto predecessor = inorder_predecessor(val);
@@ -307,10 +315,33 @@ public:
             }
         }
 
+        bool edit(int id, int newAmount) {
+
+            auto temp = searchRecursive(AVL_Root, id);
+            if (temp != nullptr) {
+                temp->classItem.inStock = newAmount;
+                return true;
+            }
+            return false;
+
+        }
+        bool edit(string name, int newAmount) {
+
+            auto temp = searchRecursive(AVL_Root, name);
+            if (temp != nullptr) {
+                temp->classItem.inStock = newAmount;
+                return true;
+            }
+            return false;
+
+        }
+
+
+
         bool deleteHead(bool is_string) {
             if (is_string)
-                return deleteValue(headValue().name);
-            return deleteValue(headValue().idNumber);
+                return delete_(headValue().name);
+            return delete_(headValue().idNumber);
         }
 
 
