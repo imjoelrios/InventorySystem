@@ -240,20 +240,20 @@ public:
 
 
         }
-        Item* search(int key)   // Returns nullptr if not found, dereference pointer before using
+        void search(int key)   // Returns nullptr if not found, dereference pointer before using
         {
             auto temp = searchRecursive(AVL_Root, key);
             if (temp == nullptr)
-                return nullptr;
-            return &temp->classItem;
+                cout << "Item not found!" << endl
+            else printItem(temp);
         }
 
-        Item* search(string key)   // Returns nullptr if not found, dereference pointer before using
+        void search(string key)   // Returns nullptr if not found, dereference pointer before using
         {
             auto temp = searchRecursive(AVL_Root, key);
             if (temp == nullptr)
-                return nullptr;
-            return &temp->classItem;
+                cout << "Item not found!" << endl
+            else printItem(temp);
         }
         bool delete_(int key)
         {
