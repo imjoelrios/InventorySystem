@@ -101,6 +101,10 @@ public:
                 values.push_back(item);
                 size++;
             }
+            else
+            {
+                cout << "Item with that ID is already in the system." << endl;
+            }
         }
         void remove(int idNumber)
         {
@@ -129,7 +133,7 @@ public:
             else
                 return helpFind(idNumber, first, middle - 1);
         }
-        void find(int idNumber)
+        void search(int idNumber)
         {
             //time complexity is O(log(n))
             int index = helpFind(idNumber, 0, size);
@@ -143,7 +147,7 @@ public:
                 cout << "Number of items: " << values.at(index).inStock << endl;
             }
         }
-        void edit(int idNumber, int newInStock)
+        void editAmountInStock(int idNumber, int newInStock)
         {
             //time complexity is O(logn)
             int index = helpFind(idNumber, 0, size);
@@ -256,7 +260,7 @@ public:
             else
                 printItem(temp);
         }
-        bool delete_(int key)
+        bool remove(int key)
         {
             auto val = searchRecursive(AVL_Root, key);
             auto predecessor = inorder_predecessor(val);
@@ -285,7 +289,7 @@ public:
                 return true;
             }
         }
-        bool edit(int id, int newAmount)
+        bool editAmountInStock(int id, int newAmount)
         {
 
             auto temp = searchRecursive(AVL_Root, id);
@@ -387,7 +391,7 @@ public:
         {
             if (is_string)
                 return delete_(headValue().name);
-            return delete_(headValue().idNumber);
+            return remove(headValue().idNumber);
         }
         Item headValue()
         {
@@ -748,7 +752,7 @@ public:
     Tree inventoryTree;
 
     // --- System's Methods/Functions ---
-    void add(string name, int idNumber, int inStock)
+    void insert(string name, int idNumber, int inStock)
     {
         // TODO: make sure the item is NOT already in the system (checking idNumber)
         Item newItem = Item(name, idNumber, inStock);
@@ -781,12 +785,12 @@ public:
             Item item;
             item.name = printRandomString(10);
             item.idNumber = i + 1;
-            //randomized idNumbers
-            item.idNumber = rand() % 1000;
             item.inStock = rand() % 1000;
 
             // add item to inventory list/arry
             inventoryVector.push_back(item);
+            inventoryMap.insert(item);
+            inventoryTree.insert(item);
         }
     }
     void printInventoryVector()
@@ -816,84 +820,136 @@ public:
 
 // ===================== Test Cases ===========================
 /*
-    1. Run the function being tested on each data structure
+    1. Random inventory is added to the system amounting to 100,000 (added to the tree and map as well)
+    2. A newItem is created. This item is the one that will be manipulated (insert, delete, search, etc.)
+        The ID of the newItem is over 100,000 to avoid collision with an item that has that idAlready
+    3. Run the function being tested on each data structure
     2. Print time
 
 */
-void test1(InventorySystem system)
+void testInsert(InventorySystem system)
 {
-    // === Test insert
-
+    system.inventoryGenerator(100000);
+    InventorySystem::Item newItem("Tshirt", 8789, 1000);
+    system.inventoryVector.push_back(newItem);
     // --- Test in Map
     time_t start, end;
     time(&start);
-    //Function being tested
+    system.inventoryMap.insert(newItem);
     time(&end);
     double mapExecutionTime = double(end - start);
 
     // --- Test in Tree
     time(&start);
-    //Function being tested
+    // system.inventoryTree.insert(newItem);
     time(&end);
     double treeExecutionTime = double(end - start);
 
     // --- Print execution times
+    cout << "Test #1 --- Insert()" << endl;
     cout << "Execution time by map : " << fixed << mapExecutionTime << setprecision(5);
     cout << " sec " << endl;
 
     cout << "Execution time by tree : " << fixed << treeExecutionTime << setprecision(5);
     cout << " sec " << endl;
+    cout << endl;
 };
-void test2(InventorySystem system)
+void testDelete(InventorySystem system)
 {
-    // === Test delete
+    system.inventoryGenerator(100000);
+    InventorySystem::Item newItem("Tshirt", 100005, 1000);
+    system.inventoryVector.push_back(newItem);
+    system.inventoryMap.insert(newItem);
+    system.inventoryTree.insert(newItem);
 
     // --- Test in Map
     time_t start, end;
     time(&start);
-    //Function being tested
+    system.inventoryMap.remove(8789);
     time(&end);
     double mapExecutionTime = double(end - start);
 
     // --- Test in Tree
     time(&start);
-    //Function being tested
+    system.inventoryTree.remove(8789);
     time(&end);
     double treeExecutionTime = double(end - start);
 
     // --- Print execution times
+    cout << "Test #2 --- Delete()" << endl;
     cout << "Execution time by map : " << fixed << mapExecutionTime << setprecision(5);
     cout << " sec " << endl;
 
     cout << "Execution time by tree : " << fixed << treeExecutionTime << setprecision(5);
     cout << " sec " << endl;
+    cout << endl;
 };
-void test3(InventorySystem system){
-    // === Test edit
+void testSearch(InventorySystem system)
+{
+    system.inventoryGenerator(100000);
+    InventorySystem::Item newItem("Tshirt", 8789, 1000);
+    system.inventoryVector.push_back(newItem);
+    system.inventoryMap.insert(newItem);
+    system.inventoryTree.insert(newItem);
+
+    // --- Test in Map
+    time_t start, end;
+    time(&start);
+    system.inventoryMap.search(8789);
+    time(&end);
+    double mapExecutionTime = double(end - start);
+
+    // --- Test in Tree
+    time(&start);
+    system.inventoryTree.search(8789);
+    time(&end);
+    double treeExecutionTime = double(end - start);
+
+    // --- Print execution times
+    cout << "Test #3 --- Search()" << endl;
+    cout << "Execution time by map : " << fixed << mapExecutionTime << setprecision(5);
+    cout << " sec " << endl;
+
+    cout << "Execution time by tree : " << fixed << treeExecutionTime << setprecision(5);
+    cout << " sec " << endl;
+    cout << endl;
 };
-void test4(InventorySystem system){
-    // Test search
+void testEdit(InventorySystem system)
+{
+    system.inventoryGenerator(100000);
+    InventorySystem::Item newItem("Tshirt", 8789, 1000);
+    system.inventoryVector.push_back(newItem);
+    system.inventoryMap.insert(newItem);
+    system.inventoryTree.insert(newItem);
 
-    // Test search for small data sets
+    // --- Test in Map
+    time_t start, end;
+    time(&start);
+    system.inventoryMap.editAmountInStock(8789, 250);
+    time(&end);
+    double mapExecutionTime = double(end - start);
 
-    // test search for large data sets
+    // --- Test in Tree
+    time(&start);
+    system.inventoryTree.editAmountInStock(8789, 250);
+    time(&end);
+    double treeExecutionTime = double(end - start);
 
+    // --- Print execution times
+    cout << "Test #3 --- Edit()" << endl;
+    cout << "Execution time by map : " << fixed << mapExecutionTime << setprecision(5);
+    cout << " sec " << endl;
+
+    cout << "Execution time by tree : " << fixed << treeExecutionTime << setprecision(5);
+    cout << " sec " << endl;
+    cout << endl;
 };
 
 // Runs whole program
-void run()
+void runTests()
 {
     InventorySystem system;
     // Run all tests
-    /*
-        test1(system);
-        test2(system);
-        test3(system);
-        test4(system);
-        test5(system);
-        test6(system);
-        test7(system);
-    */
 };
 
 // ===================== Main Method ===========================
@@ -901,5 +957,7 @@ int main()
 {
     // Main is used to test whatever you're working on
     // Just make sure to clear main before pushing/commiting any changes
+    InventorySystem system;
+    testInsert(system);
     return 0;
 };
