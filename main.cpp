@@ -240,7 +240,7 @@ public:
 
 
         }
-        void search(int key)   // Returns nullptr if not found, dereference pointer before using
+        void search(int key)   
         {
             auto temp = searchRecursive(AVL_Root, key);
             if (temp == nullptr)
@@ -248,7 +248,7 @@ public:
             else printItem(temp);
         }
 
-        void search(string key)   // Returns nullptr if not found, dereference pointer before using
+        void search(string key)   
         {
             auto temp = searchRecursive(AVL_Root, key);
             if (temp == nullptr)
