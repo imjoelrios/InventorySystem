@@ -13,10 +13,10 @@ using namespace std;
 string printRandomString(int n)
 {
     const int MAX = 26;
-    char alphabet[MAX] = { 'a', 'b', 'c', 'd', 'e', 'f', 'g',
+    char alphabet[MAX] = {'a', 'b', 'c', 'd', 'e', 'f', 'g',
                           'h', 'i', 'j', 'k', 'l', 'm', 'n',
                           'o', 'p', 'q', 'r', 's', 't', 'u',
-                          'v', 'w', 'x', 'y', 'z' };
+                          'v', 'w', 'x', 'y', 'z'};
 
     string res = "";
     for (int i = 0; i < n; i++)
@@ -166,8 +166,8 @@ public:
         struct Node
         {
             Item classItem;
-            Node* right = nullptr;
-            Node* left = nullptr;
+            Node *right = nullptr;
+            Node *left = nullptr;
             int height = 0;
             int data = NULL;
             string stringData = "";
@@ -195,11 +195,11 @@ public:
         }
 
         // --- Tree functions ---
-        void insert(Item& newItem)
+        void insert(Item &newItem)
         {
             if (AVL_Root == nullptr)
             {
-                Node* temp = new Node();
+                Node *temp = new Node();
                 temp->classItem = newItem;
                 temp->data = newItem.idNumber;
                 AVL_Root = temp;
@@ -208,11 +208,11 @@ public:
             }
             insertRecursive(AVL_Root, newItem.idNumber, newItem);
         }
-        void insert(string data, Item& item)
+        void insert(string data, Item &item)
         {
             if (AVL_Root == nullptr)
             {
-                Node* temp = new Node();
+                Node *temp = new Node();
                 temp->classItem = item;
                 temp->stringData = data;
                 AVL_Root = temp;
@@ -302,7 +302,7 @@ public:
         }
         bool searchInorder(int key)
         {
-            stack<Node*> temp;
+            stack<Node *> temp;
             if (AVL_Root == nullptr)
                 return false;
             searchInorderHelp(key, AVL_Root, temp);
@@ -370,7 +370,7 @@ public:
         }
         bool searchInorder(string key)
         {
-            stack<Node*> temp;
+            stack<Node *> temp;
             if (AVL_Root == nullptr)
                 return false;
             searchInorderHelp(key, AVL_Root, temp);
@@ -400,13 +400,13 @@ public:
 
     private:
         // --- Tree structure ---
-        Node* AVL_Root = nullptr;
-        Node* rotateRightLeft(Node* node)
+        Node *AVL_Root = nullptr;
+        Node *rotateRightLeft(Node *node)
         {
 
             if (node == nullptr)
                 return node;
-            Node* rightChild = node->right;
+            Node *rightChild = node->right;
             node->right = rightChild->left;
             rightChild->left = node->right->right;
             node->right->right = rightChild;
@@ -421,7 +421,7 @@ public:
             newRightChild->height++;
             return newRightChild;
         }
-        Node* rotateLeft(Node* node)
+        Node *rotateLeft(Node *node)
         {
             if (node == nullptr)
                 return node;
@@ -434,7 +434,7 @@ public:
             rightChild->left->height -= 2;
             return rightChild;
         }
-        Node* rotateRight(Node* node)
+        Node *rotateRight(Node *node)
         {
             if (node == nullptr)
                 return node;
@@ -447,11 +447,11 @@ public:
             leftChild->right->height -= 2;
             return leftChild;
         }
-        Node* rotateLeftRight(Node* node)
+        Node *rotateLeftRight(Node *node)
         {
             if (node == nullptr)
                 return node;
-            Node* leftChild = node->left;
+            Node *leftChild = node->left;
             node->left = leftChild->right;
             leftChild->right = node->left->left;
             node->left->left = leftChild;
@@ -466,12 +466,12 @@ public:
             newLeftChild->height++;
             return newLeftChild;
         }
-        Node* insertRecursive(Node* root, int data, Item& item)
+        Node *insertRecursive(Node *root, int data, Item &item)
         {
 
             if (root == NULL)
             {
-                Node* temp = new Node();
+                Node *temp = new Node();
                 temp->classItem = item;
                 temp->data = data;
                 temp->height = 1;
@@ -486,12 +486,12 @@ public:
             root = balanceNodes(root);
             return root;
         }
-        Node* insertRecursive(Node* root, string data, Item& item)
+        Node *insertRecursive(Node *root, string data, Item &item)
         {
 
             if (root == NULL)
             {
-                Node* temp = new Node();
+                Node *temp = new Node();
                 temp->classItem = item;
                 temp->stringData = data;
                 temp->height = 1;
@@ -506,7 +506,7 @@ public:
             root = balanceNodes(root);
             return root;
         }
-        int max_height(Node* root)
+        int max_height(Node *root)
         {
             if (root == nullptr)
                 return 0;
@@ -516,18 +516,18 @@ public:
 
             return 1 + (heightLeft > heightRight ? heightLeft : heightRight);
         }
-        int height(Node* root)
+        int height(Node *root)
         {
             if (root == nullptr)
                 return 0;
             return root->height;
         }
-        Node* balanceNodes(Node* parent)
+        Node *balanceNodes(Node *parent)
         {
             if (parent == nullptr)
                 return parent;
 
-            Node* temp = parent;
+            Node *temp = parent;
 
             if (height(parent->left) - height(parent->right) > 1)
             {
@@ -549,7 +549,7 @@ public:
             }
             return parent;
         }
-        void printItem(Node* item)
+        void printItem(Node *item)
         {
             if (item != nullptr)
             {
@@ -559,7 +559,7 @@ public:
                 cout << endl;
             }
         }
-        void printPostorder(Node* root)
+        void printPostorder(Node *root)
         {
             if (root == nullptr)
                 return;
@@ -568,7 +568,7 @@ public:
             printPostorder(root->right);
             printItem(root);
         }
-        void printInorder(Node* root)
+        void printInorder(Node *root)
         {
             if (root == nullptr)
                 return;
@@ -577,7 +577,7 @@ public:
             printItem(root);
             printInorder(root->right);
         }
-        void printReverseInorder(Node* root)
+        void printReverseInorder(Node *root)
         {
             if (root == nullptr)
                 return;
@@ -586,7 +586,7 @@ public:
             printItem(root);
             printReverseInorder(root->left);
         }
-        void printPreorder(Node* root)
+        void printPreorder(Node *root)
         {
             if (root == nullptr)
                 return;
@@ -595,7 +595,7 @@ public:
             printPreorder(root->left);
             printPreorder(root->right);
         }
-        void searchInorderHelp(string key, Node* root, stack<Node*>& stack_)
+        void searchInorderHelp(string key, Node *root, stack<Node *> &stack_)
         {
             if (root == nullptr)
                 return;
@@ -604,7 +604,7 @@ public:
                 stack_.push(root);
             searchInorderHelp(key, root->right, stack_);
         }
-        void searchInorderHelp(int key, Node* root, stack<Node*>& stack_)
+        void searchInorderHelp(int key, Node *root, stack<Node *> &stack_)
         {
             if (root == nullptr)
                 return;
@@ -613,7 +613,7 @@ public:
                 stack_.push(root);
             searchInorderHelp(key, root->right, stack_);
         }
-        Node* searchRecursive(Node* root, int key)
+        Node *searchRecursive(Node *root, int key)
         {
             if (root == nullptr)
                 return nullptr;
@@ -625,7 +625,7 @@ public:
                 return searchRecursive(root->right, key);
             return nullptr;
         }
-        Node* searchRecursive(Node* root, string key)
+        Node *searchRecursive(Node *root, string key)
         {
             if (root == nullptr)
                 return nullptr;
@@ -637,7 +637,7 @@ public:
                 return searchRecursive(root->right, key);
             return nullptr;
         }
-        bool isALeaf(Node* node)
+        bool isALeaf(Node *node)
         {
             if (node == nullptr)
                 return false;
@@ -645,7 +645,7 @@ public:
                 return true;
             return false;
         }
-        Node* deleteLeaf(Node* root, Node* parent)
+        Node *deleteLeaf(Node *root, Node *parent)
         {
 
             if (root->data == parent->data)
@@ -662,7 +662,7 @@ public:
             root->height = max_height(root);
             root = balanceNodes(root);
         }
-        Node* deleteRecursive(Node* root, Node* rootNonRecursive, Node*& inorder, Node* deleting, bool is_string)
+        Node *deleteRecursive(Node *root, Node *rootNonRecursive, Node *&inorder, Node *deleting, bool is_string)
         {
             if (inorder == nullptr)
             {
@@ -721,7 +721,7 @@ public:
             root = balanceNodes(root);
             return root;
         }
-        Node* parent(Node* root, Node* key)
+        Node *parent(Node *root, Node *key)
         {
             if (root == nullptr || key == AVL_Root)
                 return nullptr;
@@ -734,7 +734,7 @@ public:
             if (root->data < key->data)
                 return parent(root->right, key);
         }
-        Node* inorder_predecessor(Node* root)
+        Node *inorder_predecessor(Node *root)
         {
 
             if (root == nullptr)
@@ -827,7 +827,7 @@ public:
     2. Print time
 
 */
-void testInsert(InventorySystem& system)
+void testInsert(InventorySystem &system)
 {
     system.inventoryGenerator(100000);
     InventorySystem::Item newItem("Tshirt", 100005, 1000);
@@ -854,7 +854,7 @@ void testInsert(InventorySystem& system)
     cout << " sec " << endl;
     cout << endl;
 };
-void testDelete(InventorySystem& system)
+void testDelete(InventorySystem &system)
 {
     system.inventoryGenerator(100000);
     InventorySystem::Item newItem("Tshirt", 100005, 1000);
@@ -884,7 +884,7 @@ void testDelete(InventorySystem& system)
     cout << " sec " << endl;
     cout << endl;
 };
-void testSearch(InventorySystem& system)
+void testSearch(InventorySystem &system)
 {
     system.inventoryGenerator(100000);
     InventorySystem::Item newItem("Tshirt", 100005, 1000);
@@ -948,7 +948,7 @@ void testEdit(InventorySystem system)
 // ===================== Specific Test Cases ===========================
 
 // For the map data structure
-void testMapInsert(InventorySystem& system)
+void testMapInsert(InventorySystem &system)
 {
     InventorySystem::Item newItem("Tshirt", 100005, 1000);
     system.inventoryVector.push_back(newItem);
@@ -959,10 +959,11 @@ void testMapInsert(InventorySystem& system)
     time(&end);
     double mapExecutionTime = double(end - start);
 }
-void testMapDelete(InventorySystem& system)
+void testMapDelete(InventorySystem &system)
 {
     InventorySystem::Item newItem("Tshirt", 100005, 1000);
     system.inventoryVector.push_back(newItem);
+    system.inventoryMap.insert(newItem);
     // --- Test in Map
     time_t start, end;
     time(&start);
@@ -970,10 +971,11 @@ void testMapDelete(InventorySystem& system)
     time(&end);
     double mapExecutionTime = double(end - start);
 }
-void testMapSearch(InventorySystem& system)
+void testMapSearch(InventorySystem &system)
 {
     InventorySystem::Item newItem("Tshirt", 100005, 1000);
     system.inventoryVector.push_back(newItem);
+    system.inventoryMap.insert(newItem);
     // --- Test in Map
     time_t start, end;
     time(&start);
@@ -981,10 +983,11 @@ void testMapSearch(InventorySystem& system)
     time(&end);
     double mapExecutionTime = double(end - start);
 }
-void testMapEdit(InventorySystem& system)
+void testMapEdit(InventorySystem &system)
 {
     InventorySystem::Item newItem("Tshirt", 100005, 1000);
     system.inventoryVector.push_back(newItem);
+    system.inventoryMap.insert(newItem);
     // --- Test in Map
     time_t start, end;
     time(&start);
@@ -994,7 +997,7 @@ void testMapEdit(InventorySystem& system)
 }
 
 // For the tree data structure
-void testTreeInsert(InventorySystem& system)
+void testTreeInsert(InventorySystem &system)
 {
     InventorySystem::Item newItem("Tshirt", 100005, 1000);
     system.inventoryVector.push_back(newItem);
@@ -1005,10 +1008,11 @@ void testTreeInsert(InventorySystem& system)
     time(&end);
     double mapExecutionTime = double(end - start);
 }
-void testTreeDelete(InventorySystem& system)
+void testTreeDelete(InventorySystem &system)
 {
     InventorySystem::Item newItem("Tshirt", 100005, 1000);
     system.inventoryVector.push_back(newItem);
+    system.inventoryTree.insert(newItem);
     // --- Test in Map
     time_t start, end;
     time(&start);
@@ -1016,10 +1020,11 @@ void testTreeDelete(InventorySystem& system)
     time(&end);
     double mapExecutionTime = double(end - start);
 }
-void testTreeSearch(InventorySystem& system)
+void testTreeSearch(InventorySystem &system)
 {
     InventorySystem::Item newItem("Tshirt", 100005, 1000);
     system.inventoryVector.push_back(newItem);
+    system.inventoryTree.insert(newItem);
     // --- Test in Map
     time_t start, end;
     time(&start);
@@ -1027,10 +1032,11 @@ void testTreeSearch(InventorySystem& system)
     time(&end);
     double mapExecutionTime = double(end - start);
 }
-void testTreeEdit(InventorySystem& system)
+void testTreeEdit(InventorySystem &system)
 {
     InventorySystem::Item newItem("Tshirt", 100005, 1000);
     system.inventoryVector.push_back(newItem);
+    system.inventoryTree.insert(newItem);
     // --- Test in Map
     time_t start, end;
     time(&start);
@@ -1053,16 +1059,16 @@ int main()
     InventorySystem system;
 
     // For map
-     //testMapInsert(system);
-     //testMapDelete(system);
-     //testMapSearch(system);
-     //testMapEdit(system);
+    //testMapInsert(system);
+    //testMapDelete(system);
+    //testMapSearch(system);
+    //testMapEdit(system);
 
     // For tree
-    testTreeInsert(system);
-    system.printTree();
-    testTreeDelete(system);
-    testTreeSearch(system);        // Add element to tree before deleting
-    testTreeEdit(system);
+    // testTreeInsert(system);
+    // testTreeDelete(system);
+    // testTreeSearch(system);
+    // testTreeEdit(system);
+
     return 0;
 };
