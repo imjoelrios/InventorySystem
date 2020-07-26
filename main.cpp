@@ -835,13 +835,13 @@ void testInsert(InventorySystem system)
     // --- Test in Map
     time_t start, end;
     time(&start);
-    // system.inventoryMap.insert(newItem);
+    system.inventoryMap.insert(newItem);
     time(&end);
     double mapExecutionTime = double(end - start);
 
     // --- Test in Tree
     time(&start);
-    // system.inventoryTree.insert(newItem);
+    system.inventoryTree.insert(newItem);
     time(&end);
     double treeExecutionTime = double(end - start);
 
@@ -945,6 +945,100 @@ void testEdit(InventorySystem system)
     cout << endl;
 };
 
+// ===================== Specific Test Cases ===========================
+
+// For the map data structure
+void testMapInsert(InventorySystem system)
+{
+    InventorySystem::Item newItem("Tshirt", 100005, 1000);
+    system.inventoryVector.push_back(newItem);
+    // --- Test in Map
+    time_t start, end;
+    time(&start);
+    system.inventoryMap.insert(newItem);
+    time(&end);
+    double mapExecutionTime = double(end - start);
+}
+void testMapDelete(InventorySystem system)
+{
+    InventorySystem::Item newItem("Tshirt", 100005, 1000);
+    system.inventoryVector.push_back(newItem);
+    // --- Test in Map
+    time_t start, end;
+    time(&start);
+    system.inventoryMap.remove(100005);
+    time(&end);
+    double mapExecutionTime = double(end - start);
+}
+void testMapSearch(InventorySystem system)
+{
+    InventorySystem::Item newItem("Tshirt", 100005, 1000);
+    system.inventoryVector.push_back(newItem);
+    // --- Test in Map
+    time_t start, end;
+    time(&start);
+    system.inventoryMap.search(100005);
+    time(&end);
+    double mapExecutionTime = double(end - start);
+}
+void testMapEdit(InventorySystem system)
+{
+    InventorySystem::Item newItem("Tshirt", 100005, 1000);
+    system.inventoryVector.push_back(newItem);
+    // --- Test in Map
+    time_t start, end;
+    time(&start);
+    system.inventoryMap.editAmountInStock(100005, 250);
+    time(&end);
+    double mapExecutionTime = double(end - start);
+}
+
+// For the tree data structure
+void testTreeInsert(InventorySystem system)
+{
+    InventorySystem::Item newItem("Tshirt", 100005, 1000);
+    system.inventoryVector.push_back(newItem);
+    // --- Test in Map
+    time_t start, end;
+    time(&start);
+    system.inventoryTree.insert(newItem);
+    time(&end);
+    double mapExecutionTime = double(end - start);
+}
+void testTreeDelete(InventorySystem system)
+{
+    InventorySystem::Item newItem("Tshirt", 100005, 1000);
+    system.inventoryVector.push_back(newItem);
+    // --- Test in Map
+    time_t start, end;
+    time(&start);
+    system.inventoryTree.remove(100005);
+    time(&end);
+    double mapExecutionTime = double(end - start);
+}
+void testTreeSearch(InventorySystem system)
+{
+    InventorySystem::Item newItem("Tshirt", 100005, 1000);
+    system.inventoryVector.push_back(newItem);
+    // --- Test in Map
+    time_t start, end;
+    time(&start);
+    system.inventoryTree.search(100005);
+    time(&end);
+    double mapExecutionTime = double(end - start);
+}
+void testTreeEdit(InventorySystem system)
+{
+    InventorySystem::Item newItem("Tshirt", 100005, 1000);
+    system.inventoryVector.push_back(newItem);
+    // --- Test in Map
+    time_t start, end;
+    time(&start);
+    system.inventoryTree.editAmountInStock(100005, 250);
+    time(&end);
+    double mapExecutionTime = double(end - start);
+}
+
 // Runs whole program
 void runTests()
 {
@@ -955,7 +1049,19 @@ void runTests()
 // ===================== Main Method ===========================
 int main()
 {
-    // Main is used to test whatever you're working on
-    // Just make sure to clear main before pushing/commiting any changes
+    // For testing just uncomment the one below and run
+    InventorySystem system;
+
+    // For map
+    // testMapInsert(system);
+    // testMapDelete(system);
+    // testMapSearch(system);
+    // testMapEdit(system);
+
+    // For tree
+    // testTreeInsert(system);
+    // testTreeDelete(system);
+    // testTreeSearch(system);
+    // testTreeEdit(system);
     return 0;
 };
