@@ -222,6 +222,14 @@ public:
             insertRecursive(AVL_Root, data, item);
         }
 
+        void printItem(int key)
+        {
+            auto temp = searchRecursive(AVL_Root, key);
+            if (temp == nullptr)
+                cout << "Item not found!" << endl;
+            else
+                printItem(temp);
+        }
         // Choose:
         // 1. Ascending order
         // 2. Descending order
@@ -952,48 +960,32 @@ void testMapInsert(InventorySystem &system)
 {
     InventorySystem::Item newItem("Tshirt", 100005, 1000);
     system.inventoryVector.push_back(newItem);
-    // --- Test in Map
-    time_t start, end;
-    time(&start);
+
     system.inventoryMap.insert(newItem);
-    time(&end);
-    double mapExecutionTime = double(end - start);
 }
 void testMapDelete(InventorySystem &system)
 {
     InventorySystem::Item newItem("Tshirt", 100005, 1000);
     system.inventoryVector.push_back(newItem);
     system.inventoryMap.insert(newItem);
-    // --- Test in Map
-    time_t start, end;
-    time(&start);
+
     system.inventoryMap.remove(100005);
-    time(&end);
-    double mapExecutionTime = double(end - start);
 }
 void testMapSearch(InventorySystem &system)
 {
     InventorySystem::Item newItem("Tshirt", 100005, 1000);
     system.inventoryVector.push_back(newItem);
     system.inventoryMap.insert(newItem);
-    // --- Test in Map
-    time_t start, end;
-    time(&start);
+
     system.inventoryMap.search(100005);
-    time(&end);
-    double mapExecutionTime = double(end - start);
 }
 void testMapEdit(InventorySystem &system)
 {
     InventorySystem::Item newItem("Tshirt", 100005, 1000);
     system.inventoryVector.push_back(newItem);
     system.inventoryMap.insert(newItem);
-    // --- Test in Map
-    time_t start, end;
-    time(&start);
+
     system.inventoryMap.editAmountInStock(100005, 250);
-    time(&end);
-    double mapExecutionTime = double(end - start);
 }
 
 // For the tree data structure
@@ -1001,48 +993,41 @@ void testTreeInsert(InventorySystem &system)
 {
     InventorySystem::Item newItem("Tshirt", 100005, 1000);
     system.inventoryVector.push_back(newItem);
-    // --- Test in Map
-    time_t start, end;
-    time(&start);
-    system.inventoryTree.insert(newItem);
-    time(&end);
-    double mapExecutionTime = double(end - start);
+
+    system.inventoryTree.printItem(100005);
+    system.inventoryTree.insert(newItem); // Function being tested
+    cout << endl;
+    system.inventoryTree.printItem(100005);
 }
 void testTreeDelete(InventorySystem &system)
 {
     InventorySystem::Item newItem("Tshirt", 100005, 1000);
     system.inventoryVector.push_back(newItem);
     system.inventoryTree.insert(newItem);
-    // --- Test in Map
-    time_t start, end;
-    time(&start);
-    system.inventoryTree.remove(100005);
-    time(&end);
-    double mapExecutionTime = double(end - start);
+
+    system.inventoryTree.printItem(100005);
+    system.inventoryTree.remove(100005); // Function being tested
+    cout << endl;
+    system.inventoryTree.printItem(100005);
 }
 void testTreeSearch(InventorySystem &system)
 {
     InventorySystem::Item newItem("Tshirt", 100005, 1000);
     system.inventoryVector.push_back(newItem);
     system.inventoryTree.insert(newItem);
-    // --- Test in Map
-    time_t start, end;
-    time(&start);
+
     system.inventoryTree.search(100005);
-    time(&end);
-    double mapExecutionTime = double(end - start);
 }
 void testTreeEdit(InventorySystem &system)
 {
     InventorySystem::Item newItem("Tshirt", 100005, 1000);
     system.inventoryVector.push_back(newItem);
     system.inventoryTree.insert(newItem);
-    // --- Test in Map
-    time_t start, end;
-    time(&start);
+
+    system.inventoryTree.printItem(100005);
     system.inventoryTree.editAmountInStock(100005, 250);
-    time(&end);
-    double mapExecutionTime = double(end - start);
+    cout << endl;
+    system.inventoryTree.printItem(100005);
 }
 
 // Runs whole program
