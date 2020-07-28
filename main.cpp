@@ -869,10 +869,10 @@ public:
 	2. Print time
 
 */
-void testInsert(InventorySystem system)
+void testInsert(InventorySystem system, int inventorySize)
 {
-    system.inventoryGenerator(200000);
-    InventorySystem::Item newItem("Tshirt", 100005, 1000);
+    system.inventoryGenerator(inventorySize);
+    InventorySystem::Item newItem("Tshirt", inventorySize + 5, 1000);
     system.inventoryVector.push_back(newItem);
     // --- Test in Map
     auto start = high_resolution_clock::now();
@@ -898,23 +898,23 @@ void testInsert(InventorySystem system)
     system.inventoryMap.remove(100005);
     system.inventoryTree.remove(100005);
 };
-void testDelete(InventorySystem system)
+void testDelete(InventorySystem system, int inventorySize)
 {
-    system.inventoryGenerator(200000);
-    InventorySystem::Item newItem("Tshirt", 100005, 1000);
+    system.inventoryGenerator(inventorySize);
+    InventorySystem::Item newItem("Tshirt", inventorySize + 5, 1000);
     system.inventoryVector.push_back(newItem);
     system.inventoryMap.insert(newItem);
     system.inventoryTree.insert(newItem);
 
     // --- Test in Map
     auto start = high_resolution_clock::now();
-    system.inventoryMap.remove(100005);
+    system.inventoryMap.remove(inventorySize + 5);
     auto stop = high_resolution_clock::now();
     auto mapExecutionTime = duration_cast<microseconds>(stop - start);
 
     // --- Test in Tree
     auto start2 = high_resolution_clock::now();
-    system.inventoryTree.remove(100005);
+    system.inventoryTree.remove(inventorySize + 5);
     auto stop2 = high_resolution_clock::now();
     auto treeExecutionTime = duration_cast<microseconds>(stop2 - start2);
 
@@ -927,23 +927,23 @@ void testDelete(InventorySystem system)
     cout << " microseconds " << endl;
     cout << endl;
 };
-void testSearch(InventorySystem system)
+void testSearch(InventorySystem system, int inventorySize)
 {
-    system.inventoryGenerator(200000);
-    InventorySystem::Item newItem("Tshirt", 100005, 1000);
+    system.inventoryGenerator(inventorySize);
+    InventorySystem::Item newItem("Tshirt", inventorySize + 5, 1000);
     system.inventoryVector.push_back(newItem);
     system.inventoryMap.insert(newItem);
     system.inventoryTree.insert(newItem);
 
     // --- Test in Map
     auto start = high_resolution_clock::now();
-    system.inventoryMap.search(100005);
+    system.inventoryMap.search(inventorySize + 5);
     auto stop = high_resolution_clock::now();
     auto mapExecutionTime = duration_cast<microseconds>(stop - start);
 
     // --- Test in Tree
     auto start2 = high_resolution_clock::now();
-    system.inventoryTree.search(100005);
+    system.inventoryTree.search(inventorySize + 5);
     auto stop2 = high_resolution_clock::now();
     auto treeExecutionTime = duration_cast<microseconds>(stop2 - start2);
 
@@ -959,23 +959,23 @@ void testSearch(InventorySystem system)
     system.inventoryMap.remove(100005);
     system.inventoryTree.remove(100005);
 };
-void testEdit(InventorySystem system)
+void testEdit(InventorySystem system, int inventorySize)
 {
-    system.inventoryGenerator(200000);
-    InventorySystem::Item newItem("Tshirt", 100005, 1000);
+    system.inventoryGenerator(inventorySize);
+    InventorySystem::Item newItem("Tshirt", inventorySize + 5, 1000);
     system.inventoryVector.push_back(newItem);
     system.inventoryMap.insert(newItem);
     system.inventoryTree.insert(newItem);
 
     // --- Test in Map
     auto start = high_resolution_clock::now();
-    system.inventoryMap.editAmountInStock(100005, 250);
+    system.inventoryMap.editAmountInStock(inventorySize + 5, 250);
     auto stop = high_resolution_clock::now();
     auto mapExecutionTime = duration_cast<microseconds>(stop - start);
 
     // --- Test in Tree
     auto start2 = high_resolution_clock::now();
-    system.inventoryTree.editAmountInStock(100005, 250);
+    system.inventoryTree.editAmountInStock(inventorySize + 5, 250);
     auto stop2 = high_resolution_clock::now();
     auto treeExecutionTime = duration_cast<microseconds>(stop2 - start2);
 
@@ -991,8 +991,21 @@ void testEdit(InventorySystem system)
     system.inventoryMap.remove(100005);
     system.inventoryTree.remove(100005);
 };
-// ===================== Specific Test Cases ===========================
 
+// Run all tests
+void runTests(InventorySystem system, int inventorySize)
+{
+    // Run all tests
+    testInsert(system, inventorySize);
+    cout << endl;
+    testDelete(system, inventorySize);
+    cout << endl;
+    testSearch(system, inventorySize);
+    cout << endl;
+    testEdit(system, inventorySize);
+};
+
+// ===================== Specific Test Cases ===========================
 // For the map data structure
 void testMapInsert(InventorySystem system)
 {
@@ -1077,19 +1090,6 @@ void testTreeEdit(InventorySystem system)
     system.inventoryTree.printItem(100005);
 }
 
-// Run all tests
-void runTests(InventorySystem system)
-{
-    // Run all tests
-    testInsert(system);
-    cout << endl;
-    testDelete(system);
-    cout << endl;
-    testSearch(system);
-    cout << endl;
-    testEdit(system);
-};
-
 // Creates an inventory system and based on userInput lets the user insert, delete, search, and edit items
 void runProgram()
 {
@@ -1139,7 +1139,7 @@ int main()
     InventorySystem system;
 
     // Run all tests
-    // runTests(system);
+    runTests(system, 100000);
 
     // Run program based on user input
     // runProgram();
