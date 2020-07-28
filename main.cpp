@@ -55,6 +55,16 @@ public:
 
     // Array with inventory
     vector<Item> inventoryVector;
+    void removeFromVector(int idNumber)
+    {
+        for (int i = 0; i < inventoryVector.size(); i++)
+        {
+            if (inventoryVector[i].idNumber = idNumber)
+            {
+                inventoryVector.erase(inventoryVector.begin() + (i - 1));
+            }
+        }
+    }
 
     // --------- Map Sub-Class ---------
     //currently based on the the keys being unsorted (if we wanted to sort them either numerically or alphabetically it would require a few changes)
@@ -147,6 +157,7 @@ public:
                 cout << "Name: " << values.at(index).name << endl;
                 cout << "idNumber: " << keys.at(index) << endl;
                 cout << "Number of items: " << values.at(index).inStock << endl;
+                cout << endl;
             }
         }
         void editAmountInStock(int idNumber, int newInStock)
@@ -245,6 +256,7 @@ public:
                 cout << "Item not found!" << endl;
             else
                 printItem(temp);
+            cout << endl;
         }
         // Choose:
         // 1. Ascending order
@@ -784,22 +796,6 @@ public:
         inventoryMap.insert(newItem);
         inventoryTree.insert(newItem);
     }
-    void searchByID()
-    {
-        // inventoryTree.search(//idNumber, item)
-    }
-    void searchByName()
-    {
-        // inventoryTree.search(//name, item)
-    }
-    void deleteByID()
-    {
-        // inventoryTree.deleteValue(//id)
-    }
-    void deleteByName()
-    {
-        // inventoryTree.deleteValue(//name)
-    }
     void inventoryGenerator(int inventoryNumber)
     {
         for (int i = 0; i < inventoryNumber; i++)
@@ -840,6 +836,28 @@ public:
         // 4. Preorder
         inventoryTree.printTree(1);
     }
+
+    // By ID
+    void searchByID(int idNumber)
+    {
+        inventoryTree.search(idNumber);
+        inventoryMap.search(idNumber);
+    }
+    void deleteByID(int idNumber)
+    {
+        inventoryTree.remove(idNumber);
+        inventoryMap.remove(idNumber);
+    }
+
+    // By Name
+    void searchByName()
+    {
+        // inventoryTree.search(//name, item)
+    }
+    void deleteByName()
+    {
+        // inventoryTree.deleteValue(//name)
+    }
 };
 
 // ===================== Test Cases ===========================
@@ -853,7 +871,7 @@ public:
 */
 void testInsert(InventorySystem system)
 {
-    system.inventoryGenerator(100000);
+    system.inventoryGenerator(200000);
     InventorySystem::Item newItem("Tshirt", 100005, 1000);
     system.inventoryVector.push_back(newItem);
     // --- Test in Map
@@ -882,7 +900,7 @@ void testInsert(InventorySystem system)
 };
 void testDelete(InventorySystem system)
 {
-    system.inventoryGenerator(100000);
+    system.inventoryGenerator(200000);
     InventorySystem::Item newItem("Tshirt", 100005, 1000);
     system.inventoryVector.push_back(newItem);
     system.inventoryMap.insert(newItem);
@@ -911,7 +929,7 @@ void testDelete(InventorySystem system)
 };
 void testSearch(InventorySystem system)
 {
-    system.inventoryGenerator(100000);
+    system.inventoryGenerator(200000);
     InventorySystem::Item newItem("Tshirt", 100005, 1000);
     system.inventoryVector.push_back(newItem);
     system.inventoryMap.insert(newItem);
@@ -943,7 +961,7 @@ void testSearch(InventorySystem system)
 };
 void testEdit(InventorySystem system)
 {
-    system.inventoryGenerator(100000);
+    system.inventoryGenerator(200000);
     InventorySystem::Item newItem("Tshirt", 100005, 1000);
     system.inventoryVector.push_back(newItem);
     system.inventoryMap.insert(newItem);
@@ -973,7 +991,6 @@ void testEdit(InventorySystem system)
     system.inventoryMap.remove(100005);
     system.inventoryTree.remove(100005);
 };
-
 // ===================== Specific Test Cases ===========================
 
 // For the map data structure
@@ -1060,7 +1077,7 @@ void testTreeEdit(InventorySystem system)
     system.inventoryTree.printItem(100005);
 }
 
-// Runs whole program
+// Run all tests
 void runTests(InventorySystem system)
 {
     // Run all tests
@@ -1073,13 +1090,59 @@ void runTests(InventorySystem system)
     testEdit(system);
 };
 
+// Creates an inventory system and based on userInput lets the user insert, delete, search, and edit items
+void runProgram()
+{
+    InventorySystem system;
+    string command;
+    string name;
+    int idNumber;
+    int inStock;
+
+    while (command != "quit")
+    {
+        cin >> command;
+
+        if (command == "insert")
+        {
+            cin >> name;
+            cin >> idNumber;
+            cin >> inStock;
+            // Call system.insert(name, idNumber, inStock)
+            cout << "Inserted: " << name << " " << idNumber << " " << inStock << endl;
+        }
+        else if (command == "search")
+        {
+            cin >> idNumber;
+            // Call system.search(idNumber)
+        }
+        else if (command == "delete")
+        {
+            cin >> idNumber;
+            // Call system.remove(idNumber)
+            cout << "Deleted item with idNumber: " << idNumber << endl;
+        }
+        else if (command == "edit")
+        {
+            cin >> idNumber;
+            cin >> inStock;
+            // Call system.edit(idNumber, inStock)
+            cout << "Edited item with idNumber: " << idNumber << endl;
+            cout << "New amount in stock: " << inStock << endl;
+        }
+    }
+}
+
 // ===================== Main Method ===========================
 int main()
 {
     InventorySystem system;
 
     // Run all tests
-    runTests(system);
+    // runTests(system);
+
+    // Run program based on user input
+    // runProgram();
 
     // --- Test cases based on data structure ---
     // -- For map --
