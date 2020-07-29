@@ -1110,10 +1110,10 @@ void runProgram()
     cout << "editAmount | editAmount idNumber amountInStock" << endl;
     cout << "printTree | printTree" << endl;
     cout << "printMap | printMap" << endl;
-    cout << "quit | quit" << endl;
+    cout << "exit | exit" << endl;
     cout << endl;
 
-    while (command != "quit")
+    while (command != "exit")
     {
         cin >> command;
 
@@ -1126,15 +1126,14 @@ void runProgram()
             cout << "editAmount | editAmount idNumber amountInStock" << endl;
             cout << "printTree | printTree" << endl;
             cout << "printMap | printMap" << endl;
-            cout << "quit | quit" << endl;
+            cout << "exit | exit" << endl;
             cout << endl;
         }
         else if (command == "insert")
         {
             cin >> name;
             cin >> idNumber;
-            if (!cin)
-                cin >> inStock;
+            cin >> inStock;
             system.insert(name, idNumber, inStock);
             cout << "Inserted: " << name << " " << idNumber << " " << inStock << endl;
             cout << endl;
@@ -1179,7 +1178,7 @@ int main()
     // runTests(system, 1000000);
 
     // Run program based on user input
-    // runProgram();
+    runProgram();
 
     // --- Test cases based on data structure ---
     // -- For map --
@@ -1192,6 +1191,12 @@ int main()
     // testTreeDelete(system);
     // testTreeSearch(system);
     // testTreeEdit(system);
+
+    // system.inventoryGenerator(10);
+    // system.insert("ModelX", 5, 1000);
+    // InventorySystem::Item newItem("ModelX", 5, 1000);
+    // system.inventoryMap.insert(newItem);
+    // system.printMap();
 
     return 0;
 };
