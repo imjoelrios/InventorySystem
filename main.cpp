@@ -101,6 +101,7 @@ public:
                 cout << "idNumber: " << keys.at(i) << endl;
                 cout << "Name: " << values.at(i).name << endl;
                 cout << "Amount: " << values.at(i).inStock << endl;
+                cout << endl;
             }
         }
         void insert(InventorySystem::Item item)
@@ -248,7 +249,6 @@ public:
             }
             insertRecursive(AVL_Root, data, item);
         }
-
         void printItem(int key)
         {
             auto temp = searchRecursive(AVL_Root, key);
@@ -848,7 +848,11 @@ public:
         inventoryTree.remove(idNumber);
         inventoryMap.remove(idNumber);
     }
-
+    void editAmountInStock(int idNumber, int newAmount)
+    {
+        inventoryMap.editAmountInStock(idNumber, newAmount);
+        inventoryMap.editAmountInStock(idNumber, newAmount);
+    }
     // By Name
     void searchByName()
     {
@@ -992,7 +996,7 @@ void testEdit(InventorySystem system, int inventorySize)
     system.inventoryTree.remove(100005);
 };
 
-// Run all tests
+// Run all tests and set the random inventory size
 void runTests(InventorySystem system, int inventorySize)
 {
     // Run all tests
@@ -1099,36 +1103,70 @@ void runProgram()
     int idNumber;
     int inStock;
 
+    cout << "List of commands:" << endl;
+    cout << "insert | insert nameOfItem idNumber amountInStock" << endl;
+    cout << "search | search idNumber" << endl;
+    cout << "delete | delete idNumber" << endl;
+    cout << "editAmount | editAmount idNumber amountInStock" << endl;
+    cout << "printTree | printTree" << endl;
+    cout << "printMap | printMap" << endl;
+    cout << "quit | quit" << endl;
+    cout << endl;
+
     while (command != "quit")
     {
         cin >> command;
 
-        if (command == "insert")
+        if (command == "commands")
+        {
+            cout << "List of commands:" << endl;
+            cout << "insert | insert nameOfItem idNumber amountInStock" << endl;
+            cout << "search | search idNumber" << endl;
+            cout << "delete | delete idNumber" << endl;
+            cout << "editAmount | editAmount idNumber amountInStock" << endl;
+            cout << "printTree | printTree" << endl;
+            cout << "printMap | printMap" << endl;
+            cout << "quit | quit" << endl;
+            cout << endl;
+        }
+        else if (command == "insert")
         {
             cin >> name;
             cin >> idNumber;
-            cin >> inStock;
-            // Call system.insert(name, idNumber, inStock)
+            if (!cin)
+                cin >> inStock;
+            system.insert(name, idNumber, inStock);
             cout << "Inserted: " << name << " " << idNumber << " " << inStock << endl;
+            cout << endl;
         }
         else if (command == "search")
         {
             cin >> idNumber;
-            // Call system.search(idNumber)
+            system.searchByID(idNumber);
         }
         else if (command == "delete")
         {
             cin >> idNumber;
-            // Call system.remove(idNumber)
+            system.deleteByID(idNumber);
             cout << "Deleted item with idNumber: " << idNumber << endl;
+            cout << endl;
         }
-        else if (command == "edit")
+        else if (command == "editAmount")
         {
             cin >> idNumber;
             cin >> inStock;
-            // Call system.edit(idNumber, inStock)
+            system.editAmountInStock(idNumber, inStock);
             cout << "Edited item with idNumber: " << idNumber << endl;
             cout << "New amount in stock: " << inStock << endl;
+            cout << endl;
+        }
+        else if (command == "printTree")
+        {
+            system.printTree();
+        }
+        else if (command == "printMap")
+        {
+            system.printMap();
         }
     }
 }
@@ -1136,10 +1174,9 @@ void runProgram()
 // ===================== Main Method ===========================
 int main()
 {
-    InventorySystem system;
-
     // Run all tests
-    runTests(system, 100000);
+    //  InventorySystem system;
+    // runTests(system, 1000000);
 
     // Run program based on user input
     // runProgram();
