@@ -1052,6 +1052,30 @@ void testMapEdit(InventorySystem system)
     system.inventoryMap.printItem(100005);
 }
 
+void test_5() {
+
+
+    InventorySystem::Map map;
+    InventorySystem::Tree tree;
+    for (int i = 100000; i > 0; i--) {
+        InventorySystem::Item test("hello world", i, 8);
+        map.insert(test);
+        tree.insert(test);
+    }
+    cout << "Map:" << endl;
+    map.search(100);
+    map.search(119);
+    map.search(1000);
+    map.search(1230);
+    cout << endl;
+    cout << "Tree: " << endl;
+    tree.search(100);
+    tree.search(119);
+    tree.search(1000);
+    tree.search(1230);
+
+};
+
 // For the tree data structure
 void testTreeInsert(InventorySystem system)
 {
@@ -1176,9 +1200,9 @@ int main()
     // Run all tests
     //  InventorySystem system;
     // runTests(system, 1000000);
-
+    test_5();
     // Run program based on user input
-    runProgram();
+    // runProgram();
 
     // --- Test cases based on data structure ---
     // -- For map --
