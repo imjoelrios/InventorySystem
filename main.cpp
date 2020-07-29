@@ -7,6 +7,8 @@
 #include <string>
 #include <stack>
 #include <chrono>
+#include <list>
+
 
 using namespace std;
 using namespace std::chrono;
@@ -15,10 +17,10 @@ using namespace std::chrono;
 string printRandomString(int n)
 {
     const int MAX = 26;
-    char alphabet[MAX] = {'a', 'b', 'c', 'd', 'e', 'f', 'g',
+    char alphabet[MAX] = { 'a', 'b', 'c', 'd', 'e', 'f', 'g',
                           'h', 'i', 'j', 'k', 'l', 'm', 'n',
                           'o', 'p', 'q', 'r', 's', 't', 'u',
-                          'v', 'w', 'x', 'y', 'z'};
+                          'v', 'w', 'x', 'y', 'z' };
 
     string res = "";
     for (int i = 0; i < n; i++)
@@ -54,6 +56,7 @@ public:
     };
 
     // Array with inventory
+
     vector<Item> inventoryVector;
     void removeFromVector(int idNumber)
     {
@@ -194,8 +197,8 @@ public:
         struct Node
         {
             Item classItem;
-            Node *right = nullptr;
-            Node *left = nullptr;
+            Node* right = nullptr;
+            Node* left = nullptr;
             int height = 0;
             int data = NULL;
             string stringData = "";
@@ -223,11 +226,11 @@ public:
         }
 
         // --- Tree functions ---
-        void insert(Item &newItem)
+        void insert(Item& newItem)
         {
             if (AVL_Root == nullptr)
             {
-                Node *temp = new Node();
+                Node* temp = new Node();
                 temp->classItem = newItem;
                 temp->data = newItem.idNumber;
                 AVL_Root = temp;
@@ -236,11 +239,11 @@ public:
             }
             insertRecursive(AVL_Root, newItem.idNumber, newItem);
         }
-        void insert(string data, Item &item)
+        void insert(string data, Item& item)
         {
             if (AVL_Root == nullptr)
             {
-                Node *temp = new Node();
+                Node* temp = new Node();
                 temp->classItem = item;
                 temp->stringData = data;
                 AVL_Root = temp;
@@ -338,7 +341,7 @@ public:
         }
         bool searchInorder(int key)
         {
-            stack<Node *> temp;
+            stack<Node*> temp;
             if (AVL_Root == nullptr)
                 return false;
             searchInorderHelp(key, AVL_Root, temp);
@@ -406,7 +409,7 @@ public:
         }
         bool searchInorder(string key)
         {
-            stack<Node *> temp;
+            stack<Node*> temp;
             if (AVL_Root == nullptr)
                 return false;
             searchInorderHelp(key, AVL_Root, temp);
@@ -436,13 +439,13 @@ public:
 
     private:
         // --- Tree structure ---
-        Node *AVL_Root = nullptr;
-        Node *rotateRightLeft(Node *node)
+        Node* AVL_Root = nullptr;
+        Node* rotateRightLeft(Node* node)
         {
 
             if (node == nullptr)
                 return node;
-            Node *rightChild = node->right;
+            Node* rightChild = node->right;
             node->right = rightChild->left;
             rightChild->left = node->right->right;
             node->right->right = rightChild;
@@ -457,7 +460,7 @@ public:
             newRightChild->height++;
             return newRightChild;
         }
-        Node *rotateLeft(Node *node)
+        Node* rotateLeft(Node* node)
         {
             if (node == nullptr)
                 return node;
@@ -470,7 +473,7 @@ public:
             rightChild->left->height -= 2;
             return rightChild;
         }
-        Node *rotateRight(Node *node)
+        Node* rotateRight(Node* node)
         {
             if (node == nullptr)
                 return node;
@@ -483,11 +486,11 @@ public:
             leftChild->right->height -= 2;
             return leftChild;
         }
-        Node *rotateLeftRight(Node *node)
+        Node* rotateLeftRight(Node* node)
         {
             if (node == nullptr)
                 return node;
-            Node *leftChild = node->left;
+            Node* leftChild = node->left;
             node->left = leftChild->right;
             leftChild->right = node->left->left;
             node->left->left = leftChild;
@@ -502,12 +505,12 @@ public:
             newLeftChild->height++;
             return newLeftChild;
         }
-        Node *insertRecursive(Node *root, int data, Item &item)
+        Node* insertRecursive(Node* root, int data, Item& item)
         {
 
             if (root == NULL)
             {
-                Node *temp = new Node();
+                Node* temp = new Node();
                 temp->classItem = item;
                 temp->data = data;
                 temp->height = 1;
@@ -522,12 +525,12 @@ public:
             root = balanceNodes(root);
             return root;
         }
-        Node *insertRecursive(Node *root, string data, Item &item)
+        Node* insertRecursive(Node* root, string data, Item& item)
         {
 
             if (root == NULL)
             {
-                Node *temp = new Node();
+                Node* temp = new Node();
                 temp->classItem = item;
                 temp->stringData = data;
                 temp->height = 1;
@@ -542,7 +545,7 @@ public:
             root = balanceNodes(root);
             return root;
         }
-        int max_height(Node *root)
+        int max_height(Node* root)
         {
             if (root == nullptr)
                 return 0;
@@ -552,18 +555,18 @@ public:
 
             return 1 + (heightLeft > heightRight ? heightLeft : heightRight);
         }
-        int height(Node *root)
+        int height(Node* root)
         {
             if (root == nullptr)
                 return 0;
             return root->height;
         }
-        Node *balanceNodes(Node *parent)
+        Node* balanceNodes(Node* parent)
         {
             if (parent == nullptr)
                 return parent;
 
-            Node *temp = parent;
+            Node* temp = parent;
 
             if (height(parent->left) - height(parent->right) > 1)
             {
@@ -585,7 +588,7 @@ public:
             }
             return parent;
         }
-        void printItem(Node *item)
+        void printItem(Node* item)
         {
             if (item != nullptr)
             {
@@ -595,7 +598,7 @@ public:
                 cout << endl;
             }
         }
-        void printPostorder(Node *root)
+        void printPostorder(Node* root)
         {
             if (root == nullptr)
                 return;
@@ -604,7 +607,7 @@ public:
             printPostorder(root->right);
             printItem(root);
         }
-        void printInorder(Node *root)
+        void printInorder(Node* root)
         {
             if (root == nullptr)
                 return;
@@ -613,7 +616,7 @@ public:
             printItem(root);
             printInorder(root->right);
         }
-        void printReverseInorder(Node *root)
+        void printReverseInorder(Node* root)
         {
             if (root == nullptr)
                 return;
@@ -622,7 +625,7 @@ public:
             printItem(root);
             printReverseInorder(root->left);
         }
-        void printPreorder(Node *root)
+        void printPreorder(Node* root)
         {
             if (root == nullptr)
                 return;
@@ -631,7 +634,7 @@ public:
             printPreorder(root->left);
             printPreorder(root->right);
         }
-        void searchInorderHelp(string key, Node *root, stack<Node *> &stack_)
+        void searchInorderHelp(string key, Node* root, stack<Node*>& stack_)
         {
             if (root == nullptr)
                 return;
@@ -640,7 +643,7 @@ public:
                 stack_.push(root);
             searchInorderHelp(key, root->right, stack_);
         }
-        void searchInorderHelp(int key, Node *root, stack<Node *> &stack_)
+        void searchInorderHelp(int key, Node* root, stack<Node*>& stack_)
         {
             if (root == nullptr)
                 return;
@@ -649,7 +652,7 @@ public:
                 stack_.push(root);
             searchInorderHelp(key, root->right, stack_);
         }
-        Node *searchRecursive(Node *root, int key)
+        Node* searchRecursive(Node* root, int key)
         {
             if (root == nullptr)
                 return nullptr;
@@ -661,7 +664,7 @@ public:
                 return searchRecursive(root->right, key);
             return nullptr;
         }
-        Node *searchRecursive(Node *root, string key)
+        Node* searchRecursive(Node* root, string key)
         {
             if (root == nullptr)
                 return nullptr;
@@ -673,7 +676,7 @@ public:
                 return searchRecursive(root->right, key);
             return nullptr;
         }
-        bool isALeaf(Node *node)
+        bool isALeaf(Node* node)
         {
             if (node == nullptr)
                 return false;
@@ -681,7 +684,7 @@ public:
                 return true;
             return false;
         }
-        Node *deleteLeaf(Node *root, Node *parent)
+        Node* deleteLeaf(Node* root, Node* parent)
         {
 
             if (root->data == parent->data)
@@ -698,7 +701,7 @@ public:
             root->height = max_height(root);
             root = balanceNodes(root);
         }
-        Node *deleteRecursive(Node *root, Node *rootNonRecursive, Node *&inorder, Node *deleting, bool is_string)
+        Node* deleteRecursive(Node* root, Node* rootNonRecursive, Node*& inorder, Node* deleting, bool is_string)
         {
             if (inorder == nullptr)
             {
@@ -757,7 +760,7 @@ public:
             root = balanceNodes(root);
             return root;
         }
-        Node *parent(Node *root, Node *key)
+        Node* parent(Node* root, Node* key)
         {
             if (root == nullptr || key == AVL_Root)
                 return nullptr;
@@ -770,7 +773,7 @@ public:
             if (root->data < key->data)
                 return parent(root->right, key);
         }
-        Node *inorder_predecessor(Node *root)
+        Node* inorder_predecessor(Node* root)
         {
 
             if (root == nullptr)
@@ -792,12 +795,14 @@ public:
     {
         // TODO: make sure the item is NOT already in the system (checking idNumber)
         Item newItem = Item(name, idNumber, inStock);
+        inventoryHashTable.insert(newItem);
         inventoryVector.push_back(newItem);
         inventoryMap.insert(newItem);
         inventoryTree.insert(newItem);
     }
     void inventoryGenerator(int inventoryNumber)
     {
+        inventoryHashTable.reconfigure(inventoryNumber);
         for (int i = 0; i < inventoryNumber; i++)
         {
             // randomly generate an item
@@ -811,6 +816,8 @@ public:
             inventoryVector.push_back(item);
             inventoryMap.insert(item);
             inventoryTree.insert(item);
+            inventoryHashTable.insert(item);
+
         }
     }
     void printInventoryVector()
@@ -862,15 +869,118 @@ public:
     {
         // inventoryTree.deleteValue(//name)
     }
+
+
+
+
+    ///Experimental for the string methods that we will implement
+    struct hashTable {
+        hashTable() {
+            this->size = 100 * multiplier;
+            for (int i = 0; i < size; i++) {
+                list<pair<string, Item>> empty_vec;
+                hash_structure_str.push_back(empty_vec);
+
+            }
+        }
+        vector<list<pair<string, Item>>>hash_structure_str;
+        int size = 0;
+        int total_values = 0;
+        const double multiplier = 1.5;
+        hash<string> hash_int;
+
+        hashTable(int size_) {
+            this->size = size_ * multiplier;
+            for (int i = 0; i < size; i++) {
+                list<pair<string, Item>> empty_vec;
+                hash_structure_str.push_back(empty_vec);
+
+            }
+
+        }
+
+        void search(string key) {
+            long hashed = hash_int(key);
+            auto temp = hash_structure_str[abs(hashed) % size];
+            for (auto element : temp) {
+                if (element.first == key) {
+                    printItem(element.second);
+                    return;
+                }
+
+            }
+            cout << "Item not found!";
+        }
+
+        void printItem(Item item) {
+
+            cout << "Name: " << item.name << endl;
+            cout << "Item number: " << item.idNumber << endl;
+            cout << "Number of items: " << item.inStock << endl;
+        }
+
+        void edit(string name, int newStock) {
+            long hashed = hash_int(name);
+            int index = abs(hashed) % size;
+            for (auto iter = hash_structure_str[index].begin(); iter != hash_structure_str[index].end(); iter++) {
+                if (iter->first == name)
+                    iter->second.inStock = newStock;
+
+            }
+        }
+
+        void insert(Item item) {
+
+            long hashed = hash_int(item.name);
+            auto temp = hash_structure_str[abs(hashed) % size];
+            auto pair = make_pair(item.name, item);
+            if (!found(temp, item.name)) {
+                hash_structure_str[abs(hashed) % size].push_back(pair);
+                total_values++;
+            }
+        }
+
+        void delete_(string name) {
+            long hashed = hash_int(name);
+            auto iter = hash_structure_str[abs(hashed) % size].begin();
+            for (; iter != hash_structure_str[abs(hashed) % size].end(); iter++) {
+                if (iter->first == name) {
+                    hash_structure_str[abs(hashed) % size].erase(iter);
+                    return;
+                }
+            }
+        }
+
+        void reconfigure(int newSize) {
+            hash_structure_str.clear();
+            this->size = newSize * multiplier;
+            for (int i = 0; i < size; i++) {
+                list<pair<string, Item>> empty_vec;
+                hash_structure_str.push_back(empty_vec);
+
+            }
+        }
+
+        bool found(list<pair<string, Item>> list, string name) {
+            bool found = false;
+            for (auto element : list) {
+                if (element.first == name)
+                    return true;
+            }
+            return false;
+        }
+    };
+    hashTable inventoryHashTable;
 };
+
 
 // ===================== Test Cases ===========================
 /*
-	1. Random inventory is added to the system amounting to 100,000 (added to the tree and map as well)
-	2. A newItem is created. This item is the one that will be manipulated (insert, delete, search, etc.)
-		The ID of the newItem is over 100,000 to avoid collision with an item that has that idAlready
-	3. Run the function being tested on each data structure
-	2. Print time
+    1. Random inventory is added to the system amounting to 100,000 (added to the tree and map as well)
+    2. A newItem is created. This item is the one that will be manipulated (insert, delete, search, etc.)
+        The ID of the newItem is over 100,000 to avoid collision with an item that has that idAlready
+    3. Run the function being tested on each data structure
+    2. Print time
 
 */
 void testInsert(InventorySystem system, int inventorySize)
@@ -890,6 +1000,12 @@ void testInsert(InventorySystem system, int inventorySize)
     auto stop2 = high_resolution_clock::now();
     auto treeExecutionTime = duration_cast<microseconds>(stop2 - start2);
 
+    // --- Test in Hash
+    auto start3 = high_resolution_clock::now();
+    system.inventoryHashTable.insert(newItem);
+    auto stop3 = high_resolution_clock::now();
+    auto hashExecutionTime = duration_cast<microseconds>(stop3 - start3);
+
     // --- Print execution times
     cout << "Test #1 --- Insert()" << endl;
     cout << "Execution time by map : " << mapExecutionTime.count();
@@ -897,10 +1013,16 @@ void testInsert(InventorySystem system, int inventorySize)
 
     cout << "Execution time by tree : " << treeExecutionTime.count();
     cout << " microseconds " << endl;
+
+
+    //   cout << "Execution time by hash : " << hashExecutionTime.count();
+    //   cout << " microseconds " << endl;
     cout << endl;
 
     system.inventoryMap.remove(100005);
     system.inventoryTree.remove(100005);
+    system.inventoryHashTable.delete_("Tshirt");
+
 };
 void testDelete(InventorySystem system, int inventorySize)
 {
@@ -909,6 +1031,7 @@ void testDelete(InventorySystem system, int inventorySize)
     system.inventoryVector.push_back(newItem);
     system.inventoryMap.insert(newItem);
     system.inventoryTree.insert(newItem);
+    system.inventoryHashTable.insert(newItem);
 
     // --- Test in Map
     auto start = high_resolution_clock::now();
@@ -922,6 +1045,12 @@ void testDelete(InventorySystem system, int inventorySize)
     auto stop2 = high_resolution_clock::now();
     auto treeExecutionTime = duration_cast<microseconds>(stop2 - start2);
 
+    // --- Test in Hash
+    auto start3 = high_resolution_clock::now();
+    system.inventoryHashTable.delete_("T-shirt");
+    auto stop3 = high_resolution_clock::now();
+    auto hashExecutionTime = duration_cast<microseconds>(stop3 - start3);
+
     // --- Print execution times
     cout << "Test #2 --- Delete()" << endl;
     cout << "Execution time by map : " << mapExecutionTime.count();
@@ -929,6 +1058,9 @@ void testDelete(InventorySystem system, int inventorySize)
 
     cout << "Execution time by tree : " << treeExecutionTime.count();
     cout << " microseconds " << endl;
+
+    //    cout << "Execution time by Hash : " << hashExecutionTime.count();
+    //    cout << " microseconds " << endl;
     cout << endl;
 };
 void testSearch(InventorySystem system, int inventorySize)
@@ -938,6 +1070,7 @@ void testSearch(InventorySystem system, int inventorySize)
     system.inventoryVector.push_back(newItem);
     system.inventoryMap.insert(newItem);
     system.inventoryTree.insert(newItem);
+    system.inventoryHashTable.insert(newItem);
 
     // --- Test in Map
     auto start = high_resolution_clock::now();
@@ -951,6 +1084,12 @@ void testSearch(InventorySystem system, int inventorySize)
     auto stop2 = high_resolution_clock::now();
     auto treeExecutionTime = duration_cast<microseconds>(stop2 - start2);
 
+    // --- Test in Hash
+    auto start3 = high_resolution_clock::now();
+    //  system.inventoryHashTable.search("Tshirt");
+    auto stop3 = high_resolution_clock::now();
+    auto hashExecutionTime = duration_cast<microseconds>(stop3 - start3);
+
     // --- Print execution times
     cout << "Test #3 --- Search()" << endl;
     cout << "Execution time by map : " << mapExecutionTime.count();
@@ -958,10 +1097,15 @@ void testSearch(InventorySystem system, int inventorySize)
 
     cout << "Execution time by tree : " << treeExecutionTime.count();
     cout << " microseconds " << endl;
+
+
+    //  cout << "Execution time by hash : " << hashExecutionTime.count();
+    //  cout << " microseconds " << endl;
     cout << endl;
 
     system.inventoryMap.remove(100005);
     system.inventoryTree.remove(100005);
+    system.inventoryHashTable.delete_("Tshirt");
 };
 void testEdit(InventorySystem system, int inventorySize)
 {
@@ -970,7 +1114,7 @@ void testEdit(InventorySystem system, int inventorySize)
     system.inventoryVector.push_back(newItem);
     system.inventoryMap.insert(newItem);
     system.inventoryTree.insert(newItem);
-
+    system.inventoryHashTable.insert(newItem);
     // --- Test in Map
     auto start = high_resolution_clock::now();
     system.inventoryMap.editAmountInStock(inventorySize + 5, 250);
@@ -983,6 +1127,14 @@ void testEdit(InventorySystem system, int inventorySize)
     auto stop2 = high_resolution_clock::now();
     auto treeExecutionTime = duration_cast<microseconds>(stop2 - start2);
 
+    // --- Test in Hash
+    auto start3 = high_resolution_clock::now();
+    system.inventoryHashTable.edit("Tshirt", 250);
+    auto stop3 = high_resolution_clock::now();
+    auto hashExecutionTime = duration_cast<microseconds>(stop3 - start3);
+
+
+
     // --- Print execution times
     cout << "Test #3 --- Edit()" << endl;
     cout << "Execution time by map : " << mapExecutionTime.count();
@@ -990,10 +1142,15 @@ void testEdit(InventorySystem system, int inventorySize)
 
     cout << "Execution time by tree : " << treeExecutionTime.count();
     cout << " microseconds " << endl;
+
+
+    //    cout << "Execution time by Hash : " << hashExecutionTime.count();
+    //    cout << " microseconds " << endl;
     cout << endl;
 
     system.inventoryMap.remove(100005);
     system.inventoryTree.remove(100005);
+    system.inventoryHashTable.delete_("Tshirt");
 };
 
 // Run all tests and set the random inventory size
@@ -1119,6 +1276,7 @@ void testTreeEdit(InventorySystem system)
 }
 
 // Creates an inventory system and based on userInput lets the user insert, delete, search, and edit items
+
 void runProgram()
 {
     InventorySystem system;
@@ -1198,11 +1356,11 @@ void runProgram()
 int main()
 {
     // Run all tests
-    //  InventorySystem system;
-    // runTests(system, 1000000);
-    test_5();
+      //InventorySystem system;
+     //runTests(system, 100000);
+    //test_5();
     // Run program based on user input
-    // runProgram();
+    runProgram();
 
     // --- Test cases based on data structure ---
     // -- For map --
