@@ -7,6 +7,7 @@
 #include <string>
 #include <stack>
 #include <chrono>
+#include <list>
 
 using namespace std;
 using namespace std::chrono;
@@ -792,12 +793,14 @@ public:
     {
         // TODO: make sure the item is NOT already in the system (checking idNumber)
         Item newItem = Item(name, idNumber, inStock);
+        // inventoryHashTable.insert(newItem);
         inventoryVector.push_back(newItem);
         inventoryMap.insert(newItem);
         inventoryTree.insert(newItem);
     }
     void inventoryGenerator(int inventoryNumber)
     {
+        // inventoryHashTable.reconfigure(inventoryNumber);
         for (int i = 0; i < inventoryNumber; i++)
         {
             // randomly generate an item
@@ -811,6 +814,7 @@ public:
             inventoryVector.push_back(item);
             inventoryMap.insert(item);
             inventoryTree.insert(item);
+            // inventoryHashTable.insert(item);
         }
     }
     void printInventoryVector()
@@ -862,20 +866,134 @@ public:
     {
         // inventoryTree.deleteValue(//name)
     }
+
+    // Experimental for the string methods that we will implement
+    /*
+    struct hashTable
+    {
+        hashTable()
+        {
+            this->size = 100 * multiplier;
+            for (int i = 0; i < size; i++)
+            {
+                list<pair<string, Item>> empty_vec;
+                hash_structure_str.push_back(empty_vec);
+            }
+        }
+        vector<list<pair<string, Item>>> hash_structure_str;
+        int size = 0;
+        int total_values = 0;
+        const double multiplier = 1.5;
+        hash<string> hash_int;
+
+        hashTable(int size_)
+        {
+            this->size = size_ * multiplier;
+            for (int i = 0; i < size; i++)
+            {
+                list<pair<string, Item>> empty_vec;
+                hash_structure_str.push_back(empty_vec);
+            }
+        }
+
+        void search(string key)
+        {
+            long hashed = hash_int(key);
+            auto temp = hash_structure_str[abs(hashed) % size];
+            for (auto element : temp)
+            {
+                if (element.first == key)
+                {
+                    printItem(element.second);
+                    return;
+                }
+            }
+            cout << "Item not found!";
+        }
+
+        void printItem(Item item)
+        {
+
+            cout << "Name: " << item.name << endl;
+            cout << "Item number: " << item.idNumber << endl;
+            cout << "Number of items: " << item.inStock << endl;
+        }
+
+        void edit(string name, int newStock)
+        {
+            long hashed = hash_int(name);
+            int index = abs(hashed) % size;
+            for (auto iter = hash_structure_str[index].begin(); iter != hash_structure_str[index].end(); iter++)
+            {
+                if (iter->first == name)
+                    iter->second.inStock = newStock;
+            }
+        }
+
+        void insert(Item item)
+        {
+
+            long hashed = hash_int(item.name);
+            auto temp = hash_structure_str[abs(hashed) % size];
+            auto pair = make_pair(item.name, item);
+            if (!found(temp, item.name))
+            {
+                hash_structure_str[abs(hashed) % size].push_back(pair);
+                total_values++;
+            }
+        }
+
+        void delete_(string name)
+        {
+            long hashed = hash_int(name);
+            auto iter = hash_structure_str[abs(hashed) % size].begin();
+            for (; iter != hash_structure_str[abs(hashed) % size].end(); iter++)
+            {
+                if (iter->first == name)
+                {
+                    hash_structure_str[abs(hashed) % size].erase(iter);
+                    return;
+                }
+            }
+        }
+
+        void reconfigure(int newSize)
+        {
+            hash_structure_str.clear();
+            this->size = newSize * multiplier;
+            for (int i = 0; i < size; i++)
+            {
+                list<pair<string, Item>> empty_vec;
+                hash_structure_str.push_back(empty_vec);
+            }
+        }
+
+        bool found(list<pair<string, Item>> list, string name)
+        {
+            bool found = false;
+            for (auto element : list)
+            {
+                if (element.first == name)
+                    return true;
+            }
+            return false;
+        }
+    };
+    hashTable inventoryHashTable;
+    */
 };
 
 // ===================== Test Cases ===========================
 /*
-	1. Random inventory is added to the system amounting to 100,000 (added to the tree and map as well)
-	2. A newItem is created. This item is the one that will be manipulated (insert, delete, search, etc.)
-		The ID of the newItem is over 100,000 to avoid collision with an item that has that idAlready
-	3. Run the function being tested on each data structure
-	2. Print time
+    1. Random inventory is added to the system amounting to 100,000 (added to the tree and map as well)
+    2. A newItem is created. This item is the one that will be manipulated (insert, delete, search, etc.)
+        The ID of the newItem is over 100,000 to avoid collision with an item that has that idAlready
+    3. Run the function being tested on each data structure
+    2. Print time
 
 */
-void testInsert(InventorySystem system, int inventorySize)
+void testInsert(InventorySystem &system, int inventorySize)
 {
-    system.inventoryGenerator(inventorySize);
     InventorySystem::Item newItem("Tshirt", inventorySize + 5, 1000);
     system.inventoryVector.push_back(newItem);
     // --- Test in Map
@@ -890,6 +1008,12 @@ void testInsert(InventorySystem system, int inventorySize)
     auto stop2 = high_resolution_clock::now();
     auto treeExecutionTime = duration_cast<microseconds>(stop2 - start2);
 
+    // --- Test in Hash
+    auto start3 = high_resolution_clock::now();
+    // system.inventoryHashTable.insert(newItem);
+    auto stop3 = high_resolution_clock::now();
+    auto hashExecutionTime = duration_cast<microseconds>(stop3 - start3);
+
     // --- Print execution times
     cout << "Test #1 --- Insert()" << endl;
     cout << "Execution time by map : " << mapExecutionTime.count();
@@ -897,19 +1021,13 @@ void testInsert(InventorySystem system, int inventorySize)
 
     cout << "Execution time by tree : " << treeExecutionTime.count();
     cout << " microseconds " << endl;
+
+    //   cout << "Execution time by hash : " << hashExecutionTime.count();
+    //   cout << " microseconds " << endl;
     cout << endl;
-
-    system.inventoryMap.remove(100005);
-    system.inventoryTree.remove(100005);
 };
-void testDelete(InventorySystem system, int inventorySize)
+void testDelete(InventorySystem &system, int inventorySize)
 {
-    system.inventoryGenerator(inventorySize);
-    InventorySystem::Item newItem("Tshirt", inventorySize + 5, 1000);
-    system.inventoryVector.push_back(newItem);
-    system.inventoryMap.insert(newItem);
-    system.inventoryTree.insert(newItem);
-
     // --- Test in Map
     auto start = high_resolution_clock::now();
     system.inventoryMap.remove(inventorySize + 5);
@@ -922,6 +1040,12 @@ void testDelete(InventorySystem system, int inventorySize)
     auto stop2 = high_resolution_clock::now();
     auto treeExecutionTime = duration_cast<microseconds>(stop2 - start2);
 
+    // --- Test in Hash
+    auto start3 = high_resolution_clock::now();
+    // system.inventoryHashTable.delete_("T-shirt");
+    auto stop3 = high_resolution_clock::now();
+    auto hashExecutionTime = duration_cast<microseconds>(stop3 - start3);
+
     // --- Print execution times
     cout << "Test #2 --- Delete()" << endl;
     cout << "Execution time by map : " << mapExecutionTime.count();
@@ -929,15 +1053,18 @@ void testDelete(InventorySystem system, int inventorySize)
 
     cout << "Execution time by tree : " << treeExecutionTime.count();
     cout << " microseconds " << endl;
+
+    //    cout << "Execution time by Hash : " << hashExecutionTime.count();
+    //    cout << " microseconds " << endl;
     cout << endl;
 };
-void testSearch(InventorySystem system, int inventorySize)
+void testSearch(InventorySystem &system, int inventorySize)
 {
-    system.inventoryGenerator(inventorySize);
     InventorySystem::Item newItem("Tshirt", inventorySize + 5, 1000);
     system.inventoryVector.push_back(newItem);
     system.inventoryMap.insert(newItem);
     system.inventoryTree.insert(newItem);
+    // system.inventoryHashTable.insert(newItem);
 
     // --- Test in Map
     auto start = high_resolution_clock::now();
@@ -951,6 +1078,12 @@ void testSearch(InventorySystem system, int inventorySize)
     auto stop2 = high_resolution_clock::now();
     auto treeExecutionTime = duration_cast<microseconds>(stop2 - start2);
 
+    // --- Test in Hash
+    auto start3 = high_resolution_clock::now();
+    //  system.inventoryHashTable.search("Tshirt");
+    auto stop3 = high_resolution_clock::now();
+    auto hashExecutionTime = duration_cast<microseconds>(stop3 - start3);
+
     // --- Print execution times
     cout << "Test #3 --- Search()" << endl;
     cout << "Execution time by map : " << mapExecutionTime.count();
@@ -958,19 +1091,13 @@ void testSearch(InventorySystem system, int inventorySize)
 
     cout << "Execution time by tree : " << treeExecutionTime.count();
     cout << " microseconds " << endl;
+
+    //  cout << "Execution time by hash : " << hashExecutionTime.count();
+    //  cout << " microseconds " << endl;
     cout << endl;
-
-    system.inventoryMap.remove(100005);
-    system.inventoryTree.remove(100005);
 };
-void testEdit(InventorySystem system, int inventorySize)
+void testEdit(InventorySystem &system, int inventorySize)
 {
-    system.inventoryGenerator(inventorySize);
-    InventorySystem::Item newItem("Tshirt", inventorySize + 5, 1000);
-    system.inventoryVector.push_back(newItem);
-    system.inventoryMap.insert(newItem);
-    system.inventoryTree.insert(newItem);
-
     // --- Test in Map
     auto start = high_resolution_clock::now();
     system.inventoryMap.editAmountInStock(inventorySize + 5, 250);
@@ -983,6 +1110,12 @@ void testEdit(InventorySystem system, int inventorySize)
     auto stop2 = high_resolution_clock::now();
     auto treeExecutionTime = duration_cast<microseconds>(stop2 - start2);
 
+    // --- Test in Hash
+    auto start3 = high_resolution_clock::now();
+    // system.inventoryHashTable.edit("Tshirt", 250);
+    auto stop3 = high_resolution_clock::now();
+    auto hashExecutionTime = duration_cast<microseconds>(stop3 - start3);
+
     // --- Print execution times
     cout << "Test #3 --- Edit()" << endl;
     cout << "Execution time by map : " << mapExecutionTime.count();
@@ -990,15 +1123,16 @@ void testEdit(InventorySystem system, int inventorySize)
 
     cout << "Execution time by tree : " << treeExecutionTime.count();
     cout << " microseconds " << endl;
-    cout << endl;
 
-    system.inventoryMap.remove(100005);
-    system.inventoryTree.remove(100005);
+    //    cout << "Execution time by Hash : " << hashExecutionTime.count();
+    //    cout << " microseconds " << endl;
+    cout << endl;
 };
 
 // Run all tests and set the random inventory size
-void runTests(InventorySystem system, int inventorySize)
+void runTests(InventorySystem &system, int inventorySize)
 {
+    system.inventoryGenerator(inventorySize);
     // Run all tests
     testInsert(system, inventorySize);
     cout << endl;
@@ -1052,12 +1186,13 @@ void testMapEdit(InventorySystem system)
     system.inventoryMap.printItem(100005);
 }
 
-void test_5() {
-
+void test_5()
+{
 
     InventorySystem::Map map;
     InventorySystem::Tree tree;
-    for (int i = 100000; i > 0; i--) {
+    for (int i = 100000; i > 0; i--)
+    {
         InventorySystem::Item test("hello world", i, 8);
         map.insert(test);
         tree.insert(test);
@@ -1073,7 +1208,6 @@ void test_5() {
     tree.search(119);
     tree.search(1000);
     tree.search(1230);
-
 };
 
 // For the tree data structure
@@ -1198,9 +1332,9 @@ void runProgram()
 int main()
 {
     // Run all tests
-    //  InventorySystem system;
-    // runTests(system, 1000000);
-    test_5();
+    InventorySystem system;
+    runTests(system, 1000000);
+
     // Run program based on user input
     // runProgram();
 
@@ -1215,12 +1349,6 @@ int main()
     // testTreeDelete(system);
     // testTreeSearch(system);
     // testTreeEdit(system);
-
-    // system.inventoryGenerator(10);
-    // system.insert("ModelX", 5, 1000);
-    // InventorySystem::Item newItem("ModelX", 5, 1000);
-    // system.inventoryMap.insert(newItem);
-    // system.printMap();
 
     return 0;
 };
