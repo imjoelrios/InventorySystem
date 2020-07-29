@@ -867,120 +867,118 @@ public:
         // inventoryTree.deleteValue(//name)
     }
 
-    // Experimental for the string methods that we will implement
-    /*
-    struct hashTable
-    {
-        hashTable()
-        {
-            this->size = 100 * multiplier;
-            for (int i = 0; i < size; i++)
-            {
-                list<pair<string, Item>> empty_vec;
-                hash_structure_str.push_back(empty_vec);
-            }
-        }
-        vector<list<pair<string, Item>>> hash_structure_str;
-        int size = 0;
-        int total_values = 0;
-        const double multiplier = 1.5;
-        hash<string> hash_int;
+    //Experimental for the string methods that we will implement
+    // struct hashTable
+    // {
+    //     hashTable()
+    //     {
+    //         this->size = 100 * multiplier;
+    //         for (int i = 0; i < size; i++)
+    //         {
+    //             list<pair<string, Item>> empty_vec;
+    //             hash_structure_str.push_back(empty_vec);
+    //         }
+    //     }
+    //     vector<list<pair<string, Item>>> hash_structure_str;
+    //     int size = 0;
+    //     int total_values = 0;
+    //     const double multiplier = 1.5;
+    //     hash<string> hash_int;
 
-        hashTable(int size_)
-        {
-            this->size = size_ * multiplier;
-            for (int i = 0; i < size; i++)
-            {
-                list<pair<string, Item>> empty_vec;
-                hash_structure_str.push_back(empty_vec);
-            }
-        }
+    //     hashTable(int size_)
+    //     {
+    //         this->size = size_ * multiplier;
+    //         for (int i = 0; i < size; i++)
+    //         {
+    //             list<pair<string, Item>> empty_vec;
+    //             hash_structure_str.push_back(empty_vec);
+    //         }
+    //     }
 
-        void search(string key)
-        {
-            long hashed = hash_int(key);
-            auto temp = hash_structure_str[abs(hashed) % size];
-            for (auto element : temp)
-            {
-                if (element.first == key)
-                {
-                    printItem(element.second);
-                    return;
-                }
-            }
-            cout << "Item not found!";
-        }
+    //     void search(string key)
+    //     {
+    //         long hashed = hash_int(key);
+    //         auto temp = hash_structure_str[abs(hashed) % size];
+    //         for (auto element : temp)
+    //         {
+    //             if (element.first == key)
+    //             {
+    //                 printItem(element.second);
+    //                 return;
+    //             }
+    //         }
+    //         cout << "Item not found!";
+    //     }
 
-        void printItem(Item item)
-        {
+    //     void printItem(Item item)
+    //     {
 
-            cout << "Name: " << item.name << endl;
-            cout << "Item number: " << item.idNumber << endl;
-            cout << "Number of items: " << item.inStock << endl;
-        }
+    //         cout << "Name: " << item.name << endl;
+    //         cout << "Item number: " << item.idNumber << endl;
+    //         cout << "Number of items: " << item.inStock << endl;
+    //     }
 
-        void edit(string name, int newStock)
-        {
-            long hashed = hash_int(name);
-            int index = abs(hashed) % size;
-            for (auto iter = hash_structure_str[index].begin(); iter != hash_structure_str[index].end(); iter++)
-            {
-                if (iter->first == name)
-                    iter->second.inStock = newStock;
-            }
-        }
+    //     void edit(string name, int newStock)
+    //     {
+    //         long hashed = hash_int(name);
+    //         int index = abs(hashed) % size;
+    //         for (auto iter = hash_structure_str[index].begin(); iter != hash_structure_str[index].end(); iter++)
+    //         {
+    //             if (iter->first == name)
+    //                 iter->second.inStock = newStock;
+    //         }
+    //     }
 
-        void insert(Item item)
-        {
+    //     void insert(Item item)
+    //     {
 
-            long hashed = hash_int(item.name);
-            auto temp = hash_structure_str[abs(hashed) % size];
-            auto pair = make_pair(item.name, item);
-            if (!found(temp, item.name))
-            {
-                hash_structure_str[abs(hashed) % size].push_back(pair);
-                total_values++;
-            }
-        }
+    //         long hashed = hash_int(item.name);
+    //         auto temp = hash_structure_str[abs(hashed) % size];
+    //         auto pair = make_pair(item.name, item);
+    //         if (!found(temp, item.name))
+    //         {
+    //             hash_structure_str[abs(hashed) % size].push_back(pair);
+    //             total_values++;
+    //         }
+    //     }
 
-        void delete_(string name)
-        {
-            long hashed = hash_int(name);
-            auto iter = hash_structure_str[abs(hashed) % size].begin();
-            for (; iter != hash_structure_str[abs(hashed) % size].end(); iter++)
-            {
-                if (iter->first == name)
-                {
-                    hash_structure_str[abs(hashed) % size].erase(iter);
-                    return;
-                }
-            }
-        }
+    //     void delete_(string name)
+    //     {
+    //         long hashed = hash_int(name);
+    //         auto iter = hash_structure_str[abs(hashed) % size].begin();
+    //         for (; iter != hash_structure_str[abs(hashed) % size].end(); iter++)
+    //         {
+    //             if (iter->first == name)
+    //             {
+    //                 hash_structure_str[abs(hashed) % size].erase(iter);
+    //                 return;
+    //             }
+    //         }
+    //     }
 
-        void reconfigure(int newSize)
-        {
-            hash_structure_str.clear();
-            this->size = newSize * multiplier;
-            for (int i = 0; i < size; i++)
-            {
-                list<pair<string, Item>> empty_vec;
-                hash_structure_str.push_back(empty_vec);
-            }
-        }
+    //     void reconfigure(int newSize)
+    //     {
+    //         hash_structure_str.clear();
+    //         this->size = newSize * multiplier;
+    //         for (int i = 0; i < size; i++)
+    //         {
+    //             list<pair<string, Item>> empty_vec;
+    //             hash_structure_str.push_back(empty_vec);
+    //         }
+    //     }
 
-        bool found(list<pair<string, Item>> list, string name)
-        {
-            bool found = false;
-            for (auto element : list)
-            {
-                if (element.first == name)
-                    return true;
-            }
-            return false;
-        }
-    };
-    hashTable inventoryHashTable;
-    */
+    //     bool found(list<pair<string, Item>> list, string name)
+    //     {
+    //         bool found = false;
+    //         for (auto element : list)
+    //         {
+    //             if (element.first == name)
+    //                 return true;
+    //         }
+    //         return false;
+    //     }
+    // };
+    // hashTable inventoryHashTable;
 };
 
 // ===================== Test Cases ===========================
@@ -1333,7 +1331,7 @@ int main()
 {
     // Run all tests
     InventorySystem system;
-    runTests(system, 1000000);
+    runTests(system, 100000);
 
     // Run program based on user input
     // runProgram();
