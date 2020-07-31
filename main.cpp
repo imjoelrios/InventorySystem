@@ -13,6 +13,7 @@ using namespace std;
 using namespace std::chrono;
 
 // ===================== Random Functions ================
+// Source: Program used from https://www.geeksforgeeks.org/program-generate-random-alphabets/
 string printRandomString(int n)
 {
     const int MAX = 26;
@@ -33,6 +34,7 @@ class InventorySystem
 {
 public:
     // --- Item Sub-Class ---
+    // Additional variables can be added to the item (depending on the inventory's complexity)
     struct Item
     {
         string name;
@@ -237,18 +239,18 @@ public:
             }
             insertRecursive(AVL_Root, newItem.idNumber, newItem);
         }
-        void insert(string data, Item &item)
+        void insertByString(Item &newItem)
         {
             if (AVL_Root == nullptr)
             {
                 Node *temp = new Node();
-                temp->classItem = item;
-                temp->stringData = data;
+                temp->classItem = newItem;
+                temp->stringData = newItem.name;
                 AVL_Root = temp;
                 temp->height = 1;
                 return;
             }
-            insertRecursive(AVL_Root, data, item);
+            insertRecursive(AVL_Root, newItem.name, newItem);
         }
         void printItem(int key)
         {
@@ -1323,18 +1325,36 @@ void runProgram()
         {
             system.printMap();
         }
+        else
+        {
+            cout << "Not a command" << endl;
+        }
     }
 }
 
 // ===================== Main Method ===========================
 int main()
 {
-    // Run all tests
-    InventorySystem system;
-    runTests(system, 100000);
 
-    // Run program based on user input
-    // runProgram();
+    cout << "1 - Run execution time calculations" << endl;
+    cout << "2 - Run user-based program" << endl;
+    int choice;
+    cin >> choice;
+    if (choice == 1)
+    {
+        // Run all tests
+        InventorySystem system;
+        runTests(system, 1000000);
+    }
+    else if (choice == 2)
+    {
+        // Run program based on user input
+        runProgram();
+    }
+    else
+    {
+        cout << "Out of bounds choice" << endl;
+    }
 
     // --- Test cases based on data structure ---
     // -- For map --
