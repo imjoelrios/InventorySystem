@@ -71,121 +71,135 @@ public:
 
     // --------- Map Sub-Class ---------
     //currently based on the the keys being unsorted (if we wanted to sort them either numerically or alphabetically it would require a few changes)
-    class Map
-    {
-    private:
-        vector<int> keys;
-        vector<InventorySystem::Item> values;
-        int size;
+	class Map
+	{
+	private:
+		vector<vector<InventorySystem::Item>> keys;
+		int size;
 
-    public:
-        // Default constructor
-        Map()
-        {
-        }
-        // Parameterized constructor
-        Map(vector<InventorySystem::Item> inventory)
-        {
-            //storing the inventory data in this map data structure
-            //a key and its value are at same location in their corresponding containers.
-            size = inventory.size();
-            for (int i = 0; i < size; i++)
-            {
-                //the key is the idNumber (could easily be changed)
-                keys.push_back(inventory.at(i).idNumber);
-                //the value is the Item itself
-                values.push_back(inventory.at(i));
-            }
-        }
-        void printMap()
-        {
-            for (int i = 0; i < size; i++)
-            {
-                cout << "idNumber: " << keys.at(i) << endl;
-                cout << "Name: " << values.at(i).name << endl;
-                cout << "Amount: " << values.at(i).inStock << endl;
-                cout << endl;
-            }
-        }
-        void insert(InventorySystem::Item item)
-        {
-            //adds the key and value to the end of corresponding vectors if key doesn't already exists (otherwise does nothing)
-            //time complexity is O(logn)
-            if (helpFind(item.idNumber, 0, size - 1) < 0)
-            {
-                keys.push_back(item.idNumber);
-                values.push_back(item);
-                size++;
-            }
-            else
-            {
-                cout << "Item with that ID is already in the system." << endl;
-            }
-        }
-        void remove(int idNumber)
-        {
-            //time complexity is log(n)
-            int index = helpFind(idNumber, 0, size - 1);
-            //if the item is found, item to be removed is swapped with the last item and then last item is deleted which all can be done in O(1)
-            if (index >= 0)
-            {
-                keys.at(index) = keys.at(size - 1);
-                values.at(index) = values.at(size - 1);
-                keys.pop_back();
-                values.pop_back();
-                size--;
-            }
-        }
-        int helpFind(int idNumber, int first, int last)
-        {
-            //binarySearch so time complexity is log(n)
-            if (first > last)
-                return -1;
-            int middle = (first + last) / 2;
-            if (keys.at(middle) == idNumber)
-                return middle;
-            if (keys.at(middle) < idNumber)
-                return helpFind(idNumber, middle + 1, last);
-            else
-                return helpFind(idNumber, first, middle - 1);
-        }
-        void search(int idNumber)
-        {
-            //time complexity is O(log(n))
-            int index = helpFind(idNumber, 0, size - 1);
-            //print statements could be removed if we want to implement them in main instead
-            if (index < 0)
-                cout << "Item not found" << endl;
-            else
-            {
-                cout << "Name: " << values.at(index).name << endl;
-                cout << "idNumber: " << keys.at(index) << endl;
-                cout << "Number of items: " << values.at(index).inStock << endl;
-                cout << endl;
-            }
-        }
-        void editAmountInStock(int idNumber, int newInStock)
-        {
-            //time complexity is O(logn)
-            int index = helpFind(idNumber, 0, size - 1);
-            if (index >= 0)
-                values.at(index).inStock = newInStock;
-        }
-        void printItem(int idNumber)
-        {
-            //time complexity is O(log(n))
-            int index = helpFind(idNumber, 0, size - 1);
-            //print statements could be removed if we want to implement them in main instead
-            if (index < 0)
-                cout << "Item not found" << endl;
-            else
-            {
-                cout << "Name: " << values.at(index).name << endl;
-                cout << "idNumber: " << keys.at(index) << endl;
-                cout << "Number of items: " << values.at(index).inStock << endl;
-            }
-        }
-    };
+	public:
+		// Default constructor
+		Map()
+		{
+            //based on 100,000 item inventory size (with space for double the size for efficiency purposes)
+			size = 100000 * 2;
+			for (int i = 0; i < size; i++)
+			{
+				vector<InventorySystem::Item> values;
+				keys.push_back(values);
+			}
+		}
+		// Parameterized constructor, requires inventory list to be sorted by idNumbers
+		Map(vector<InventorySystem::Item> inventory)
+		{
+			size = inventory.size() * 2;
+			//doubles the size of original data for efficiency purposes
+			for (int i = 0; i < size / 2; i++)
+			{
+				vector<InventorySystem::Item> values;
+				values.push_back(inventory.at(i));
+				keys.push_back(values);
+			}
+			for (int i = 0; i < size / 2; i++)
+			{
+				vector<InventorySystem::Item> values;
+				keys.push_back(values);
+			}
+		}
+		void printMap() //unsorted
+		{
+			for (int i = 0; i < size; i++)
+			{
+				for (int j = 0; j < keys.at(i).size(); j++) {
+					cout << "idNumber: " << keys.at(i)[j].idNumber << endl;
+					cout << "Name: " << keys.at(i)[j].name << endl;
+					cout << "Amount: " << keys.at(i)[j].inStock << endl;
+					cout << endl;
+				}
+			}
+		}
+		void insert(InventorySystem::Item item)
+		{
+			//the idNumber % size gives the index location for the list that an item with that key (idNumbers) falls into
+			int index = item.idNumber % size;
+			InventorySystem::Item* pointer;
+            //if their are no other items at that index, simply add it
+			if (keys.at(index).size() == 0) {
+				keys.at(index).push_back(item);
+			}
+            //if their are other items at that index, check to ensure an item with the same key (idNumber) doesn't exist before inserting
+			else if ((pointer = helpFind(item.idNumber)) == nullptr) {
+				keys.at(index).push_back(item);
+			}
+			else {
+				cout << "Item with that ID is already in the system." << endl;
+			}
+		}
+		void remove(int idNumber)
+		{
+			int index = idNumber % size;
+            //checking the items in the list at the index location for the associated key
+			for (int i = 0; i < keys.at(index).size(); i++) {
+				if (keys.at(index)[i].idNumber == idNumber) {
+					keys.at(index)[i] = keys.at(index)[keys.at(index).size() - 1];
+					keys.at(index).pop_back();
+				}
+			}
+		}
+		void search(int idNumber)
+		{
+			InventorySystem::Item* item = helpFind(idNumber);
+			if (item == nullptr) {
+				cout << "Item not found" << endl;
+			}
+			else
+				printItem(item);
+		}
+		void searchByName(string name) {
+			for (int i = 0; i < keys.size(); i++) {
+				for (int j = 0; j < keys.at(i).size(); j++) {
+					if (keys.at(i)[j].name.compare(name) == 0) {
+						cout << "Name: " << keys.at(i)[j].name << endl;
+						cout << "idNumber: " << keys.at(i)[j].idNumber << endl;
+						cout << "Number of items: " << keys.at(i)[j].inStock << endl;
+						cout << endl;
+					}
+				}
+			}
+		}
+		void editAmountInStock(int idNumber, int newInStock)
+		{
+			int index = idNumber % size;
+			for (int i = 0; i < keys.at(index).size(); i++) {
+				if (keys.at(index)[i].idNumber == idNumber) {
+					keys.at(index)[i].inStock = newInStock;
+				}
+			}
+		}
+		InventorySystem::Item* helpFind(int idNumber) {
+			int index = idNumber % size;
+			InventorySystem::Item* pointer = nullptr;
+            //checking the items in the list at the index location for the associated key, return pointer to item if it exists
+			for (int i = 0; i < keys.at(index).size(); i++) {
+				if (keys.at(index)[i].idNumber == idNumber) {
+					pointer = &keys.at(index)[i];
+					return pointer;
+				}
+			}
+			return pointer;
+		}
+		void printItem(InventorySystem::Item*& item)
+		{
+			cout << "Name: " << item->name << endl;
+			cout << "idNumber: " << item->idNumber << endl;
+			cout << "Number of items: " << item->inStock << endl;
+			cout << endl;
+		}
+		void printItem(int idNumber)
+		{
+			search(idNumber);
+		}
+	};
 
     // Map with inventory
     Map inventoryMap;
@@ -1344,7 +1358,7 @@ int main()
     {
         // Run all tests
         InventorySystem system;
-        runTests(system, 1000000);
+        runTests(system, 100000);
     }
     else if (choice == 2)
     {
