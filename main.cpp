@@ -74,7 +74,7 @@ public:
 	class Map
 	{
 	private:
-		vector<vector<InventorySystem::Item>> keys;
+		vector<vector<InventorySystem::Item>> buckets;
 		int size;
 
 	public:
@@ -85,8 +85,8 @@ public:
 			size = 100000 * 2;
 			for (int i = 0; i < size; i++)
 			{
-				vector<InventorySystem::Item> values;
-				keys.push_back(values);
+				vector<InventorySystem::Item> bucket;
+				buckets.push_back(bucket);
 			}
 		}
 		// Parameterized constructor, requires inventory list to be sorted by idNumbers
@@ -96,24 +96,24 @@ public:
 			//doubles the size of original data for efficiency purposes
 			for (int i = 0; i < size / 2; i++)
 			{
-				vector<InventorySystem::Item> values;
-				values.push_back(inventory.at(i));
-				keys.push_back(values);
+				vector<InventorySystem::Item> bucket;
+				bucket.push_back(inventory.at(i));
+				buckets.push_back(bucket);
 			}
 			for (int i = 0; i < size / 2; i++)
 			{
-				vector<InventorySystem::Item> values;
-				keys.push_back(values);
+				vector<InventorySystem::Item> bucket;
+				buckets.push_back(bucket);
 			}
 		}
 		void printMap() //unsorted
 		{
 			for (int i = 0; i < size; i++)
 			{
-				for (int j = 0; j < keys.at(i).size(); j++) {
-					cout << "idNumber: " << keys.at(i)[j].idNumber << endl;
-					cout << "Name: " << keys.at(i)[j].name << endl;
-					cout << "Amount: " << keys.at(i)[j].inStock << endl;
+				for (int j = 0; j < buckets.at(i).size(); j++) {
+					cout << "idNumber: " << buckets.at(i)[j].idNumber << endl;
+					cout << "Name: " << buckets.at(i)[j].name << endl;
+					cout << "Amount: " << buckets.at(i)[j].inStock << endl;
 					cout << endl;
 				}
 			}
@@ -124,12 +124,12 @@ public:
 			int index = item.idNumber % size;
 			InventorySystem::Item* pointer;
             //if their are no other items at that index, simply add it
-			if (keys.at(index).size() == 0) {
-				keys.at(index).push_back(item);
+			if (buckets.at(index).size() == 0) {
+				buckets.at(index).push_back(item);
 			}
             //if their are other items at that index, check to ensure an item with the same key (idNumber) doesn't exist before inserting
 			else if ((pointer = helpFind(item.idNumber)) == nullptr) {
-				keys.at(index).push_back(item);
+				buckets.at(index).push_back(item);
 			}
 			else {
 				cout << "Item with that ID is already in the system." << endl;
@@ -139,10 +139,10 @@ public:
 		{
 			int index = idNumber % size;
             //checking the items in the list at the index location for the associated key
-			for (int i = 0; i < keys.at(index).size(); i++) {
-				if (keys.at(index)[i].idNumber == idNumber) {
-					keys.at(index)[i] = keys.at(index)[keys.at(index).size() - 1];
-					keys.at(index).pop_back();
+			for (int i = 0; i < buckets.at(index).size(); i++) {
+				if (buckets.at(index)[i].idNumber == idNumber) {
+					buckets.at(index)[i] = buckets.at(index)[buckets.at(index).size() - 1];
+					buckets.at(index).pop_back();
 				}
 			}
 		}
@@ -156,12 +156,12 @@ public:
 				printItem(item);
 		}
 		void searchByName(string name) {
-			for (int i = 0; i < keys.size(); i++) {
-				for (int j = 0; j < keys.at(i).size(); j++) {
-					if (keys.at(i)[j].name.compare(name) == 0) {
-						cout << "Name: " << keys.at(i)[j].name << endl;
-						cout << "idNumber: " << keys.at(i)[j].idNumber << endl;
-						cout << "Number of items: " << keys.at(i)[j].inStock << endl;
+			for (int i = 0; i < buckets.size(); i++) {
+				for (int j = 0; j < buckets.at(i).size(); j++) {
+					if (buckets.at(i)[j].name.compare(name) == 0) {
+						cout << "Name: " << buckets.at(i)[j].name << endl;
+						cout << "idNumber: " << buckets.at(i)[j].idNumber << endl;
+						cout << "Number of items: " << buckets.at(i)[j].inStock << endl;
 						cout << endl;
 					}
 				}
@@ -170,9 +170,9 @@ public:
 		void editAmountInStock(int idNumber, int newInStock)
 		{
 			int index = idNumber % size;
-			for (int i = 0; i < keys.at(index).size(); i++) {
-				if (keys.at(index)[i].idNumber == idNumber) {
-					keys.at(index)[i].inStock = newInStock;
+			for (int i = 0; i < buckets.at(index).size(); i++) {
+				if (buckets.at(index)[i].idNumber == idNumber) {
+					buckets.at(index)[i].inStock = newInStock;
 				}
 			}
 		}
@@ -180,9 +180,9 @@ public:
 			int index = idNumber % size;
 			InventorySystem::Item* pointer = nullptr;
             //checking the items in the list at the index location for the associated key, return pointer to item if it exists
-			for (int i = 0; i < keys.at(index).size(); i++) {
-				if (keys.at(index)[i].idNumber == idNumber) {
-					pointer = &keys.at(index)[i];
+			for (int i = 0; i < buckets.at(index).size(); i++) {
+				if (buckets.at(index)[i].idNumber == idNumber) {
+					pointer = &buckets.at(index)[i];
 					return pointer;
 				}
 			}
