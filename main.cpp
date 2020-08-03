@@ -71,135 +71,152 @@ public:
 
     // --------- Map Sub-Class ---------
     //currently based on the the keys being unsorted (if we wanted to sort them either numerically or alphabetically it would require a few changes)
-	class Map
-	{
-	private:
-		vector<vector<InventorySystem::Item>> keys;
-		int size;
+    class Map
+    {
+    private:
+        vector<vector<InventorySystem::Item>> keys;
+        int size;
 
-	public:
-		// Default constructor
-		Map()
-		{
+    public:
+        // Default constructor
+        Map()
+        {
             //based on 100,000 item inventory size (with space for double the size for efficiency purposes)
-			size = 100000 * 2;
-			for (int i = 0; i < size; i++)
-			{
-				vector<InventorySystem::Item> values;
-				keys.push_back(values);
-			}
-		}
-		// Parameterized constructor, requires inventory list to be sorted by idNumbers
-		Map(vector<InventorySystem::Item> inventory)
-		{
-			size = inventory.size() * 2;
-			//doubles the size of original data for efficiency purposes
-			for (int i = 0; i < size / 2; i++)
-			{
-				vector<InventorySystem::Item> values;
-				values.push_back(inventory.at(i));
-				keys.push_back(values);
-			}
-			for (int i = 0; i < size / 2; i++)
-			{
-				vector<InventorySystem::Item> values;
-				keys.push_back(values);
-			}
-		}
-		void printMap() //unsorted
-		{
-			for (int i = 0; i < size; i++)
-			{
-				for (int j = 0; j < keys.at(i).size(); j++) {
-					cout << "idNumber: " << keys.at(i)[j].idNumber << endl;
-					cout << "Name: " << keys.at(i)[j].name << endl;
-					cout << "Amount: " << keys.at(i)[j].inStock << endl;
-					cout << endl;
-				}
-			}
-		}
-		void insert(InventorySystem::Item item)
-		{
-			//the idNumber % size gives the index location for the list that an item with that key (idNumbers) falls into
-			int index = item.idNumber % size;
-			InventorySystem::Item* pointer;
+            size = 100000 * 2;
+            for (int i = 0; i < size; i++)
+            {
+                vector<InventorySystem::Item> values;
+                keys.push_back(values);
+            }
+        }
+        // Parameterized constructor, requires inventory list to be sorted by idNumbers
+        Map(vector<InventorySystem::Item> inventory)
+        {
+            size = inventory.size() * 2;
+            //doubles the size of original data for efficiency purposes
+            for (int i = 0; i < size / 2; i++)
+            {
+                vector<InventorySystem::Item> values;
+                values.push_back(inventory.at(i));
+                keys.push_back(values);
+            }
+            for (int i = 0; i < size / 2; i++)
+            {
+                vector<InventorySystem::Item> values;
+                keys.push_back(values);
+            }
+        }
+        void printMap() //unsorted
+        {
+            for (int i = 0; i < size; i++)
+            {
+                for (int j = 0; j < keys.at(i).size(); j++)
+                {
+                    cout << "idNumber: " << keys.at(i)[j].idNumber << endl;
+                    cout << "Name: " << keys.at(i)[j].name << endl;
+                    cout << "Amount: " << keys.at(i)[j].inStock << endl;
+                    cout << endl;
+                }
+            }
+        }
+        void insert(InventorySystem::Item item)
+        {
+            //the idNumber % size gives the index location for the list that an item with that key (idNumbers) falls into
+            int index = item.idNumber % size;
+            InventorySystem::Item *pointer;
             //if their are no other items at that index, simply add it
-			if (keys.at(index).size() == 0) {
-				keys.at(index).push_back(item);
-			}
+            if (keys.at(index).size() == 0)
+            {
+                keys.at(index).push_back(item);
+            }
             //if their are other items at that index, check to ensure an item with the same key (idNumber) doesn't exist before inserting
-			else if ((pointer = helpFind(item.idNumber)) == nullptr) {
-				keys.at(index).push_back(item);
-			}
-			else {
-				cout << "Item with that ID is already in the system." << endl;
-			}
-		}
-		void remove(int idNumber)
-		{
-			int index = idNumber % size;
+            else if ((pointer = helpFind(item.idNumber)) == nullptr)
+            {
+                keys.at(index).push_back(item);
+            }
+            else
+            {
+                cout << "Item with that ID is already in the system." << endl;
+            }
+        }
+        void remove(int idNumber)
+        {
+            int index = idNumber % size;
             //checking the items in the list at the index location for the associated key
-			for (int i = 0; i < keys.at(index).size(); i++) {
-				if (keys.at(index)[i].idNumber == idNumber) {
-					keys.at(index)[i] = keys.at(index)[keys.at(index).size() - 1];
-					keys.at(index).pop_back();
-				}
-			}
-		}
-		void search(int idNumber)
-		{
-			InventorySystem::Item* item = helpFind(idNumber);
-			if (item == nullptr) {
-				cout << "Item not found" << endl;
-			}
-			else
-				printItem(item);
-		}
-		void searchByName(string name) {
-			for (int i = 0; i < keys.size(); i++) {
-				for (int j = 0; j < keys.at(i).size(); j++) {
-					if (keys.at(i)[j].name.compare(name) == 0) {
-						cout << "Name: " << keys.at(i)[j].name << endl;
-						cout << "idNumber: " << keys.at(i)[j].idNumber << endl;
-						cout << "Number of items: " << keys.at(i)[j].inStock << endl;
-						cout << endl;
-					}
-				}
-			}
-		}
-		void editAmountInStock(int idNumber, int newInStock)
-		{
-			int index = idNumber % size;
-			for (int i = 0; i < keys.at(index).size(); i++) {
-				if (keys.at(index)[i].idNumber == idNumber) {
-					keys.at(index)[i].inStock = newInStock;
-				}
-			}
-		}
-		InventorySystem::Item* helpFind(int idNumber) {
-			int index = idNumber % size;
-			InventorySystem::Item* pointer = nullptr;
+            for (int i = 0; i < keys.at(index).size(); i++)
+            {
+                if (keys.at(index)[i].idNumber == idNumber)
+                {
+                    keys.at(index)[i] = keys.at(index)[keys.at(index).size() - 1];
+                    keys.at(index).pop_back();
+                }
+            }
+        }
+        void search(int idNumber)
+        {
+            InventorySystem::Item *item = helpFind(idNumber);
+            if (item == nullptr)
+            {
+                cout << "Item not found in Map" << endl;
+            }
+            else
+                printItem(item);
+        }
+        void searchByName(string name)
+        {
+            for (int i = 0; i < keys.size(); i++)
+            {
+                for (int j = 0; j < keys.at(i).size(); j++)
+                {
+                    if (keys.at(i)[j].name.compare(name) == 0)
+                    {
+                        cout << "Name: " << keys.at(i)[j].name << endl;
+                        cout << "idNumber: " << keys.at(i)[j].idNumber << endl;
+                        cout << "Number of items: " << keys.at(i)[j].inStock << endl;
+                        cout << endl;
+                    }
+                }
+            }
+        }
+        void editAmountInStock(int idNumber, int newInStock)
+        {
+            int index = idNumber % size;
+            for (int i = 0; i < keys.at(index).size(); i++)
+            {
+                if (keys.at(index)[i].idNumber == idNumber)
+                {
+                    keys.at(index)[i].inStock = newInStock;
+                }
+            }
+        }
+        InventorySystem::Item *helpFind(int idNumber)
+        {
+            int index = idNumber % size;
+            InventorySystem::Item *pointer = nullptr;
             //checking the items in the list at the index location for the associated key, return pointer to item if it exists
-			for (int i = 0; i < keys.at(index).size(); i++) {
-				if (keys.at(index)[i].idNumber == idNumber) {
-					pointer = &keys.at(index)[i];
-					return pointer;
-				}
-			}
-			return pointer;
-		}
-		void printItem(InventorySystem::Item*& item)
-		{
-			cout << "Name: " << item->name << endl;
-			cout << "idNumber: " << item->idNumber << endl;
-			cout << "Number of items: " << item->inStock << endl;
-			cout << endl;
-		}
-		void printItem(int idNumber)
-		{
-			search(idNumber);
-		}
-	};
+            for (int i = 0; i < keys.at(index).size(); i++)
+            {
+                if (keys.at(index)[i].idNumber == idNumber)
+                {
+                    pointer = &keys.at(index)[i];
+                    return pointer;
+                }
+            }
+            return pointer;
+        }
+        void printItem(InventorySystem::Item *&item)
+        {
+            cout << "Item in Map" << endl;
+            cout << "Name: " << item->name << endl;
+            cout << "idNumber: " << item->idNumber << endl;
+            cout << "Number of items: " << item->inStock << endl;
+            cout << endl;
+        }
+        void printItem(int idNumber)
+        {
+            search(idNumber);
+        }
+    };
 
     // Map with inventory
     Map inventoryMap;
@@ -270,7 +287,7 @@ public:
         {
             auto temp = searchRecursive(AVL_Root, key);
             if (temp == nullptr)
-                cout << "Item not found!" << endl;
+                cout << "Item not found in Tree" << endl;
             else
                 printItem(temp);
             cout << endl;
@@ -309,7 +326,7 @@ public:
         {
             auto temp = searchRecursive(AVL_Root, key);
             if (temp == nullptr)
-                cout << "Item not found!" << endl;
+                cout << "Item not found in Tree" << endl;
             else
                 printItem(temp);
         }
@@ -377,7 +394,7 @@ public:
         {
             auto temp = searchRecursive(AVL_Root, key);
             if (temp == nullptr)
-                cout << "Item not found!" << endl;
+                cout << "Item not found in Tree" << endl;
             else
                 printItem(temp);
         }
@@ -606,6 +623,7 @@ public:
         {
             if (item != nullptr)
             {
+                cout << "Item in Tree" << endl;
                 cout << "Name: " << item->classItem.name << endl;
                 cout << "idNumber: " << item->classItem.idNumber << endl;
                 cout << "Number of items: " << item->classItem.inStock << endl;
@@ -1267,7 +1285,7 @@ void testTreeEdit(InventorySystem system)
 }
 
 // Creates an inventory system and based on userInput lets the user insert, delete, search, and edit items
-void runProgram()
+void userProgram()
 {
     InventorySystem system;
     string command;
@@ -1275,14 +1293,15 @@ void runProgram()
     int idNumber;
     int inStock;
 
-    cout << "List of commands:" << endl;
+    cout << "List of commands (action | command/input):" << endl;
     cout << "insert | insert nameOfItem idNumber amountInStock" << endl;
     cout << "search | search idNumber" << endl;
     cout << "delete | delete idNumber" << endl;
     cout << "editAmount | editAmount idNumber amountInStock" << endl;
     cout << "printTree | printTree" << endl;
     cout << "printMap | printMap" << endl;
-    cout << "exit | exit" << endl;
+    cout << "exit program | exit" << endl;
+    cout << "print commands | commands" << endl;
     cout << endl;
 
     while (command != "exit")
@@ -1298,7 +1317,8 @@ void runProgram()
             cout << "editAmount | editAmount idNumber amountInStock" << endl;
             cout << "printTree | printTree" << endl;
             cout << "printMap | printMap" << endl;
-            cout << "exit | exit" << endl;
+            cout << "exit program | exit" << endl;
+            cout << "print commands | commands" << endl;
             cout << endl;
         }
         else if (command == "insert")
@@ -1339,6 +1359,10 @@ void runProgram()
         {
             system.printMap();
         }
+        else if (command == "exit")
+        {
+            cout << "Program exited" << endl;
+        }
         else
         {
             cout << "Not a command" << endl;
@@ -1363,7 +1387,7 @@ int main()
     else if (choice == 2)
     {
         // Run program based on user input
-        runProgram();
+        userProgram();
     }
     else
     {
