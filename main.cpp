@@ -1285,7 +1285,7 @@ void testTreeEdit(InventorySystem system)
 }
 
 // Creates an inventory system and based on userInput lets the user insert, delete, search, and edit items
-void userProgram()
+void runProgram()
 {
     InventorySystem system;
     string command;
@@ -1387,7 +1387,7 @@ int main()
     else if (choice == 2)
     {
         // Run program based on user input
-        userProgram();
+        runProgram();
     }
     else
     {
