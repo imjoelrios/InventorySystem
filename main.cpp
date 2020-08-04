@@ -729,7 +729,7 @@ public:
 */
 void testInsert(InventorySystem &system, int inventorySize)
 {
-    InventorySystem::Item newItem("Tshirt", inventorySize + 5, 1000);
+    InventorySystem::Item newItem("TestName", inventorySize + 5, 1000);
     system.inventoryVector.push_back(newItem);
     // --- Test in Map
     auto start = high_resolution_clock::now();
@@ -777,7 +777,7 @@ void testDelete(InventorySystem &system, int inventorySize)
 };
 void testSearch(InventorySystem &system, int inventorySize)
 {
-    InventorySystem::Item newItem("Tshirt", inventorySize + 5, 1000);
+    InventorySystem::Item newItem("TestName", inventorySize + 5, 1000);
     system.inventoryVector.push_back(newItem);
     system.inventoryMap.insert(newItem);
     system.inventoryTree.insert(newItem);
@@ -819,7 +819,7 @@ void testEdit(InventorySystem &system, int inventorySize)
     auto treeExecutionTime = duration_cast<nanoseconds>(stop2 - start2);
 
     // --- Print execution times
-    cout << "Test #3 --- Edit()" << endl;
+    cout << "Test #4 --- Edit()" << endl;
     cout << "Execution time by map : " << mapExecutionTime.count();
     cout << " nanoseconds " << endl;
 
@@ -846,7 +846,7 @@ void runTests(InventorySystem &system, int inventorySize)
 // For the map data structure
 void testMapInsert(InventorySystem system)
 {
-    InventorySystem::Item newItem("Tshirt", 100005, 1000);
+    InventorySystem::Item newItem("TestName", 100005, 1000);
     system.inventoryVector.push_back(newItem);
 
     system.inventoryMap.printItem(100005);
@@ -856,7 +856,7 @@ void testMapInsert(InventorySystem system)
 }
 void testMapDelete(InventorySystem system)
 {
-    InventorySystem::Item newItem("Tshirt", 100005, 1000);
+    InventorySystem::Item newItem("TestName", 100005, 1000);
     system.inventoryVector.push_back(newItem);
     system.inventoryMap.insert(newItem);
 
@@ -867,7 +867,7 @@ void testMapDelete(InventorySystem system)
 }
 void testMapSearch(InventorySystem system)
 {
-    InventorySystem::Item newItem("Tshirt", 100005, 1000);
+    InventorySystem::Item newItem("TestName", 100005, 1000);
     system.inventoryVector.push_back(newItem);
     system.inventoryMap.insert(newItem);
 
@@ -875,7 +875,7 @@ void testMapSearch(InventorySystem system)
 }
 void testMapEdit(InventorySystem system)
 {
-    InventorySystem::Item newItem("Tshirt", 100005, 1000);
+    InventorySystem::Item newItem("TestName", 100005, 1000);
     system.inventoryVector.push_back(newItem);
     system.inventoryMap.insert(newItem);
 
@@ -888,7 +888,7 @@ void testMapEdit(InventorySystem system)
 // For the tree data structure
 void testTreeInsert(InventorySystem system)
 {
-    InventorySystem::Item newItem("Tshirt", 100005, 1000);
+    InventorySystem::Item newItem("TestName", 100005, 1000);
     system.inventoryVector.push_back(newItem);
 
     system.inventoryTree.printItem(100005);
@@ -898,7 +898,7 @@ void testTreeInsert(InventorySystem system)
 }
 void testTreeDelete(InventorySystem system)
 {
-    InventorySystem::Item newItem("Tshirt", 100005, 1000);
+    InventorySystem::Item newItem("TestName", 100005, 1000);
     system.inventoryVector.push_back(newItem);
     system.inventoryTree.insert(newItem);
 
@@ -909,7 +909,7 @@ void testTreeDelete(InventorySystem system)
 }
 void testTreeSearch(InventorySystem system)
 {
-    InventorySystem::Item newItem("Tshirt", 100005, 1000);
+    InventorySystem::Item newItem("TestName", 100005, 1000);
     system.inventoryVector.push_back(newItem);
     system.inventoryTree.insert(newItem);
 
@@ -917,7 +917,7 @@ void testTreeSearch(InventorySystem system)
 }
 void testTreeEdit(InventorySystem system)
 {
-    InventorySystem::Item newItem("Tshirt", 100005, 1000);
+    InventorySystem::Item newItem("TestName", 100005, 1000);
     system.inventoryVector.push_back(newItem);
     system.inventoryTree.insert(newItem);
 
