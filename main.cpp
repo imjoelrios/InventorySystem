@@ -237,6 +237,14 @@ public:
 
     public:
 
+        
+        friend bool operator==(string left, string right)
+        {
+            if (left.compare(right) == 0)
+                return true;
+            return false;
+        }
+
         // --- Tree functions ---
         void insert(Item& newItem)
         {
@@ -302,6 +310,30 @@ public:
             else
                 printItem(temp);
         }
+
+        void search(string key) {
+            if (AVL_Root == nullptr)
+                cout << "Item not found in Tree" << endl;
+            bool flag = false;
+            searchInorderHelp(key, AVL_Root,flag);
+            if(!flag)
+                cout << "Item not found in Tree" << endl;
+
+        }
+
+        void searchInorderHelp(string key, Node* root,bool& flag) {
+            if (root == nullptr||flag)
+                return;
+            searchInorderHelp(key, root->left,flag);
+            if (root->classItem.name == key) {
+                flag = true;
+                printItem(root);
+                return;
+            }    
+            searchInorderHelp(key, root->right,flag);
+
+         }
+
         bool remove(int key)
         {
             auto val = searchRecursive(AVL_Root, key);
