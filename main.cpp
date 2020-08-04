@@ -1122,6 +1122,28 @@ void userTest3(InventorySystem system)
 	system.printTree();
 	system.printMap();
 }
+void userTest4(InventorySystem system)
+{
+    /*
+		edit item in empty list (does nothing)
+		delete item in empty list (does nothing)
+		insert item
+		insert item with same idNumber (does nothing)
+		print
+	*/
+	system.editAmountInStock(100005, 1000);
+	system.deleteByID(100005);
+	cout << "Editting and Deleting from empty structures does nothing.";
+	cout << endl;
+
+	system.insert("TestName1", 100005, 1000);
+	system.insert("TestName2", 100005, 1000);
+	cout << "Cannot insert item with duplicate idNumbers.";
+	cout << endl;
+
+	system.printTree();
+	system.printMap();
+}
 
 // ======= Run program (execution time analysis or user program) =======
 void runProgram()
@@ -1171,6 +1193,7 @@ int main()
 	// userTest1(system);
 	// userTest2(system);
 	// userTest3(system);
+    // userTest4(system);
 
 	return 0;
 };
