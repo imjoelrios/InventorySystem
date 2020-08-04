@@ -500,7 +500,6 @@ public:
         {
             if (item != nullptr)
             {
-                cout << "Item in Tree" << endl;
                 cout << "Name: " << item->classItem.name << endl;
                 cout << "idNumber: " << item->classItem.idNumber << endl;
                 cout << "Number of items: " << item->classItem.inStock << endl;
