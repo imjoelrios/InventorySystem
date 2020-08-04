@@ -114,7 +114,7 @@ public:
                 {
                     cout << "idNumber: " << buckets.at(i)[j].idNumber << endl;
                     cout << "Name: " << buckets.at(i)[j].name << endl;
-                    cout << "Amount: " << buckets.at(i)[j].inStock << endl;
+                    cout << "Amount in Stock: " << buckets.at(i)[j].inStock << endl;
                     cout << endl;
                 }
             }
@@ -173,7 +173,7 @@ public:
                     {
                         cout << "Name: " << buckets.at(i)[j].name << endl;
                         cout << "idNumber: " << buckets.at(i)[j].idNumber << endl;
-                        cout << "Number of items: " << buckets.at(i)[j].inStock << endl;
+                        cout << "Amount in Stock: " << buckets.at(i)[j].inStock << endl;
                         cout << endl;
                     }
                 }
@@ -208,7 +208,6 @@ public:
         //given a pointer to an item itself
         void printItem(InventorySystem::Item *&item)
         {
-            cout << "Item in Map" << endl;
             cout << "Name: " << item->name << endl;
             cout << "idNumber: " << item->idNumber << endl;
             cout << "Number of items: " << item->inStock << endl;
@@ -302,7 +301,6 @@ public:
         // 4. Preorder
         void printTree(int choice)
         {
-            cout << "Available inventory: " << endl;
             auto temp = AVL_Root;
             if (choice == 3)
             {
@@ -626,7 +624,6 @@ public:
         {
             if (item != nullptr)
             {
-                cout << "Item in Tree" << endl;
                 cout << "Name: " << item->classItem.name << endl;
                 cout << "idNumber: " << item->classItem.idNumber << endl;
                 cout << "Number of items: " << item->classItem.inStock << endl;
@@ -866,6 +863,7 @@ public:
     }
     void printMap()
     {
+        cout << "Inventory in Map:" << endl;
         inventoryMap.printMap();
     }
     void printTree()
@@ -875,13 +873,16 @@ public:
         // 2. Descending order
         // 3. Postorder
         // 4. Preorder
+        cout << "Inventory in Tree:" << endl;
         inventoryTree.printTree(1);
     }
 
     // By ID
     void searchByID(int idNumber)
     {
+        cout << "Item in Tree:" << endl;
         inventoryTree.search(idNumber);
+        cout << "Item in Map:" << endl;
         inventoryMap.search(idNumber);
     }
     void deleteByID(int idNumber)
@@ -1035,27 +1036,27 @@ void testInsert(InventorySystem &system, int inventorySize)
     auto start = high_resolution_clock::now();
     system.inventoryMap.insert(newItem);
     auto stop = high_resolution_clock::now();
-    auto mapExecutionTime = duration_cast<microseconds>(stop - start);
+    auto mapExecutionTime = duration_cast<nanoseconds>(stop - start);
 
     // --- Test in Tree
     auto start2 = high_resolution_clock::now();
     system.inventoryTree.insert(newItem);
     auto stop2 = high_resolution_clock::now();
-    auto treeExecutionTime = duration_cast<microseconds>(stop2 - start2);
+    auto treeExecutionTime = duration_cast<nanoseconds>(stop2 - start2);
 
     // --- Test in Hash
     auto start3 = high_resolution_clock::now();
     // system.inventoryHashTable.insert(newItem);
     auto stop3 = high_resolution_clock::now();
-    auto hashExecutionTime = duration_cast<microseconds>(stop3 - start3);
+    auto hashExecutionTime = duration_cast<nanoseconds>(stop3 - start3);
 
     // --- Print execution times
     cout << "Test #1 --- Insert()" << endl;
     cout << "Execution time by map : " << mapExecutionTime.count();
-    cout << " microseconds " << endl;
+    cout << " nanoseconds " << endl;
 
     cout << "Execution time by tree : " << treeExecutionTime.count();
-    cout << " microseconds " << endl;
+    cout << " nanoseconds " << endl;
 
     //   cout << "Execution time by hash : " << hashExecutionTime.count();
     //   cout << " microseconds " << endl;
@@ -1067,27 +1068,27 @@ void testDelete(InventorySystem &system, int inventorySize)
     auto start = high_resolution_clock::now();
     system.inventoryMap.remove(inventorySize + 5);
     auto stop = high_resolution_clock::now();
-    auto mapExecutionTime = duration_cast<microseconds>(stop - start);
+    auto mapExecutionTime = duration_cast<nanoseconds>(stop - start);
 
     // --- Test in Tree
     auto start2 = high_resolution_clock::now();
     system.inventoryTree.remove(inventorySize + 5);
     auto stop2 = high_resolution_clock::now();
-    auto treeExecutionTime = duration_cast<microseconds>(stop2 - start2);
+    auto treeExecutionTime = duration_cast<nanoseconds>(stop2 - start2);
 
     // --- Test in Hash
     auto start3 = high_resolution_clock::now();
     // system.inventoryHashTable.delete_("T-shirt");
     auto stop3 = high_resolution_clock::now();
-    auto hashExecutionTime = duration_cast<microseconds>(stop3 - start3);
+    auto hashExecutionTime = duration_cast<nanoseconds>(stop3 - start3);
 
     // --- Print execution times
     cout << "Test #2 --- Delete()" << endl;
     cout << "Execution time by map : " << mapExecutionTime.count();
-    cout << " microseconds " << endl;
+    cout << " nanoseconds " << endl;
 
     cout << "Execution time by tree : " << treeExecutionTime.count();
-    cout << " microseconds " << endl;
+    cout << " nanoseconds " << endl;
 
     //    cout << "Execution time by Hash : " << hashExecutionTime.count();
     //    cout << " microseconds " << endl;
@@ -1105,27 +1106,27 @@ void testSearch(InventorySystem &system, int inventorySize)
     auto start = high_resolution_clock::now();
     system.inventoryMap.search(inventorySize + 5);
     auto stop = high_resolution_clock::now();
-    auto mapExecutionTime = duration_cast<microseconds>(stop - start);
+    auto mapExecutionTime = duration_cast<nanoseconds>(stop - start);
 
     // --- Test in Tree
     auto start2 = high_resolution_clock::now();
     system.inventoryTree.search(inventorySize + 5);
     auto stop2 = high_resolution_clock::now();
-    auto treeExecutionTime = duration_cast<microseconds>(stop2 - start2);
+    auto treeExecutionTime = duration_cast<nanoseconds>(stop2 - start2);
 
     // --- Test in Hash
     auto start3 = high_resolution_clock::now();
     //  system.inventoryHashTable.search("Tshirt");
     auto stop3 = high_resolution_clock::now();
-    auto hashExecutionTime = duration_cast<microseconds>(stop3 - start3);
+    auto hashExecutionTime = duration_cast<nanoseconds>(stop3 - start3);
 
     // --- Print execution times
     cout << "Test #3 --- Search()" << endl;
     cout << "Execution time by map : " << mapExecutionTime.count();
-    cout << " microseconds " << endl;
+    cout << " nanoseconds " << endl;
 
     cout << "Execution time by tree : " << treeExecutionTime.count();
-    cout << " microseconds " << endl;
+    cout << " nanoseconds " << endl;
 
     //  cout << "Execution time by hash : " << hashExecutionTime.count();
     //  cout << " microseconds " << endl;
@@ -1137,27 +1138,27 @@ void testEdit(InventorySystem &system, int inventorySize)
     auto start = high_resolution_clock::now();
     system.inventoryMap.editAmountInStock(inventorySize + 5, 250);
     auto stop = high_resolution_clock::now();
-    auto mapExecutionTime = duration_cast<microseconds>(stop - start);
+    auto mapExecutionTime = duration_cast<nanoseconds>(stop - start);
 
     // --- Test in Tree
     auto start2 = high_resolution_clock::now();
     system.inventoryTree.editAmountInStock(inventorySize + 5, 250);
     auto stop2 = high_resolution_clock::now();
-    auto treeExecutionTime = duration_cast<microseconds>(stop2 - start2);
+    auto treeExecutionTime = duration_cast<nanoseconds>(stop2 - start2);
 
     // --- Test in Hash
     auto start3 = high_resolution_clock::now();
     // system.inventoryHashTable.edit("Tshirt", 250);
     auto stop3 = high_resolution_clock::now();
-    auto hashExecutionTime = duration_cast<microseconds>(stop3 - start3);
+    auto hashExecutionTime = duration_cast<nanoseconds>(stop3 - start3);
 
     // --- Print execution times
     cout << "Test #3 --- Edit()" << endl;
     cout << "Execution time by map : " << mapExecutionTime.count();
-    cout << " microseconds " << endl;
+    cout << " nanoseconds " << endl;
 
     cout << "Execution time by tree : " << treeExecutionTime.count();
-    cout << " microseconds " << endl;
+    cout << " nanoseconds " << endl;
 
     //    cout << "Execution time by Hash : " << hashExecutionTime.count();
     //    cout << " microseconds " << endl;
@@ -1351,49 +1352,92 @@ void userProgram()
 }
 
 // ===================== Test Cases for User Program ===========================
-void userTest1()
+void userTest1(InventorySystem system)
 {
     /*
         insert
         insert
-        edit 
+        edit 1
         search 1
+        search 2
     */
+    InventorySystem::Item newItem("TestName", 100005, 1000);
+    system.insert("TestName", 100005, 1000);
+    system.insert("TestName2", 100007, 3000);
+
+    system.printMap();
+    system.printTree();
+
+    system.editAmountInStock(100005, 250);
+    cout << "Edited item with ID #100005, new inStock amount is 250" << endl;
+    cout << endl;
+
+    cout << "Search for item with ID #100005" << endl;
+    system.searchByID(100005);
+
+    cout << "Search for item with ID #100007" << endl;
+    system.searchByID(100007);
 }
-void userTest2()
+void userTest2(InventorySystem system)
 {
     /*
         insert
         insert
-        delete 
+        delete 1
         search 1
+        search 2
     */
+    InventorySystem::Item newItem("TestName", 100005, 1000);
+    system.insert("TestName", 100005, 1000);
+    system.insert("TestName2", 100007, 3000);
+
+    system.printMap();
+    system.printTree();
+
+    system.deleteByID(100005);
+    cout << "Deleted item with ID #100005" << endl;
+    cout << endl;
+
+    cout << "Search for item with ID #100005" << endl;
+    system.searchByID(100005);
+    cout << "Search for item with ID #100007" << endl;
+    system.searchByID(100007);
 }
-void userTest3()
+void userTest3(InventorySystem system)
 {
+
     /*
+        Creates a tree, deletes all nodes, then inserts again
         insert
         insert
         delete 
         delete
         insert
-
     */
+    system.insert("TestName", 100005, 1000);
+
+    system.printTree();
+    system.printMap();
+
+    system.deleteByID(100005);
+
+    system.printTree();
+    system.printMap();
+
+    system.insert("TestName", 100005, 1000);
+
+    system.printTree();
+    system.printMap();
 }
-void userTest4()
+void userTest4(InventorySystem system)
 {
     /*
-        insert
-        insert
-        delete 
-        search
+       
     */
 }
 
-// ===================== Main Method ===========================
-int main()
+void runProgram()
 {
-
     cout << "1 - Run execution time calculations" << endl;
     cout << "2 - Run user-based program" << endl;
     int choice;
@@ -1413,8 +1457,16 @@ int main()
     {
         cout << "Out of bounds choice" << endl;
     }
+}
+
+// ===================== Main Method ===========================
+int main()
+{
+
+    runProgram();
 
     // --- Test cases based on data structure ---
+    // InventorySystem system;
     // -- For map --
     // testMapInsert(system);
     // testMapDelete(system);
@@ -1425,6 +1477,13 @@ int main()
     // testTreeDelete(system);
     // testTreeSearch(system);
     // testTreeEdit(system);
+
+    // --- Test cases for userProgram ---
+    // InventorySystem system;
+    // userTest1(system);
+    // userTest2(system);
+    // userTest3(system);
+    // userTest4(system);
 
     return 0;
 };
