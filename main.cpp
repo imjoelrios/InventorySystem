@@ -707,6 +707,15 @@ public:
         inventoryMap.editAmountInStock(idNumber, newAmount);
         inventoryMap.editAmountInStock(idNumber, newAmount);
     }
+    // Search by ID in general inventory
+	bool searchInventory(int idNumber) {
+		for (int i = 0; i < inventoryVector.size(); i++) {
+			if (inventoryVector.at(i).idNumber == idNumber) {
+				return true;
+			}
+		}
+		return false;
+	}
     // By Name
     void searchByName(string name)
     {
@@ -988,21 +997,29 @@ void userProgram()
             system.searchByName(name);
         }
         else if (command == "delete")
-        {
-            cin >> idNumber;
-            system.deleteByID(idNumber);
-            cout << "Deleted item with idNumber: " << idNumber << endl;
-            cout << endl;
-        }
-        else if (command == "editAmount")
-        {
-            cin >> idNumber;
-            cin >> inStock;
-            system.editAmountInStock(idNumber, inStock);
-            cout << "Edited item with idNumber: " << idNumber << endl;
-            cout << "New amount in stock: " << inStock << endl;
-            cout << endl;
-        }
+		{
+			cin >> idNumber;
+			if (system.searchInventory(idNumber)) {
+				system.deleteByID(idNumber);
+				cout << "Deleted item with idNumber: " << idNumber << endl;
+			}
+			else 
+				cout << "Item with that idNumber doesn't exist" << endl;
+			cout << endl;
+		}
+		else if (command == "editAmount")
+		{
+			cin >> idNumber;
+			cin >> inStock;
+			if (system.searchInventory(idNumber)) {
+				system.editAmountInStock(idNumber, inStock);
+				cout << "Edited item with idNumber: " << idNumber << endl;
+				cout << "New amount in stock: " << inStock << endl;
+			}
+			else
+				cout << "Item with that idNumber doesn't exist" << endl;
+			cout << endl;
+		}
         else if (command == "printTree")
         {
             system.printTree();
