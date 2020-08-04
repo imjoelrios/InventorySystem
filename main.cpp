@@ -275,7 +275,6 @@ public:
         // 4. Preorder
         void printTree(int choice)
         {
-            cout << "Available inventory: " << endl;
             auto temp = AVL_Root;
             if (choice == 3)
             {
@@ -784,12 +783,14 @@ void testSearch(InventorySystem &system, int inventorySize)
     // system.inventoryHashTable.insert(newItem);
 
     // --- Test in Map
+    cout << "Item in Map:" << endl;
     auto start = high_resolution_clock::now();
     system.inventoryMap.searchByID(inventorySize + 5);
     auto stop = high_resolution_clock::now();
     auto mapExecutionTime = duration_cast<nanoseconds>(stop - start);
 
     // --- Test in Tree
+    cout << "Item in Tree:" << endl;
     auto start2 = high_resolution_clock::now();
     system.inventoryTree.searchByID(inventorySize + 5);
     auto stop2 = high_resolution_clock::now();
@@ -1093,17 +1094,13 @@ void userTest3(InventorySystem system)
 
     system.printTree();
     system.printMap();
+    cout << "Both data structures are empty" << endl;
+    cout << endl;
 
     system.insert("TestName", 100005, 1000);
 
     system.printTree();
     system.printMap();
-}
-void userTest4(InventorySystem system)
-{
-    /*
-       
-    */
 }
 
 // ======= Run program (execution time analysis or user program) =======
