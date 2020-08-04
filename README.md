@@ -2,9 +2,9 @@
 
 **Description**
 
-The AVL tree and map data structures are implemented from scratch in order to handle all of the system's data and their methods' execution times are calculated (displayed in nanoseconds) and compared.
+The AVL tree and map data structures are implemented from scratch in order to handle all of the system's data and the execution times of their methods are calculated (displayed in nanoseconds) and compared.
 
-An user program was also added enabling real-time functionality.
+A user program was also added enabling real-time functionality.
 
 In essence, the most simplified version (MVP) of an inventory system is created.
 
@@ -69,7 +69,7 @@ print commands | commands
 
 **User Program Output Examples**
 
-Imagine its Tesla's inventory system.
+Imagine it's Tesla's inventory system.
 
 ```
 insert ModelX 1 2500
