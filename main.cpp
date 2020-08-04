@@ -171,9 +171,11 @@ public:
 						cout << "idNumber: " << buckets.at(i)[j].idNumber << endl;
 						cout << "Amount in Stock: " << buckets.at(i)[j].inStock << endl;
 						cout << endl;
+						return;
 					}
 				}
 			}
+			cout << "Item not found in Map" << endl;
 		}
 		void editAmountInStock(int idNumber, int newInStock)
 		{
