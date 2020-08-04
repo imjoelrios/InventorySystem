@@ -342,7 +342,7 @@ public:
             if (isALeaf(val))
             {
                 auto parentNode = parent(AVL_Root, val);
-                if (height(val) == 1)
+                if (val==AVL_Root)
                 {
                     free(AVL_Root);
                     AVL_Root = nullptr;
