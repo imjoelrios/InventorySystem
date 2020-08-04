@@ -230,61 +230,31 @@ public:
         struct Node
         {
             Item classItem;
-            Node *right = nullptr;
-            Node *left = nullptr;
+            Node* right = nullptr;
+            Node* left = nullptr;
             int height = 0;
-            int data = NULL;
-            string stringData = "";
         };
 
     public:
-        // Operators
-        friend bool operator<(string left, string right)
-        {
-            if (left.compare(right) < 0)
-                return true;
-            return false;
-        }
-        friend bool operator>(string left, string right)
-        {
-            if (left.compare(right) > 0)
-                return true;
-            return false;
-        }
-        friend bool operator==(string left, string right)
-        {
-            if (left.compare(right) == 0)
-                return true;
-            return false;
-        }
 
         // --- Tree functions ---
-        void insert(Item &newItem)
+        void insert(Item& newItem)
         {
-            if (AVL_Root == nullptr)
-            {
-                Node *temp = new Node();
-                temp->classItem = newItem;
-                temp->data = newItem.idNumber;
-                AVL_Root = temp;
-                temp->height = 1;
+            if (AVL_Root == nullptr) {
+                AVL_Root = addNewNode(newItem);
                 return;
             }
-            insertRecursive(AVL_Root, newItem.idNumber, newItem);
+
+            insertRecursive(AVL_Root, newItem);
         }
-        void insertByString(Item &newItem)
-        {
-            if (AVL_Root == nullptr)
-            {
-                Node *temp = new Node();
-                temp->classItem = newItem;
-                temp->stringData = newItem.name;
-                AVL_Root = temp;
-                temp->height = 1;
-                return;
-            }
-            insertRecursive(AVL_Root, newItem.name, newItem);
+
+        Node* addNewNode(Item& newItem) {
+            Node* temp = new Node();
+            temp->classItem = newItem;
+            temp->height = 1;
+            return temp;
         }
+
         void printItem(int key)
         {
             auto temp = searchRecursive(AVL_Root, key);
@@ -301,6 +271,7 @@ public:
         // 4. Preorder
         void printTree(int choice)
         {
+            cout << "Available inventory: " << endl;
             auto temp = AVL_Root;
             if (choice == 3)
             {
@@ -340,7 +311,7 @@ public:
             if (isALeaf(val))
             {
                 auto parentNode = parent(AVL_Root, val);
-                if (val == AVL_Root)
+                if (AVL_Root == val)
                 {
                     free(AVL_Root);
                     AVL_Root = nullptr;
@@ -356,13 +327,12 @@ public:
             }
             else
             {
-                deleteRecursive(AVL_Root, AVL_Root, predecessor, val, false);
+                deleteRecursive(AVL_Root, AVL_Root, predecessor, val);
                 return true;
             }
         }
         bool editAmountInStock(int id, int newAmount)
         {
-
             auto temp = searchRecursive(AVL_Root, id);
             if (temp != nullptr)
             {
@@ -371,113 +341,17 @@ public:
             }
             return false;
         }
-        bool searchInorder(int key)
-        {
-            stack<Node *> temp;
-            if (AVL_Root == nullptr)
-                return false;
-            searchInorderHelp(key, AVL_Root, temp);
-            while (!temp.empty())
-            {
-                if (temp.top()->data == key)
-                {
-                    printItem(temp.top());
-                    return true;
-                }
 
-                temp.pop();
-            }
-            return false;
-        }
-
-        // Tree organized by name
-        void search(string key)
-        {
-            auto temp = searchRecursive(AVL_Root, key);
-            if (temp == nullptr)
-                cout << "Item not found in Tree" << endl;
-            else
-                printItem(temp);
-        }
-        bool delete_(string key)
-        {
-            auto val = searchRecursive(AVL_Root, key);
-            auto predecessor = inorder_predecessor(val);
-            if (val == nullptr)
-                return false;
-            if (isALeaf(val))
-            {
-                auto parentNode = parent(AVL_Root, val);
-                if (height(val) == 1)
-                {
-                    free(AVL_Root);
-                    AVL_Root = nullptr;
-                    return true;
-                }
-                else if (parentNode->left == val)
-                    parentNode->left = nullptr;
-                else if (parentNode->right == val)
-                    parentNode->right = nullptr;
-                free(val);
-
-                return true;
-            }
-            else
-            {
-                deleteRecursive(AVL_Root, AVL_Root, predecessor, val, true);
-                return true;
-            }
-        }
-        bool edit(string name, int newAmount)
-        {
-
-            auto temp = searchRecursive(AVL_Root, name);
-            if (temp != nullptr)
-            {
-                temp->classItem.inStock = newAmount;
-                return true;
-            }
-            return false;
-        }
-        bool searchInorder(string key)
-        {
-            stack<Node *> temp;
-            if (AVL_Root == nullptr)
-                return false;
-            searchInorderHelp(key, AVL_Root, temp);
-            while (!temp.empty())
-            {
-                if (temp.top()->stringData == key)
-                {
-                    printItem(temp.top());
-                    return true;
-                }
-
-                temp.pop();
-            }
-            return false;
-        }
-
-        bool deleteHead(bool is_string)
-        {
-            if (is_string)
-                return delete_(headValue().name);
-            return remove(headValue().idNumber);
-        }
-        Item headValue()
-        {
-            return AVL_Root->classItem;
-        }
 
     private:
         // --- Tree structure ---
-        Node *AVL_Root = nullptr;
-        Node *rotateRightLeft(Node *node)
+        Node* AVL_Root = nullptr;
+        Node* rotateRightLeft(Node* node)
         {
 
             if (node == nullptr)
                 return node;
-            Node *rightChild = node->right;
+            Node* rightChild = node->right;
             node->right = rightChild->left;
             rightChild->left = node->right->right;
             node->right->right = rightChild;
@@ -492,7 +366,7 @@ public:
             newRightChild->height++;
             return newRightChild;
         }
-        Node *rotateLeft(Node *node)
+        Node* rotateLeft(Node* node)
         {
             if (node == nullptr)
                 return node;
@@ -505,7 +379,7 @@ public:
             rightChild->left->height -= 2;
             return rightChild;
         }
-        Node *rotateRight(Node *node)
+        Node* rotateRight(Node* node)
         {
             if (node == nullptr)
                 return node;
@@ -518,11 +392,11 @@ public:
             leftChild->right->height -= 2;
             return leftChild;
         }
-        Node *rotateLeftRight(Node *node)
+        Node* rotateLeftRight(Node* node)
         {
             if (node == nullptr)
                 return node;
-            Node *leftChild = node->left;
+            Node* leftChild = node->left;
             node->left = leftChild->right;
             leftChild->right = node->left->left;
             node->left->left = leftChild;
@@ -537,47 +411,21 @@ public:
             newLeftChild->height++;
             return newLeftChild;
         }
-        Node *insertRecursive(Node *root, int data, Item &item)
+        Node* insertRecursive(Node* root, Item& item)
         {
 
-            if (root == NULL)
-            {
-                Node *temp = new Node();
-                temp->classItem = item;
-                temp->data = data;
-                temp->height = 1;
-                return temp;
-            }
-            if (data < root->data)
-                root->left = insertRecursive(root->left, data, item);
-            else if (data > root->data)
-                root->right = insertRecursive(root->right, data, item);
+            if (root == nullptr)
+                return addNewNode(item);
+            if (item.idNumber < root->classItem.idNumber)
+                root->left = insertRecursive(root->left, item);
+            else if (item.idNumber > root->classItem.idNumber)
+                root->right = insertRecursive(root->right, item);
 
             root->height = max_height(root);
             root = balanceNodes(root);
             return root;
         }
-        Node *insertRecursive(Node *root, string data, Item &item)
-        {
-
-            if (root == NULL)
-            {
-                Node *temp = new Node();
-                temp->classItem = item;
-                temp->stringData = data;
-                temp->height = 1;
-                return temp;
-            }
-            if (data < root->stringData)
-                root->left = insertRecursive(root->left, data, item);
-            else if (data > root->stringData)
-                root->right = insertRecursive(root->right, data, item);
-
-            root->height = max_height(root);
-            root = balanceNodes(root);
-            return root;
-        }
-        int max_height(Node *root)
+        int max_height(Node* root)
         {
             if (root == nullptr)
                 return 0;
@@ -587,18 +435,18 @@ public:
 
             return 1 + (heightLeft > heightRight ? heightLeft : heightRight);
         }
-        int height(Node *root)
+        int height(Node* root)
         {
             if (root == nullptr)
                 return 0;
             return root->height;
         }
-        Node *balanceNodes(Node *parent)
+        Node* balanceNodes(Node* parent)
         {
             if (parent == nullptr)
                 return parent;
 
-            Node *temp = parent;
+            Node* temp = parent;
 
             if (height(parent->left) - height(parent->right) > 1)
             {
@@ -620,17 +468,18 @@ public:
             }
             return parent;
         }
-        void printItem(Node *item)
+        void printItem(Node* item)
         {
             if (item != nullptr)
             {
+                cout << "Item in Tree" << endl;
                 cout << "Name: " << item->classItem.name << endl;
                 cout << "idNumber: " << item->classItem.idNumber << endl;
                 cout << "Number of items: " << item->classItem.inStock << endl;
                 cout << endl;
             }
         }
-        void printPostorder(Node *root)
+        void printPostorder(Node* root)
         {
             if (root == nullptr)
                 return;
@@ -639,7 +488,7 @@ public:
             printPostorder(root->right);
             printItem(root);
         }
-        void printInorder(Node *root)
+        void printInorder(Node* root)
         {
             if (root == nullptr)
                 return;
@@ -648,7 +497,7 @@ public:
             printItem(root);
             printInorder(root->right);
         }
-        void printReverseInorder(Node *root)
+        void printReverseInorder(Node* root)
         {
             if (root == nullptr)
                 return;
@@ -657,7 +506,7 @@ public:
             printItem(root);
             printReverseInorder(root->left);
         }
-        void printPreorder(Node *root)
+        void printPreorder(Node* root)
         {
             if (root == nullptr)
                 return;
@@ -666,49 +515,22 @@ public:
             printPreorder(root->left);
             printPreorder(root->right);
         }
-        void searchInorderHelp(string key, Node *root, stack<Node *> &stack_)
-        {
-            if (root == nullptr)
-                return;
-            searchInorderHelp(key, root->left, stack_);
-            if (root->stringData == key)
-                stack_.push(root);
-            searchInorderHelp(key, root->right, stack_);
-        }
-        void searchInorderHelp(int key, Node *root, stack<Node *> &stack_)
-        {
-            if (root == nullptr)
-                return;
-            searchInorderHelp(key, root->left, stack_);
-            if (root->data == key)
-                stack_.push(root);
-            searchInorderHelp(key, root->right, stack_);
-        }
-        Node *searchRecursive(Node *root, int key)
+
+
+        Node* searchRecursive(Node* root, int key)
         {
             if (root == nullptr)
                 return nullptr;
-            if (key == root->data)
+            if (key == root->classItem.idNumber)
                 return root;
-            else if (key < root->data)
+            else if (key < root->classItem.idNumber)
                 return searchRecursive(root->left, key);
-            else if (key > root->data)
+            else if (key > root->classItem.idNumber)
                 return searchRecursive(root->right, key);
             return nullptr;
         }
-        Node *searchRecursive(Node *root, string key)
-        {
-            if (root == nullptr)
-                return nullptr;
-            if (key == root->stringData)
-                return root;
-            else if (key < root->stringData)
-                return searchRecursive(root->left, key);
-            else if (key > root->stringData)
-                return searchRecursive(root->right, key);
-            return nullptr;
-        }
-        bool isALeaf(Node *node)
+
+        bool isALeaf(Node* node)
         {
             if (node == nullptr)
                 return false;
@@ -716,24 +538,8 @@ public:
                 return true;
             return false;
         }
-        Node *deleteLeaf(Node *root, Node *parent)
-        {
 
-            if (root->data == parent->data)
-            {
-                root->height = max_height(root);
-                root = balanceNodes(root);
-                return root;
-            }
-            if (parent->data < root->data)
-                root->left = deleteLeaf(root->left, parent);
-            else if (parent->data > root->data)
-                root->right = deleteLeaf(root->right, parent);
-
-            root->height = max_height(root);
-            root = balanceNodes(root);
-        }
-        Node *deleteRecursive(Node *root, Node *rootNonRecursive, Node *&inorder, Node *deleting, bool is_string)
+        Node* deleteRecursive(Node* root, Node* rootNonRecursive, Node*& inorder, Node* deleting)
         {
             if (inorder == nullptr)
             {
@@ -751,48 +557,30 @@ public:
                     return nullptr;
                 }
             }
-            else if (root->data == inorder->data && !is_string)
+            else if (root->classItem.idNumber == inorder->classItem.idNumber)
             {
                 auto temp = inorder->left;
-                swap(deleting->data, inorder->data);
+                swap(deleting->classItem.idNumber, inorder->classItem.idNumber);
                 swap(deleting->classItem, inorder->classItem);
-                swap(deleting->stringData, inorder->stringData);
                 free(inorder);
                 if (temp == nullptr)
                     return nullptr;
                 return temp;
             }
-            else if (root->stringData == inorder->stringData && is_string)
+
+            else
             {
-                auto temp = inorder->left;
-                swap(deleting->data, inorder->data);
-                swap(deleting->classItem, inorder->classItem);
-                swap(deleting->stringData, inorder->stringData);
-                free(inorder);
-                if (temp == nullptr)
-                    return nullptr;
-                return temp;
-            }
-            else if (is_string)
-            {
-                if (inorder->stringData < root->stringData)
-                    root->left = deleteRecursive(root->left, rootNonRecursive, inorder, deleting, is_string);
-                else if (inorder->stringData > root->stringData)
-                    root->right = deleteRecursive(root->right, rootNonRecursive, inorder, deleting, is_string);
-            }
-            else if (!is_string)
-            {
-                if (inorder->data < root->data)
-                    root->left = deleteRecursive(root->left, rootNonRecursive, inorder, deleting, is_string);
-                else if (inorder->data > root->data)
-                    root->right = deleteRecursive(root->right, rootNonRecursive, inorder, deleting, is_string);
+                if (inorder->classItem.idNumber < root->classItem.idNumber)
+                    root->left = deleteRecursive(root->left, rootNonRecursive, inorder, deleting);
+                else if (inorder->classItem.idNumber > root->classItem.idNumber)
+                    root->right = deleteRecursive(root->right, rootNonRecursive, inorder, deleting);
             }
 
             root->height = max_height(root);
             root = balanceNodes(root);
             return root;
         }
-        Node *parent(Node *root, Node *key)
+        Node* parent(Node* root, Node* key)
         {
             if (root == nullptr || key == AVL_Root)
                 return nullptr;
@@ -800,12 +588,12 @@ public:
                 return root;
             else if (root->right == key)
                 return root;
-            if (root->data > key->data)
+            if (root->classItem.idNumber > key->classItem.idNumber)
                 return parent(root->left, key);
-            if (root->data < key->data)
+            if (root->classItem.idNumber < key->classItem.idNumber)
                 return parent(root->right, key);
         }
-        Node *inorder_predecessor(Node *root)
+        Node* inorder_predecessor(Node* root)
         {
 
             if (root == nullptr)
@@ -848,7 +636,7 @@ public:
             inventoryVector.push_back(item);
             inventoryMap.insert(item);
             inventoryTree.insert(item);
-            // inventoryHashTable.insert(item);
+            
         }
     }
     void printInventoryVector()
@@ -904,119 +692,6 @@ public:
     {
         // inventoryTree.deleteValue(//name)
     }
-
-    //Experimental for the string methods that we will implement
-    // struct hashTable
-    // {
-    //     hashTable()
-    //     {
-    //         this->size = 100 * multiplier;
-    //         for (int i = 0; i < size; i++)
-    //         {
-    //             list<pair<string, Item>> empty_vec;
-    //             hash_structure_str.push_back(empty_vec);
-    //         }
-    //     }
-    //     vector<list<pair<string, Item>>> hash_structure_str;
-    //     int size = 0;
-    //     int total_values = 0;
-    //     const double multiplier = 1.5;
-    //     hash<string> hash_int;
-
-    //     hashTable(int size_)
-    //     {
-    //         this->size = size_ * multiplier;
-    //         for (int i = 0; i < size; i++)
-    //         {
-    //             list<pair<string, Item>> empty_vec;
-    //             hash_structure_str.push_back(empty_vec);
-    //         }
-    //     }
-
-    //     void search(string key)
-    //     {
-    //         long hashed = hash_int(key);
-    //         auto temp = hash_structure_str[abs(hashed) % size];
-    //         for (auto element : temp)
-    //         {
-    //             if (element.first == key)
-    //             {
-    //                 printItem(element.second);
-    //                 return;
-    //             }
-    //         }
-    //         cout << "Item not found!";
-    //     }
-
-    //     void printItem(Item item)
-    //     {
-
-    //         cout << "Name: " << item.name << endl;
-    //         cout << "Item number: " << item.idNumber << endl;
-    //         cout << "Number of items: " << item.inStock << endl;
-    //     }
-
-    //     void edit(string name, int newStock)
-    //     {
-    //         long hashed = hash_int(name);
-    //         int index = abs(hashed) % size;
-    //         for (auto iter = hash_structure_str[index].begin(); iter != hash_structure_str[index].end(); iter++)
-    //         {
-    //             if (iter->first == name)
-    //                 iter->second.inStock = newStock;
-    //         }
-    //     }
-
-    //     void insert(Item item)
-    //     {
-
-    //         long hashed = hash_int(item.name);
-    //         auto temp = hash_structure_str[abs(hashed) % size];
-    //         auto pair = make_pair(item.name, item);
-    //         if (!found(temp, item.name))
-    //         {
-    //             hash_structure_str[abs(hashed) % size].push_back(pair);
-    //             total_values++;
-    //         }
-    //     }
-
-    //     void delete_(string name)
-    //     {
-    //         long hashed = hash_int(name);
-    //         auto iter = hash_structure_str[abs(hashed) % size].begin();
-    //         for (; iter != hash_structure_str[abs(hashed) % size].end(); iter++)
-    //         {
-    //             if (iter->first == name)
-    //             {
-    //                 hash_structure_str[abs(hashed) % size].erase(iter);
-    //                 return;
-    //             }
-    //         }
-    //     }
-
-    //     void reconfigure(int newSize)
-    //     {
-    //         hash_structure_str.clear();
-    //         this->size = newSize * multiplier;
-    //         for (int i = 0; i < size; i++)
-    //         {
-    //             list<pair<string, Item>> empty_vec;
-    //             hash_structure_str.push_back(empty_vec);
-    //         }
-    //     }
-
-    //     bool found(list<pair<string, Item>> list, string name)
-    //     {
-    //         bool found = false;
-    //         for (auto element : list)
-    //         {
-    //             if (element.first == name)
-    //                 return true;
-    //         }
-    //         return false;
-    //     }
-    // };
-    // hashTable inventoryHashTable;
 };
 
 // ===================== Execution Time Test Cases ===========================
@@ -1044,11 +719,6 @@ void testInsert(InventorySystem &system, int inventorySize)
     auto stop2 = high_resolution_clock::now();
     auto treeExecutionTime = duration_cast<nanoseconds>(stop2 - start2);
 
-    // --- Test in Hash
-    auto start3 = high_resolution_clock::now();
-    // system.inventoryHashTable.insert(newItem);
-    auto stop3 = high_resolution_clock::now();
-    auto hashExecutionTime = duration_cast<nanoseconds>(stop3 - start3);
 
     // --- Print execution times
     cout << "Test #1 --- Insert()" << endl;
@@ -1057,9 +727,6 @@ void testInsert(InventorySystem &system, int inventorySize)
 
     cout << "Execution time by tree : " << treeExecutionTime.count();
     cout << " nanoseconds " << endl;
-
-    //   cout << "Execution time by hash : " << hashExecutionTime.count();
-    //   cout << " microseconds " << endl;
     cout << endl;
 };
 void testDelete(InventorySystem &system, int inventorySize)
@@ -1076,12 +743,6 @@ void testDelete(InventorySystem &system, int inventorySize)
     auto stop2 = high_resolution_clock::now();
     auto treeExecutionTime = duration_cast<nanoseconds>(stop2 - start2);
 
-    // --- Test in Hash
-    auto start3 = high_resolution_clock::now();
-    // system.inventoryHashTable.delete_("T-shirt");
-    auto stop3 = high_resolution_clock::now();
-    auto hashExecutionTime = duration_cast<nanoseconds>(stop3 - start3);
-
     // --- Print execution times
     cout << "Test #2 --- Delete()" << endl;
     cout << "Execution time by map : " << mapExecutionTime.count();
@@ -1089,9 +750,6 @@ void testDelete(InventorySystem &system, int inventorySize)
 
     cout << "Execution time by tree : " << treeExecutionTime.count();
     cout << " nanoseconds " << endl;
-
-    //    cout << "Execution time by Hash : " << hashExecutionTime.count();
-    //    cout << " microseconds " << endl;
     cout << endl;
 };
 void testSearch(InventorySystem &system, int inventorySize)
@@ -1114,11 +772,6 @@ void testSearch(InventorySystem &system, int inventorySize)
     auto stop2 = high_resolution_clock::now();
     auto treeExecutionTime = duration_cast<nanoseconds>(stop2 - start2);
 
-    // --- Test in Hash
-    auto start3 = high_resolution_clock::now();
-    //  system.inventoryHashTable.search("Tshirt");
-    auto stop3 = high_resolution_clock::now();
-    auto hashExecutionTime = duration_cast<nanoseconds>(stop3 - start3);
 
     // --- Print execution times
     cout << "Test #3 --- Search()" << endl;
@@ -1127,9 +780,6 @@ void testSearch(InventorySystem &system, int inventorySize)
 
     cout << "Execution time by tree : " << treeExecutionTime.count();
     cout << " nanoseconds " << endl;
-
-    //  cout << "Execution time by hash : " << hashExecutionTime.count();
-    //  cout << " microseconds " << endl;
     cout << endl;
 };
 void testEdit(InventorySystem &system, int inventorySize)
@@ -1146,12 +796,6 @@ void testEdit(InventorySystem &system, int inventorySize)
     auto stop2 = high_resolution_clock::now();
     auto treeExecutionTime = duration_cast<nanoseconds>(stop2 - start2);
 
-    // --- Test in Hash
-    auto start3 = high_resolution_clock::now();
-    // system.inventoryHashTable.edit("Tshirt", 250);
-    auto stop3 = high_resolution_clock::now();
-    auto hashExecutionTime = duration_cast<nanoseconds>(stop3 - start3);
-
     // --- Print execution times
     cout << "Test #3 --- Edit()" << endl;
     cout << "Execution time by map : " << mapExecutionTime.count();
@@ -1159,9 +803,6 @@ void testEdit(InventorySystem &system, int inventorySize)
 
     cout << "Execution time by tree : " << treeExecutionTime.count();
     cout << " nanoseconds " << endl;
-
-    //    cout << "Execution time by Hash : " << hashExecutionTime.count();
-    //    cout << " microseconds " << endl;
     cout << endl;
 };
 
