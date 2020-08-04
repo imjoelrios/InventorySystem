@@ -342,7 +342,7 @@ public:
             if (isALeaf(val))
             {
                 auto parentNode = parent(AVL_Root, val);
-                if (val==AVL_Root)
+                if (val == AVL_Root)
                 {
                     free(AVL_Root);
                     AVL_Root = nullptr;
@@ -1018,7 +1018,7 @@ public:
     // hashTable inventoryHashTable;
 };
 
-// ===================== Test Cases ===========================
+// ===================== Execution Time Test Cases ===========================
 /*
     1. Random inventory is added to the system amounting to 100,000 (added to the tree and map as well)
     2. A newItem is created. This item is the one that will be manipulated (insert, delete, search, etc.)
@@ -1178,7 +1178,7 @@ void runTests(InventorySystem &system, int inventorySize)
     testEdit(system, inventorySize);
 };
 
-// ===================== Specific Test Cases ===========================
+// ===================== Execution Time Test Cases per Data Structure ===========================
 // For the map data structure
 void testMapInsert(InventorySystem system)
 {
@@ -1220,30 +1220,6 @@ void testMapEdit(InventorySystem system)
     cout << endl;
     system.inventoryMap.printItem(100005);
 }
-
-void test_5()
-{
-
-    InventorySystem::Map map;
-    InventorySystem::Tree tree;
-    for (int i = 100000; i > 0; i--)
-    {
-        InventorySystem::Item test("hello world", i, 8);
-        map.insert(test);
-        tree.insert(test);
-    }
-    cout << "Map:" << endl;
-    map.search(100);
-    map.search(119);
-    map.search(1000);
-    map.search(1230);
-    cout << endl;
-    cout << "Tree: " << endl;
-    tree.search(100);
-    tree.search(119);
-    tree.search(1000);
-    tree.search(1230);
-};
 
 // For the tree data structure
 void testTreeInsert(InventorySystem system)
@@ -1287,8 +1263,9 @@ void testTreeEdit(InventorySystem system)
     system.inventoryTree.printItem(100005);
 }
 
+// ===================== User Program ===========================
 // Creates an inventory system and based on userInput lets the user insert, delete, search, and edit items
-void runProgram()
+void userProgram()
 {
     InventorySystem system;
     string command;
@@ -1373,6 +1350,46 @@ void runProgram()
     }
 }
 
+// ===================== Test Cases for User Program ===========================
+void userTest1()
+{
+    /*
+        insert
+        insert
+        edit 
+        search 1
+    */
+}
+void userTest2()
+{
+    /*
+        insert
+        insert
+        delete 
+        search 1
+    */
+}
+void userTest3()
+{
+    /*
+        insert
+        insert
+        delete 
+        delete
+        insert
+
+    */
+}
+void userTest4()
+{
+    /*
+        insert
+        insert
+        delete 
+        search
+    */
+}
+
 // ===================== Main Method ===========================
 int main()
 {
@@ -1390,7 +1407,7 @@ int main()
     else if (choice == 2)
     {
         // Run program based on user input
-        runProgram();
+        userProgram();
     }
     else
     {
