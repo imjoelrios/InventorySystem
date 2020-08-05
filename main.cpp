@@ -13,10 +13,10 @@ using namespace std::chrono;
 string printRandomString(int n)
 {
 	const int MAX = 26;
-	char alphabet[MAX] = {'a', 'b', 'c', 'd', 'e', 'f', 'g',
-						  'h', 'i', 'j', 'k', 'l', 'm', 'n',
-						  'o', 'p', 'q', 'r', 's', 't', 'u',
-						  'v', 'w', 'x', 'y', 'z'};
+	char alphabet[MAX] ={ 'a', 'b', 'c', 'd', 'e', 'f', 'g',
+		'h', 'i', 'j', 'k', 'l', 'm', 'n',
+		'o', 'p', 'q', 'r', 's', 't', 'u',
+		'v', 'w', 'x', 'y', 'z' };
 
 	string res = "";
 	for (int i = 0; i < n; i++)
@@ -572,7 +572,7 @@ public:
 			searchInorderHelp(key, root->right, flag);
 		}
 
-		
+
 		// Helper methods to remove. This implementation uses inorder predecessor, 
 		// it can be changed to use inorder successor
 		Node *deleteRecursive(Node *root, Node *rootNonRecursive, Node *&inorder, Node *deleting)
@@ -625,7 +625,7 @@ public:
 				return true;
 			return false;
 		}
-		
+
 		Node *parent(Node *root, Node *key)
 		{
 			if (root == nullptr || key == AVL_Root)
@@ -678,7 +678,7 @@ public:
 	}
 	void inventoryGenerator(int inventoryNumber)
 	{
-		
+
 		for (int i = 0; i < inventoryNumber; i++)
 		{
 			// randomly generate an item
@@ -1184,8 +1184,10 @@ void userTest4(InventorySystem system)
 // ======= Run program (execution time analysis or user program) =======
 void runProgram()
 {
+	cout << "Menu: " << endl;
 	cout << "1 - Run execution time calculations" << endl;
 	cout << "2 - Run user-based program" << endl;
+	cout << "Choice: ";
 	int choice;
 	cin >> choice;
 	if (choice == 1)
