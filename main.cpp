@@ -58,7 +58,7 @@ public:
 	{
 		for (int i = 0; i < inventoryVector.size(); i++)
 		{
-			if (inventoryVector[i].idNumber = idNumber)
+			if (inventoryVector[i].idNumber == idNumber)
 			{
 				inventoryVector.erase(inventoryVector.begin() + (i - 1));
 			}
