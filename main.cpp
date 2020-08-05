@@ -13,10 +13,10 @@ using namespace std::chrono;
 string printRandomString(int n)
 {
 	const int MAX = 26;
-	char alphabet[MAX] = { 'a', 'b', 'c', 'd', 'e', 'f', 'g',
+	char alphabet[MAX] = {'a', 'b', 'c', 'd', 'e', 'f', 'g',
 						  'h', 'i', 'j', 'k', 'l', 'm', 'n',
 						  'o', 'p', 'q', 'r', 's', 't', 'u',
-						  'v', 'w', 'x', 'y', 'z' };
+						  'v', 'w', 'x', 'y', 'z'};
 
 	string res = "";
 	for (int i = 0; i < n; i++)
@@ -119,7 +119,7 @@ public:
 		{
 			//the idNumber % size gives the index location for the list that an item with that key (idNumbers) falls into
 			int index = item.idNumber % size;
-			InventorySystem::Item* pointer;
+			InventorySystem::Item *pointer;
 			//if their are no other items at that index, simply add it
 			if (buckets.at(index).size() == 0)
 			{
@@ -150,7 +150,7 @@ public:
 		}
 		void searchByID(int idNumber)
 		{
-			InventorySystem::Item* item = helpFind(idNumber);
+			InventorySystem::Item *item = helpFind(idNumber);
 			if (item == nullptr)
 			{
 				cout << "Item not found in Map" << endl;
@@ -188,10 +188,10 @@ public:
 				}
 			}
 		}
-		InventorySystem::Item* helpFind(int idNumber)
+		InventorySystem::Item *helpFind(int idNumber)
 		{
 			int index = idNumber % size;
-			InventorySystem::Item* pointer = nullptr;
+			InventorySystem::Item *pointer = nullptr;
 			//checking the items in the list at the index location for the associated key, return pointer to item if it exists
 			for (int i = 0; i < buckets.at(index).size(); i++)
 			{
@@ -204,7 +204,7 @@ public:
 			return pointer;
 		}
 		//given a pointer to an item itself
-		void printItem(InventorySystem::Item*& item)
+		void printItem(InventorySystem::Item *&item)
 		{
 			cout << "Name: " << item->name << endl;
 			cout << "idNumber: " << item->idNumber << endl;
@@ -228,8 +228,8 @@ public:
 		struct Node
 		{
 			Item classItem;
-			Node* right = nullptr;
-			Node* left = nullptr;
+			Node *right = nullptr;
+			Node *left = nullptr;
 			int height = 0;
 		};
 
@@ -242,7 +242,7 @@ public:
 		}
 
 		// --- Tree functions ---
-		void insert(Item& newItem)
+		void insert(Item &newItem)
 		{
 			if (AVL_Root == nullptr)
 			{
@@ -253,9 +253,9 @@ public:
 			insertRecursive(AVL_Root, newItem);
 		}
 
-		Node* addNewNode(Item& newItem)
+		Node *addNewNode(Item &newItem)
 		{
-			Node* temp = new Node();
+			Node *temp = new Node();
 			temp->classItem = newItem;
 			temp->height = 1;
 			return temp;
@@ -310,17 +310,18 @@ public:
 
 		void searchByName(string key)
 		{
-			if (AVL_Root == nullptr) {
+			if (AVL_Root == nullptr)
+			{
 				cout << "Item not found in Tree" << endl;
 				return;
-			}	
+			}
 			bool flag = false;
 			searchInorderHelp(key, AVL_Root, flag);
 			if (!flag)
 				cout << "Item not found in Tree" << endl;
 		}
 
-		void searchInorderHelp(string key, Node* root, bool& flag)
+		void searchInorderHelp(string key, Node *root, bool &flag)
 		{
 			if (root == nullptr || flag)
 				return;
@@ -376,13 +377,13 @@ public:
 
 	private:
 		// --- Tree structure ---
-		Node* AVL_Root = nullptr;
-		Node* rotateRightLeft(Node* node)
+		Node *AVL_Root = nullptr;
+		Node *rotateRightLeft(Node *node)
 		{
 
 			if (node == nullptr)
 				return node;
-			Node* rightChild = node->right;
+			Node *rightChild = node->right;
 			node->right = rightChild->left;
 			rightChild->left = node->right->right;
 			node->right->right = rightChild;
@@ -397,7 +398,7 @@ public:
 			newRightChild->height++;
 			return newRightChild;
 		}
-		Node* rotateLeft(Node* node)
+		Node *rotateLeft(Node *node)
 		{
 			if (node == nullptr)
 				return node;
@@ -410,7 +411,7 @@ public:
 			rightChild->left->height -= 2;
 			return rightChild;
 		}
-		Node* rotateRight(Node* node)
+		Node *rotateRight(Node *node)
 		{
 			if (node == nullptr)
 				return node;
@@ -423,11 +424,11 @@ public:
 			leftChild->right->height -= 2;
 			return leftChild;
 		}
-		Node* rotateLeftRight(Node* node)
+		Node *rotateLeftRight(Node *node)
 		{
 			if (node == nullptr)
 				return node;
-			Node* leftChild = node->left;
+			Node *leftChild = node->left;
 			node->left = leftChild->right;
 			leftChild->right = node->left->left;
 			node->left->left = leftChild;
@@ -442,7 +443,7 @@ public:
 			newLeftChild->height++;
 			return newLeftChild;
 		}
-		Node* insertRecursive(Node* root, Item& item)
+		Node *insertRecursive(Node *root, Item &item)
 		{
 
 			if (root == nullptr)
@@ -456,7 +457,7 @@ public:
 			root = balanceNodes(root);
 			return root;
 		}
-		int max_height(Node* root)
+		int max_height(Node *root)
 		{
 			if (root == nullptr)
 				return 0;
@@ -466,18 +467,18 @@ public:
 
 			return 1 + (heightLeft > heightRight ? heightLeft : heightRight);
 		}
-		int height(Node* root)
+		int height(Node *root)
 		{
 			if (root == nullptr)
 				return 0;
 			return root->height;
 		}
-		Node* balanceNodes(Node* parent)
+		Node *balanceNodes(Node *parent)
 		{
 			if (parent == nullptr)
 				return parent;
 
-			Node* temp = parent;
+			Node *temp = parent;
 
 			if (height(parent->left) - height(parent->right) > 1)
 			{
@@ -499,7 +500,7 @@ public:
 			}
 			return parent;
 		}
-		void printItem(Node* item)
+		void printItem(Node *item)
 		{
 			if (item != nullptr)
 			{
@@ -509,7 +510,7 @@ public:
 				cout << endl;
 			}
 		}
-		void printPostorder(Node* root)
+		void printPostorder(Node *root)
 		{
 			if (root == nullptr)
 				return;
@@ -518,7 +519,7 @@ public:
 			printPostorder(root->right);
 			printItem(root);
 		}
-		void printInorder(Node* root)
+		void printInorder(Node *root)
 		{
 			if (root == nullptr)
 				return;
@@ -527,7 +528,7 @@ public:
 			printItem(root);
 			printInorder(root->right);
 		}
-		void printReverseInorder(Node* root)
+		void printReverseInorder(Node *root)
 		{
 			if (root == nullptr)
 				return;
@@ -536,7 +537,7 @@ public:
 			printItem(root);
 			printReverseInorder(root->left);
 		}
-		void printPreorder(Node* root)
+		void printPreorder(Node *root)
 		{
 			if (root == nullptr)
 				return;
@@ -546,7 +547,7 @@ public:
 			printPreorder(root->right);
 		}
 
-		Node* searchRecursive(Node* root, int key)
+		Node *searchRecursive(Node *root, int key)
 		{
 			if (root == nullptr)
 				return nullptr;
@@ -559,7 +560,7 @@ public:
 			return nullptr;
 		}
 
-		bool isALeaf(Node* node)
+		bool isALeaf(Node *node)
 		{
 			if (node == nullptr)
 				return false;
@@ -568,7 +569,7 @@ public:
 			return false;
 		}
 
-		Node* deleteRecursive(Node* root, Node* rootNonRecursive, Node*& inorder, Node* deleting)
+		Node *deleteRecursive(Node *root, Node *rootNonRecursive, Node *&inorder, Node *deleting)
 		{
 			if (inorder == nullptr)
 			{
@@ -609,7 +610,7 @@ public:
 			root = balanceNodes(root);
 			return root;
 		}
-		Node* parent(Node* root, Node* key)
+		Node *parent(Node *root, Node *key)
 		{
 			if (root == nullptr || key == AVL_Root)
 				return nullptr;
@@ -622,7 +623,7 @@ public:
 			if (root->classItem.idNumber < key->classItem.idNumber)
 				return parent(root->right, key);
 		}
-		Node* inorder_predecessor(Node* root)
+		Node *inorder_predecessor(Node *root)
 		{
 
 			if (root == nullptr)
@@ -661,7 +662,7 @@ public:
 			item.idNumber = i + 1;
 			item.inStock = rand() % 1000;
 
-			// add item to inventory list/arry
+			// add item to inventory list/array
 			inventoryVector.push_back(item);
 			inventoryMap.insert(item);
 			inventoryTree.insert(item);
@@ -696,10 +697,10 @@ public:
 	// By ID
 	void searchByID(int idNumber)
 	{
-		cout << "Item in Tree:" << endl;
+		cout << "In Tree:" << endl;
 		inventoryTree.searchByID(idNumber);
 		cout << endl;
-		cout << "Item in Map:" << endl;
+		cout << "In Map:" << endl;
 		inventoryMap.searchByID(idNumber);
 	}
 	void deleteByID(int idNumber)
@@ -713,9 +714,12 @@ public:
 		inventoryMap.editAmountInStock(idNumber, newAmount);
 	}
 	// Search by ID in general inventory
-	bool searchInventory(int idNumber) {
-		for (int i = 0; i < inventoryVector.size(); i++) {
-			if (inventoryVector.at(i).idNumber == idNumber) {
+	bool searchInventory(int idNumber)
+	{
+		for (int i = 0; i < inventoryVector.size(); i++)
+		{
+			if (inventoryVector.at(i).idNumber == idNumber)
+			{
 				return true;
 			}
 		}
@@ -724,10 +728,10 @@ public:
 	// By Name
 	void searchByName(string name)
 	{
-		cout << "Item in Tree:" << endl;
+		cout << "In Tree:" << endl;
 		inventoryTree.searchByName(name);
 		cout << endl;
-		cout << "Item in Map:" << endl;
+		cout << "In Map:" << endl;
 		inventoryMap.searchByName(name);
 	}
 };
@@ -741,7 +745,7 @@ public:
 	2. Print time
 
 */
-void testInsert(InventorySystem& system, int inventorySize)
+void testInsert(InventorySystem &system, int inventorySize)
 {
 	InventorySystem::Item newItem("TestName", inventorySize + 5, 1000);
 	system.inventoryVector.push_back(newItem);
@@ -766,7 +770,7 @@ void testInsert(InventorySystem& system, int inventorySize)
 	cout << " nanoseconds " << endl;
 	cout << endl;
 };
-void testDelete(InventorySystem& system, int inventorySize)
+void testDelete(InventorySystem &system, int inventorySize)
 {
 	// --- Test in Map
 	auto start = high_resolution_clock::now();
@@ -789,7 +793,7 @@ void testDelete(InventorySystem& system, int inventorySize)
 	cout << " nanoseconds " << endl;
 	cout << endl;
 };
-void testSearch(InventorySystem& system, int inventorySize)
+void testSearch(InventorySystem &system, int inventorySize)
 {
 	InventorySystem::Item newItem("TestName", inventorySize + 5, 1000);
 	system.inventoryVector.push_back(newItem);
@@ -798,14 +802,14 @@ void testSearch(InventorySystem& system, int inventorySize)
 	// system.inventoryHashTable.insert(newItem);
 
 	// --- Test in Map
-	cout << "Item in Map:" << endl;
+	cout << "In Map:" << endl;
 	auto start = high_resolution_clock::now();
 	system.inventoryMap.searchByID(inventorySize + 5);
 	auto stop = high_resolution_clock::now();
 	auto mapExecutionTime = duration_cast<nanoseconds>(stop - start);
 
 	// --- Test in Tree
-	cout << "Item in Tree:" << endl;
+	cout << "In Tree:" << endl;
 	auto start2 = high_resolution_clock::now();
 	system.inventoryTree.searchByID(inventorySize + 5);
 	auto stop2 = high_resolution_clock::now();
@@ -820,7 +824,7 @@ void testSearch(InventorySystem& system, int inventorySize)
 	cout << " nanoseconds " << endl;
 	cout << endl;
 };
-void testEdit(InventorySystem& system, int inventorySize)
+void testEdit(InventorySystem &system, int inventorySize)
 {
 	// --- Test in Map
 	auto start = high_resolution_clock::now();
@@ -845,7 +849,7 @@ void testEdit(InventorySystem& system, int inventorySize)
 };
 
 // Run all tests and set the random inventory size
-void runTests(InventorySystem& system, int inventorySize)
+void runTests(InventorySystem &system, int inventorySize)
 {
 	system.inventoryGenerator(inventorySize);
 	// Run all tests
@@ -1005,7 +1009,8 @@ void userProgram()
 		else if (command == "delete")
 		{
 			cin >> idNumber;
-			if (system.searchInventory(idNumber)) {
+			if (system.searchInventory(idNumber))
+			{
 				system.deleteByID(idNumber);
 				cout << "Deleted item with idNumber: " << idNumber << endl;
 			}
@@ -1017,7 +1022,8 @@ void userProgram()
 		{
 			cin >> idNumber;
 			cin >> inStock;
-			if (system.searchInventory(idNumber)) {
+			if (system.searchInventory(idNumber))
+			{
 				system.editAmountInStock(idNumber, inStock);
 				cout << "Edited item with idNumber: " << idNumber << endl;
 				cout << "New amount in stock: " << inStock << endl;
@@ -1128,7 +1134,7 @@ void userTest3(InventorySystem system)
 }
 void userTest4(InventorySystem system)
 {
-    /*
+	/*
 		edit item in empty list (does nothing)
 		delete item in empty list (does nothing)
 		insert item
@@ -1137,7 +1143,7 @@ void userTest4(InventorySystem system)
 	*/
 	system.editAmountInStock(100005, 1000);
 	system.deleteByID(100005);
-	cout << "Editting and Deleting from empty structures does nothing.";
+	cout << "Editing and Deleting from empty structures does nothing.";
 	cout << endl;
 
 	system.insert("TestName1", 100005, 1000);
@@ -1197,7 +1203,7 @@ int main()
 	// userTest1(system);
 	// userTest2(system);
 	// userTest3(system);
-    // userTest4(system);
+	// userTest4(system);
 
 	return 0;
 };

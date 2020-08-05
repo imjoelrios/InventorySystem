@@ -8,6 +8,12 @@ A user program was also added enabling real-time functionality.
 
 In essence, the most simplified version (MVP) of an inventory system is created.
 
+**Notes / Todo**
+
+- User input validation hasn't been added, therefore errors can occur or the user program might crash if the input is incorrect.
+
+- The entire project is based on **C++11**. Some errors may occur otherwise.
+
 **Initial Menu**
 
 ```
@@ -31,12 +37,12 @@ Test #2 --- Delete()
 Execution time by map : 636 nanoseconds
 Execution time by tree : 14407 nanoseconds
 
-Item in Map:
+In Map:
 Name: TestName
 idNumber: 100005
 Amount in Stock: 1000
 
-Item in Tree:
+In Tree:
 Name: TestName
 idNumber: 100005
 Amount in Stock: 1000
@@ -88,12 +94,12 @@ Deleted item with idNumber: 2
 
 ```
 searchByID 1
-Item in Tree:
+In Tree:
 Name: ModelX
 idNumber: 1
 Amount in Stock: 2500
 
-Item in Map:
+In Map:
 Name: ModelX
 idNumber: 1
 Amount in Stock: 2500
@@ -109,7 +115,3 @@ New amount in stock: 200
 exit
 Program exited
 ```
-
-### Notes / Todo
-
-- User input validation hasn't been added, therefore errors can occur or the user program might crash if the input is incorrect.
