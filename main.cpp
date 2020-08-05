@@ -310,8 +310,10 @@ public:
 
 		void searchByName(string key)
 		{
-			if (AVL_Root == nullptr)
+			if (AVL_Root == nullptr) {
 				cout << "Item not found in Tree" << endl;
+				return;
+			}	
 			bool flag = false;
 			searchInorderHelp(key, AVL_Root, flag);
 			if (!flag)
