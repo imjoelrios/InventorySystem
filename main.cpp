@@ -253,14 +253,6 @@ public:
 			insertRecursive(AVL_Root, newItem);
 		}
 
-		Node *addNewNode(Item &newItem)
-		{
-			Node *temp = new Node();
-			temp->classItem = newItem;
-			temp->height = 1;
-			return temp;
-		}
-
 		void printItem(int key)
 		{
 			auto temp = searchRecursive(AVL_Root, key);
@@ -298,7 +290,7 @@ public:
 				cout << "Invalid option! " << endl;
 		}
 
-		// Tree organized by ID number
+		// Tree sorted by ID number
 		void searchByID(int key)
 		{
 			auto temp = searchRecursive(AVL_Root, key);
@@ -307,7 +299,7 @@ public:
 			else
 				printItem(temp);
 		}
-
+		// Will search the tree inorder, since it is sorted by Id number not name
 		void searchByName(string key)
 		{
 			if (AVL_Root == nullptr)
@@ -321,20 +313,7 @@ public:
 				cout << "Item not found in Tree" << endl;
 		}
 
-		void searchInorderHelp(string key, Node *root, bool &flag)
-		{
-			if (root == nullptr || flag)
-				return;
-			searchInorderHelp(key, root->left, flag);
-			if (root->classItem.name == key)
-			{
-				flag = true;
-				printItem(root);
-				return;
-			}
-			searchInorderHelp(key, root->right, flag);
-		}
-
+		// Delete by idNumber
 		bool remove(int key)
 		{
 			auto val = searchRecursive(AVL_Root, key);
@@ -378,6 +357,8 @@ public:
 	private:
 		// --- Tree structure ---
 		Node *AVL_Root = nullptr;
+
+		// Rotations and update height
 		Node *rotateRightLeft(Node *node)
 		{
 
@@ -443,6 +424,8 @@ public:
 			newLeftChild->height++;
 			return newLeftChild;
 		}
+
+		// Helper methods to insert 
 		Node *insertRecursive(Node *root, Item &item)
 		{
 
@@ -457,6 +440,16 @@ public:
 			root = balanceNodes(root);
 			return root;
 		}
+
+		Node* addNewNode(Item& newItem)
+		{
+			Node* temp = new Node();
+			temp->classItem = newItem;
+			temp->height = 1;
+			return temp;
+		}
+
+		// Methods related to height, used in remove and insert methods
 		int max_height(Node *root)
 		{
 			if (root == nullptr)
@@ -473,6 +466,8 @@ public:
 				return 0;
 			return root->height;
 		}
+
+		// balanceNodes() method in charge of making the proper rotations during insert and delete 
 		Node *balanceNodes(Node *parent)
 		{
 			if (parent == nullptr)
@@ -500,6 +495,8 @@ public:
 			}
 			return parent;
 		}
+
+		// Print methods
 		void printItem(Node *item)
 		{
 			if (item != nullptr)
@@ -547,6 +544,7 @@ public:
 			printPreorder(root->right);
 		}
 
+		// Helper method for search by Id
 		Node *searchRecursive(Node *root, int key)
 		{
 			if (root == nullptr)
@@ -559,16 +557,24 @@ public:
 				return searchRecursive(root->right, key);
 			return nullptr;
 		}
-
-		bool isALeaf(Node *node)
+		// Helper method to searchByName
+		void searchInorderHelp(string key, Node* root, bool& flag)
 		{
-			if (node == nullptr)
-				return false;
-			else if (node->left == nullptr && node->right == nullptr)
-				return true;
-			return false;
+			if (root == nullptr || flag)
+				return;
+			searchInorderHelp(key, root->left, flag);
+			if (root->classItem.name == key)
+			{
+				flag = true;
+				printItem(root);
+				return;
+			}
+			searchInorderHelp(key, root->right, flag);
 		}
 
+		
+		// Helper methods to remove. This implementation uses inorder predecessor, 
+		// it can be changed to use inorder successor
 		Node *deleteRecursive(Node *root, Node *rootNonRecursive, Node *&inorder, Node *deleting)
 		{
 			if (inorder == nullptr)
@@ -610,6 +616,16 @@ public:
 			root = balanceNodes(root);
 			return root;
 		}
+
+		bool isALeaf(Node* node)
+		{
+			if (node == nullptr)
+				return false;
+			else if (node->left == nullptr && node->right == nullptr)
+				return true;
+			return false;
+		}
+		
 		Node *parent(Node *root, Node *key)
 		{
 			if (root == nullptr || key == AVL_Root)
@@ -625,7 +641,6 @@ public:
 		}
 		Node *inorder_predecessor(Node *root)
 		{
-
 			if (root == nullptr)
 				return nullptr;
 			if (root->left == nullptr)
@@ -633,6 +648,18 @@ public:
 			auto temp = root->left;
 			while (temp->right != nullptr)
 				temp = temp->right;
+			return temp;
+		}
+
+		Node* inorder_successor(Node* root)
+		{
+			if (root == nullptr)
+				return nullptr;
+			if (root->right == nullptr)
+				return nullptr;
+			auto temp = root->right;
+			while (temp->left != nullptr)
+				temp = temp->left;
 			return temp;
 		}
 	};
@@ -645,14 +672,13 @@ public:
 	{
 		// TODO: make sure the item is NOT already in the system (checking idNumber)
 		Item newItem = Item(name, idNumber, inStock);
-		// inventoryHashTable.insert(newItem);
 		inventoryVector.push_back(newItem);
 		inventoryMap.insert(newItem);
 		inventoryTree.insert(newItem);
 	}
 	void inventoryGenerator(int inventoryNumber)
 	{
-		// inventoryHashTable.reconfigure(inventoryNumber);
+		
 		for (int i = 0; i < inventoryNumber; i++)
 		{
 			// randomly generate an item
