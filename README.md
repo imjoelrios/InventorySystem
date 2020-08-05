@@ -27,9 +27,11 @@ Choice:
 
 ### Execution Time Program
 
-**Example - Output of Execution Time Program**
+In the example below, an inventory system is created and randomly generated data for 100,000 items/products (each with a random name, assigned idNumber, and random amount in stock) is added. However, the inventory size can be modified.
 
-In the example below (the standard test), an inventory system is created with randomly generated data for 100,000 items/products (each with a random name, assigned idNumber, and random amount in stock). However, the inventory size can be modified.
+The function `inventoryGenerator`, within the InventorySystem class, takes the desired inventory size as input and this is what is used to create the generated data.
+
+**Example - Output of Execution Time Program**
 
 ```
 Test #1 --- Insert()

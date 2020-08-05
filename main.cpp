@@ -1019,8 +1019,14 @@ void userProgram()
 			cin >> name;
 			cin >> idNumber;
 			cin >> inStock;
-			system.insert(name, idNumber, inStock);
-			cout << "Inserted: " << name << " " << idNumber << " " << inStock << endl;
+			if (system.searchInventory(idNumber))
+			{
+				cout << "Item with that ID is already in the system." << endl;
+			}
+			else {
+				system.insert(name, idNumber, inStock);
+				cout << "Inserted: " << name << " " << idNumber << " " << inStock << endl;
+			}
 			cout << endl;
 		}
 		else if (command == "searchByID")
