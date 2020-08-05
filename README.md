@@ -8,18 +8,21 @@ A user program was also added enabling real-time functionality.
 
 In essence, the most simplified version (MVP) of an inventory system is created.
 
-**Notes / Todo**
+**Notes**
 
 - User input validation hasn't been added, therefore errors can occur or the user program might crash if the input is incorrect.
 
 - The entire project is based on **C++11**. Some errors may occur otherwise.
 
+- Press _run_ in your IDE and the program should execute!
+
 **Initial Menu**
 
 ```
+-- Menu --
 1 - Run execution time calculations
-
 2 - Run user-based program
+Choice:
 ```
 
 ### Execution Time Program
@@ -61,7 +64,7 @@ Execution time by tree : 314 nanoseconds
 **User Program Menu**
 
 ```
-List of commands (action | command/input):
+-- List of commands (action | command/input) --
 insert | insert nameOfItem idNumber amountInStock
 searchByID | searchByID idNumber
 searchByName | searchByName name

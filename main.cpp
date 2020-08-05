@@ -983,7 +983,8 @@ void userProgram()
 	int idNumber;
 	int inStock;
 
-	cout << "List of commands (action | command/input):" << endl;
+	cout << endl;
+	cout << "-- List of commands (action | command/input) --" << endl;
 	cout << "insert | insert nameOfItem idNumber amountInStock" << endl;
 	cout << "searchByID | searchByID idNumber" << endl;
 	cout << "searchByName | searchByName name" << endl;
@@ -1001,7 +1002,7 @@ void userProgram()
 
 		if (command == "commands")
 		{
-			cout << "List of commands (action | command/input):" << endl;
+			cout << "-- List of commands (action | command/input) --" << endl;
 			cout << "insert | insert nameOfItem idNumber amountInStock" << endl;
 			cout << "searchByID | searchByID idNumber" << endl;
 			cout << "searchByName | searchByName name" << endl;
@@ -1184,7 +1185,7 @@ void userTest4(InventorySystem system)
 // ======= Run program (execution time analysis or user program) =======
 void runProgram()
 {
-	cout << "Menu: " << endl;
+	cout << "-- Menu --" << endl;
 	cout << "1 - Run execution time calculations" << endl;
 	cout << "2 - Run user-based program" << endl;
 	cout << "Choice: ";
